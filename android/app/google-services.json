@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1033184374253",
+    "project_id": "financify-accounting",
+    "storage_bucket": "financify-accounting.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1033184374253:android:83f105d0619d5600e28be4",
+        "android_client_info": {
+          "package_name": "com.example.accouting_software"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1033184374253-76ahncifqo41178kul6skkkc89ejrtu7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjPjjWX6LnY4L76H5du02ojHWiqMv9DqI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1033184374253-76ahncifqo41178kul6skkkc89ejrtu7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
