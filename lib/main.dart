@@ -83,6 +83,7 @@ class _MyAppState extends State<MyApp> {
           ),
           colorScheme:
               Theme.of(context).colorScheme.copyWith(secondary: Colors.white),
+          iconTheme: IconThemeData(color: Colors.white, opacity: 1.0),
           appBarTheme: const AppBarTheme(
               color: Color.fromARGB(255, 16, 16, 16),
               titleTextStyle: TextStyle(color: Colors.white, fontSize: 35))),

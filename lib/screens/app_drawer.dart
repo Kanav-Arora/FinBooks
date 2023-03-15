@@ -6,10 +6,16 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      backgroundColor: Theme.of(context).primaryColor,
       elevation: 2,
-      child: Column(children: [
-        Text('Inventory'),
-      ]),
+      child: Column(
+        children: [
+          Text(
+            'Inventory',
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ],
+      ),
     );
   }
 }
