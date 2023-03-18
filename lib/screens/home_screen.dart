@@ -1,6 +1,7 @@
 import 'package:accouting_software/icons/custom_icons_icons.dart';
 import 'package:accouting_software/screens/app_drawer.dart';
 import 'package:accouting_software/widgets/app_bar_popupmenu.dart';
+import 'package:accouting_software/widgets/app_bar_popupmenubutton.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -29,27 +30,9 @@ class HomeScreen extends StatelessWidget {
             );
           },
         ),
-        actions: [
-          PopupMenuButton(
-              color: Theme.of(context).primaryColor,
-              child: Container(
-                padding: const EdgeInsets.all(5.0),
-                margin: const EdgeInsets.only(top: 5.0),
-                child: CircleAvatar(
-                  backgroundColor: Theme.of(context).primaryColor,
-                  radius: 30,
-                  child: const CircleAvatar(
-                      backgroundImage: CachedNetworkImageProvider(
-                    'https://www.wikihow.com/images/6/61/Draw-a-Cartoon-Man-Step-15.jpg',
-                  )),
-                ),
-              ),
-              itemBuilder: (BuildContext ctx) {
-                return AppBarPopupmenu(ctx).create().toList();
-              }),
-        ],
+        actions: [AppBarPopupmenuButton()],
       ),
-      drawer: const AppDrawer(),
+      drawer: AppDrawer(),
       body: Container(
         width: size.width,
         height: size.height,

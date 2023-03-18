@@ -18,11 +18,13 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formkey = GlobalKey<FormState>();
   var _isLoading = false;
   String email = "", password = "";
+  var _visPass = false;
 
   @override
   void initState() {
     // TODO: implement initState
     _isLoading = false;
+    _visPass = false;
     super.initState();
   }
 
@@ -118,6 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 20,
                       ),
                       TextFormField(
+                        obscureText: _visPass == true ? false : true,
                         validator: (value) {
                           return value!.isEmpty == true ? 'Empty' : null;
                         },
