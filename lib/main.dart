@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'package:accouting_software/providers/accounts_provider.dart';
+import 'package:accouting_software/providers/items_provider.dart';
 import 'package:accouting_software/screens/accounts/accounts_main.dart';
 import 'package:accouting_software/screens/accounts/add_account.dart';
 import 'package:accouting_software/screens/home_screen.dart';
+import 'package:accouting_software/screens/items/items_main.dart';
 import 'package:accouting_software/screens/ledger%20accounts/ledger_main.dart';
 import 'package:accouting_software/screens/login_screen.dart';
 import 'package:accouting_software/screens/signup_screen.dart';
@@ -66,6 +68,7 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (ctx) => AccountsProvider()),
+        ChangeNotifierProvider(create: (ctx) => ItemProvider())
       ],
       child: MaterialApp(
         title: 'Accounting App',
@@ -107,6 +110,7 @@ class _MyAppState extends State<MyApp> {
           LedgerMain.routeName: (ctx) => LedgerMain(),
           AccountsMain.routeName: (ctx) => AccountsMain(),
           AddAccount.routeName: (ctx) => AddAccount(),
+          ItemsMain.routeName: (ctx) => ItemsMain(),
         },
         initialRoute: FirebaseAuth.instance.currentUser == null
             ? LoginScreen.routeName

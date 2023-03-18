@@ -87,7 +87,7 @@ class _AddAccountState extends State<AddAccount> {
           },
         ),
         title: Text(
-          'L E D G E R\nA C C O U N T S',
+          'A D D\nA C C O U N T',
           style: Theme.of(context).textTheme.titleMedium,
           textAlign: TextAlign.center,
         ),

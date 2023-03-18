@@ -1,5 +1,6 @@
 import 'package:accouting_software/screens/accounts/accounts_main.dart';
 import 'package:accouting_software/screens/home_screen.dart';
+import 'package:accouting_software/screens/items/items_main.dart';
 import 'package:accouting_software/screens/ledger%20accounts/ledger_main.dart';
 import 'package:flutter/material.dart';
 
@@ -48,6 +49,8 @@ class AppDrawer extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyMedium),
           ),
           ListTile(
+            onTap: () =>
+                Navigator.of(context).pushReplacementNamed(ItemsMain.routeName),
             leading: Icon(
               Icons.add_box_rounded,
               color: Theme.of(context).colorScheme.secondary,
