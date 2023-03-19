@@ -4,6 +4,7 @@ import 'package:accouting_software/providers/items_provider.dart';
 import 'package:accouting_software/screens/accounts/accounts_main.dart';
 import 'package:accouting_software/screens/accounts/add_account.dart';
 import 'package:accouting_software/screens/home_screen.dart';
+import 'package:accouting_software/screens/items/add_items.dart';
 import 'package:accouting_software/screens/items/items_main.dart';
 import 'package:accouting_software/screens/ledger%20accounts/ledger_main.dart';
 import 'package:accouting_software/screens/login_screen.dart';
@@ -111,6 +112,7 @@ class _MyAppState extends State<MyApp> {
           AccountsMain.routeName: (ctx) => AccountsMain(),
           AddAccount.routeName: (ctx) => AddAccount(),
           ItemsMain.routeName: (ctx) => ItemsMain(),
+          AddItems.routeName: (ctx) => AddItems(),
         },
         initialRoute: FirebaseAuth.instance.currentUser == null
             ? LoginScreen.routeName

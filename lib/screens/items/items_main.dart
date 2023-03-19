@@ -1,5 +1,6 @@
 import 'package:accouting_software/classes/item.dart';
 import 'package:accouting_software/providers/items_provider.dart';
+import 'package:accouting_software/screens/items/add_items.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -52,7 +53,9 @@ class ItemsMain extends StatelessWidget {
                 height: 40,
               ),
               OutlinedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushNamed(AddItems.routeName);
+                },
                 child: Icon(
                   Icons.add,
                   color: th.colorScheme.secondary,
