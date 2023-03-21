@@ -14,6 +14,7 @@ class ItemsMain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<ItemProvider>(context, listen: false).fetch();
     final ThemeData th = Theme.of(context);
     final size = MediaQuery.of(context).size;
     return Scaffold(
@@ -45,91 +46,96 @@ class ItemsMain extends StatelessWidget {
         centerTitle: true,
         actions: const [AppBarPopupmenuButton()],
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          width: size.width,
-          height: size.height,
-          color: th.primaryColor,
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 40,
-              ),
-              OutlinedButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed(AddItems.routeName);
-                },
-                child: Icon(
-                  Icons.add,
-                  color: th.colorScheme.secondary,
+      body: RefreshIndicator(
+        onRefresh: () {
+          return Provider.of<ItemProvider>(context, listen: false).fetch();
+        },
+        child: SingleChildScrollView(
+          child: Container(
+            width: size.width,
+            height: size.height,
+            color: th.primaryColor,
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 40,
                 ),
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-              Expanded(child: Consumer<ItemProvider>(
-                builder: (ctx, value, _) {
-                  return DataTable(
-                    columns: <DataColumn>[
-                      DataColumn(
-                        label: Expanded(
-                          child: Text(
-                            'Id',
-                            style: th.textTheme.bodyMedium,
+                OutlinedButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(AddItems.routeName);
+                  },
+                  child: Icon(
+                    Icons.add,
+                    color: th.colorScheme.secondary,
+                  ),
+                ),
+                const SizedBox(
+                  height: 40,
+                ),
+                Expanded(child: Consumer<ItemProvider>(
+                  builder: (ctx, value, _) {
+                    return DataTable(
+                      columns: <DataColumn>[
+                        DataColumn(
+                          label: Expanded(
+                            child: Text(
+                              'Id',
+                              style: th.textTheme.bodyMedium,
+                            ),
                           ),
                         ),
-                      ),
-                      DataColumn(
-                        label: Expanded(
-                          child: Text(
-                            'Name',
-                            style: th.textTheme.bodyMedium,
+                        DataColumn(
+                          label: Expanded(
+                            child: Text(
+                              'Name',
+                              style: th.textTheme.bodyMedium,
+                            ),
                           ),
                         ),
-                      ),
-                      DataColumn(
-                        label: Expanded(
-                          child: Text(
-                            'Quantity',
-                            style: th.textTheme.bodyMedium,
+                        DataColumn(
+                          label: Expanded(
+                            child: Text(
+                              'Quantity',
+                              style: th.textTheme.bodyMedium,
+                            ),
                           ),
                         ),
-                      ),
-                      DataColumn(
-                        label: Expanded(
-                          child: Text(
-                            'Price',
-                            style: th.textTheme.bodyMedium,
+                        DataColumn(
+                          label: Expanded(
+                            child: Text(
+                              'Price',
+                              style: th.textTheme.bodyMedium,
+                            ),
                           ),
                         ),
+                      ],
+                      rows: List<DataRow>.generate(
+                        value.items.length,
+                        (index) {
+                          Item obj = value.items.elementAt(index);
+                          return DataRow(
+                            cells: <DataCell>[
+                              DataCell(
+                                Text(obj.id),
+                              ),
+                              DataCell(
+                                Text(obj.name),
+                              ),
+                              DataCell(
+                                Text(obj.quantity),
+                              ),
+                              DataCell(
+                                Text(obj.price),
+                              ),
+                            ],
+                          );
+                        },
                       ),
-                    ],
-                    rows: List<DataRow>.generate(
-                      value.items.length,
-                      (index) {
-                        Item obj = value.items.elementAt(index);
-                        return DataRow(
-                          cells: <DataCell>[
-                            DataCell(
-                              Text(obj.id),
-                            ),
-                            DataCell(
-                              Text(obj.name),
-                            ),
-                            DataCell(
-                              Text(obj.quantity),
-                            ),
-                            DataCell(
-                              Text(obj.price),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  );
-                },
-              )),
-            ],
+                    );
+                  },
+                )),
+              ],
+            ),
           ),
         ),
       ),

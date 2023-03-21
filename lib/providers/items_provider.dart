@@ -49,13 +49,15 @@ class ItemProvider with ChangeNotifier {
 
   Future<void> fetch() async {
     var user = FirebaseAuth.instance.currentUser!.uid;
-    print(user);
     DatabaseReference ref =
-        FirebaseDatabase.instance.ref('user/$user').child('accounts');
+        FirebaseDatabase.instance.ref('user/$user').child('items');
     try {
       final response = await ref.get();
       if (response.value != null) {
+        print("response available");
         snapshotValue(response);
+      } else {
+        _items = [];
       }
       notifyListeners();
     } catch (error) {

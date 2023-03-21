@@ -33,7 +33,6 @@ class _AccountsMainState extends State<AccountsMain> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<AccountsProvider>(context, listen: false).fetch();
     final ThemeData th = Theme.of(context);
     final size = MediaQuery.of(context).size;
     final List<Widget> toggleButtonOptions = [
@@ -140,70 +139,80 @@ class _AccountsMainState extends State<AccountsMain> {
                 const SizedBox(
                   height: 40,
                 ),
-                Expanded(child: SingleChildScrollView(
-                  child: Consumer<AccountsProvider>(
-                    builder: (ctx, value, _) {
-                      return DataTable(
-                        columns: <DataColumn>[
-                          DataColumn(
-                            label: Expanded(
-                              child: Text(
-                                'Id',
-                                style: th.textTheme.bodyMedium,
+                FutureBuilder(
+                  builder: (ctx, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasError) {
+                        Utilities().toastMessage('Some Error Occured');
+                      } else if (snapshot.hasData) {
+                        final data = snapshot.data as List<Account>;
+                        return Expanded(
+                            child: SingleChildScrollView(
+                                child: DataTable(
+                          columns: <DataColumn>[
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'Id',
+                                  style: th.textTheme.bodyMedium,
+                                ),
                               ),
                             ),
-                          ),
-                          DataColumn(
-                            label: Expanded(
-                              child: Text(
-                                'Name',
-                                style: th.textTheme.bodyMedium,
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'Name',
+                                  style: th.textTheme.bodyMedium,
+                                ),
                               ),
                             ),
-                          ),
-                          DataColumn(
-                            label: Expanded(
-                              child: Text(
-                                'Type',
-                                style: th.textTheme.bodyMedium,
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'Type',
+                                  style: th.textTheme.bodyMedium,
+                                ),
                               ),
                             ),
-                          ),
-                          DataColumn(
-                            label: Expanded(
-                              child: Text(
-                                'Amount',
-                                style: th.textTheme.bodyMedium,
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'Amount',
+                                  style: th.textTheme.bodyMedium,
+                                ),
                               ),
                             ),
+                          ],
+                          rows: List<DataRow>.generate(
+                            data.length,
+                            (index) {
+                              Account obj = data.elementAt(index);
+                              return DataRow(
+                                cells: <DataCell>[
+                                  DataCell(
+                                    Text(obj.id),
+                                  ),
+                                  DataCell(
+                                    Text(obj.acc_name),
+                                  ),
+                                  DataCell(
+                                    Text(obj.acc_type),
+                                  ),
+                                  const DataCell(
+                                    Text('0'),
+                                  ),
+                                ],
+                              );
+                            },
                           ),
-                        ],
-                        rows: List<DataRow>.generate(
-                          value.accounts.length,
-                          (index) {
-                            Account obj = value.accounts.elementAt(index);
-                            return DataRow(
-                              cells: <DataCell>[
-                                DataCell(
-                                  Text(obj.id),
-                                ),
-                                DataCell(
-                                  Text(obj.acc_name),
-                                ),
-                                DataCell(
-                                  Text(obj.acc_type),
-                                ),
-                                const DataCell(
-                                  Text('0'),
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                )),
+                        )));
+                      }
+                    }
+                    return CircularProgressIndicator();
+                  },
+                  future: Provider.of<AccountsProvider>(context, listen: false)
+                      .toggled(_selectedToggle.name),
+                ),
               ],
             ),
           ),

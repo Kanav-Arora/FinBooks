@@ -63,37 +63,7 @@ class _LedgerMainState extends State<LedgerMain> {
         color: Theme.of(context).primaryColor,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              children: [
-                Consumer<AccountsProvider>(
-                  builder: (ctx, value, _) {
-                    return DropdownButton(
-                      hint: Text(
-                        'Select an account',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                      dropdownColor: Theme.of(context).primaryColor,
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary),
-                      items: value.accounts
-                          .map((e) => DropdownMenuItem(
-                              value: e.acc_name, child: Text(e.acc_name)))
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedDropDownItem = value as String;
-                        });
-                      },
-                    );
-                  },
-                ),
-                Container(
-                  child: Row(),
-                )
-              ],
-            ),
-          ],
+          children: [],
         ),
       ),
     );
