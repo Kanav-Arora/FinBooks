@@ -21,7 +21,7 @@ class _AddAccountState extends State<AddAccount> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   var _isLoading = false;
-  final List<bool> _selectedOption = <bool>[true, false];
+  final List<bool> _selectedOption = <bool>[false, false];
   var _selectedToggle = Toggles.credit;
 
   final _formkey = GlobalKey<FormState>();

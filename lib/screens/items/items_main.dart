@@ -17,13 +17,16 @@ class ItemsMain extends StatelessWidget {
     final ThemeData th = Theme.of(context);
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      key: _scaffoldKey,
       drawer: AppDrawer(),
       appBar: AppBar(
         elevation: 0,
         leading: Builder(
           builder: (BuildContext ctx) {
             return IconButton(
-              onPressed: () => _scaffoldKey.currentState!.openDrawer(),
+              onPressed: () {
+                _scaffoldKey.currentState!.openDrawer();
+              },
               icon: Container(
                   padding: const EdgeInsets.only(left: 20),
                   child: Icon(

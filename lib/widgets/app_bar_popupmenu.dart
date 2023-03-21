@@ -1,4 +1,5 @@
 import 'package:accouting_software/screens/login_screen.dart';
+import 'package:accouting_software/screens/user_account.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,9 @@ class AppBarPopupmenu {
             "Account",
             style: TextStyle(color: Theme.of(ctx).colorScheme.secondary),
           ),
-          onTap: () {},
+          onTap: () {
+            Navigator.of(ctx).pushNamed(UserAccount.routeName);
+          },
         ),
       ),
       PopupMenuItem(

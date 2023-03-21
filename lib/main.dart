@@ -8,7 +8,9 @@ import 'package:accouting_software/screens/items/add_items.dart';
 import 'package:accouting_software/screens/items/items_main.dart';
 import 'package:accouting_software/screens/ledger%20accounts/ledger_main.dart';
 import 'package:accouting_software/screens/login_screen.dart';
+import 'package:accouting_software/screens/sale/add_sale.dart';
 import 'package:accouting_software/screens/signup_screen.dart';
+import 'package:accouting_software/screens/user_account.dart';
 import 'package:accouting_software/screens/verification_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -113,6 +115,8 @@ class _MyAppState extends State<MyApp> {
           AddAccount.routeName: (ctx) => AddAccount(),
           ItemsMain.routeName: (ctx) => ItemsMain(),
           AddItems.routeName: (ctx) => AddItems(),
+          UserAccount.routeName: (ctx) => UserAccount(),
+          AddSale.routeName: (ctx) => AddSale(),
         },
         initialRoute: FirebaseAuth.instance.currentUser == null
             ? LoginScreen.routeName

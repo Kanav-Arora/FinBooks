@@ -33,6 +33,7 @@ class _AccountsMainState extends State<AccountsMain> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<AccountsProvider>(context, listen: false).fetch();
     final ThemeData th = Theme.of(context);
     final size = MediaQuery.of(context).size;
     final List<Widget> toggleButtonOptions = [
@@ -113,11 +114,11 @@ class _AccountsMainState extends State<AccountsMain> {
                         });
                       },
                       borderRadius: const BorderRadius.all(Radius.circular(8)),
-                      borderColor: th.colorScheme.secondary,
-                      selectedBorderColor: Colors.purple[700],
+                      borderColor: Colors.grey,
+                      selectedBorderColor: th.colorScheme.secondary,
                       selectedColor: Colors.white,
-                      fillColor: Colors.purple[300],
-                      color: Colors.purple[400],
+                      fillColor: Color.fromARGB(255, 23, 23, 23),
+                      color: Color.fromARGB(255, 23, 23, 23),
                       constraints: const BoxConstraints(
                         minHeight: 40.0,
                         minWidth: 80.0,

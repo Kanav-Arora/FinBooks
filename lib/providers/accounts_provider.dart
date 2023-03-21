@@ -73,6 +73,8 @@ class AccountsProvider with ChangeNotifier {
       final response = await ref.get();
       if (response.value != null) {
         snapshotValue(response);
+      } else {
+        _account = [];
       }
       notifyListeners();
     } catch (error) {
