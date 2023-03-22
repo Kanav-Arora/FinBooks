@@ -25,13 +25,13 @@ class _AddItemsState extends State<AddItems> {
   final _formkey = GlobalKey<FormState>();
 
   late List<String> _gstSlabsList;
-  late var gstValue;
+  late var gstValue = "hehe";
 
   @override
   void initState() {
     _isLoading = false;
     _gstSlabsList = <String>["5%", "12%", "18%", "28%"];
-    gstValue = null;
+    gstValue = "hehe";
     super.initState();
   }
 

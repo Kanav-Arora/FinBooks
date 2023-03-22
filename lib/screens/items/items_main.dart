@@ -1,6 +1,7 @@
 import 'package:accouting_software/classes/item.dart';
 import 'package:accouting_software/providers/items_provider.dart';
 import 'package:accouting_software/screens/items/add_items.dart';
+import 'package:accouting_software/utils/utitlities.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +15,6 @@ class ItemsMain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<ItemProvider>(context, listen: false).fetch();
     final ThemeData th = Theme.of(context);
     final size = MediaQuery.of(context).size;
     return Scaffold(
@@ -72,68 +72,80 @@ class ItemsMain extends StatelessWidget {
                 const SizedBox(
                   height: 40,
                 ),
-                Expanded(child: Consumer<ItemProvider>(
-                  builder: (ctx, value, _) {
-                    return DataTable(
-                      columns: <DataColumn>[
-                        DataColumn(
-                          label: Expanded(
-                            child: Text(
-                              'Id',
-                              style: th.textTheme.bodyMedium,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Expanded(
-                            child: Text(
-                              'Name',
-                              style: th.textTheme.bodyMedium,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Expanded(
-                            child: Text(
-                              'Quantity',
-                              style: th.textTheme.bodyMedium,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Expanded(
-                            child: Text(
-                              'Price',
-                              style: th.textTheme.bodyMedium,
-                            ),
-                          ),
-                        ),
-                      ],
-                      rows: List<DataRow>.generate(
-                        value.items.length,
-                        (index) {
-                          Item obj = value.items.elementAt(index);
-                          return DataRow(
-                            cells: <DataCell>[
-                              DataCell(
-                                Text(obj.id),
+                FutureBuilder(
+                  builder: ((context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasError) {
+                        Utilities().toastMessage(snapshot.error.toString());
+                      } else if (snapshot.hasData) {
+                        final data = snapshot.data as List<Item>;
+                        return Expanded(
+                          child: DataTable(
+                            columns: <DataColumn>[
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'Id',
+                                    style: th.textTheme.bodyMedium,
+                                  ),
+                                ),
                               ),
-                              DataCell(
-                                Text(obj.name),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'Name',
+                                    style: th.textTheme.bodyMedium,
+                                  ),
+                                ),
                               ),
-                              DataCell(
-                                Text(obj.quantity),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'Quantity',
+                                    style: th.textTheme.bodyMedium,
+                                  ),
+                                ),
                               ),
-                              DataCell(
-                                Text(obj.price),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'Price',
+                                    style: th.textTheme.bodyMedium,
+                                  ),
+                                ),
                               ),
                             ],
-                          );
-                        },
-                      ),
-                    );
-                  },
-                )),
+                            rows: List<DataRow>.generate(
+                              data.length,
+                              (index) {
+                                Item obj = data.elementAt(index);
+                                return DataRow(
+                                  cells: <DataCell>[
+                                    DataCell(
+                                      Text(obj.id),
+                                    ),
+                                    DataCell(
+                                      Text(obj.name),
+                                    ),
+                                    DataCell(
+                                      Text(obj.quantity),
+                                    ),
+                                    DataCell(
+                                      Text(obj.price),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          ),
+                        );
+                      }
+                    }
+                    return CircularProgressIndicator();
+                  }),
+                  future:
+                      Provider.of<ItemProvider>(context, listen: false).items,
+                ),
               ],
             ),
           ),

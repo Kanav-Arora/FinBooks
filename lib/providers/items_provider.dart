@@ -8,7 +8,8 @@ class ItemProvider with ChangeNotifier {
   // ignore: prefer_final_fields
   List<Item> _items = [];
 
-  List<Item> get items {
+  Future<List<Item>> get items async {
+    await fetch();
     return _items;
   }
 
@@ -54,7 +55,6 @@ class ItemProvider with ChangeNotifier {
     try {
       final response = await ref.get();
       if (response.value != null) {
-        print("response available");
         snapshotValue(response);
       } else {
         _items = [];

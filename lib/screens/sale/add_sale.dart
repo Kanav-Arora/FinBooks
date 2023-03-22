@@ -1,5 +1,9 @@
+import 'package:accouting_software/classes/account.dart';
+import 'package:accouting_software/providers/accounts_provider.dart';
+import 'package:accouting_software/utils/utitlities.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import '../../icons/custom_icons_icons.dart';
 import '../../widgets/app_bar_popupmenubutton.dart';
 import '../app_drawer.dart';
@@ -19,10 +23,12 @@ class _AddSaleState extends State<AddSale> {
   var _selectedToggle = Toggles.credit;
   DateTime selectedDate = DateTime.now();
   final TextEditingController _billDateController = TextEditingController();
+  late var _selectedAccount;
 
   @override
   void initState() {
     _selectedToggle = Toggles.credit;
+    _selectedAccount = null;
     super.initState();
   }
 
@@ -136,22 +142,61 @@ class _AddSaleState extends State<AddSale> {
                   ),
                 ],
               ),
-              // SizedBox(
-              //   height: 20,
-              // ),
-              // DropdownSearch<String>(
-              //   items: ["Brazil", "Italia (Disabled)", "Tunisia", 'Canada'],
-              //   dropdownDecoratorProps: DropDownDecoratorProps(
-              //     dropdownSearchDecoration: InputDecoration(
-              //       labelText: "Menu mode",
-              //       hintText: "country in menu mode",
-              //     ),
-              //   ),
-              //   onChanged: (value) {},
-              //   selectedItem: "Brazil",
-              // ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 15.0),
+                child: FutureBuilder(
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasError) {
+                        Utilities().toastMessage(snapshot.error.toString());
+                      } else if (snapshot.hasData) {
+                        final data = snapshot.data;
+                        return DropdownButton<String>(
+                            hint: Text(
+                              'Select an account',
+                              style: th.textTheme.bodyMedium!.copyWith(
+                                  color:
+                                      const Color.fromARGB(255, 130, 130, 130)),
+                              textAlign: TextAlign.center,
+                            ),
+                            value: _selectedAccount,
+                            icon: const Icon(Icons.arrow_downward),
+                            elevation: 16,
+                            style: const TextStyle(color: Colors.deepPurple),
+                            underline: Container(
+                              height: 2,
+                              color: Colors.grey,
+                            ),
+                            dropdownColor:
+                                const Color.fromARGB(255, 23, 23, 23),
+                            onChanged: (String? value) {
+                              setState(() {
+                                _selectedAccount = value ?? "";
+                              });
+                            },
+                            items: data!
+                                .map<DropdownMenuItem<String>>((Account value) {
+                              return DropdownMenuItem<String>(
+                                value: value.acc_name,
+                                child: Text(
+                                  value.acc_name,
+                                  style: th.textTheme.bodyMedium,
+                                ),
+                              );
+                            }).toList());
+                      }
+                    }
+                    return Text(
+                      'Fetching accounts data',
+                      style: th.textTheme.bodyMedium,
+                    );
+                  },
+                  future: Provider.of<AccountsProvider>(context, listen: false)
+                      .accounts,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(3.0),
@@ -164,7 +209,7 @@ class _AddSaleState extends State<AddSale> {
                           'Bill date',
                           style: th.textTheme.titleMedium,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         SizedBox(
@@ -211,7 +256,7 @@ class _AddSaleState extends State<AddSale> {
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 20,
                     ),
                     Column(
@@ -221,7 +266,7 @@ class _AddSaleState extends State<AddSale> {
                           'Due date',
                           style: th.textTheme.titleMedium,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         SizedBox(

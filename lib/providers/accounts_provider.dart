@@ -9,7 +9,8 @@ enum Toggles { all, credit, debit }
 
 class AccountsProvider with ChangeNotifier {
   List<Account> _account = [];
-  List<Account> get accounts {
+  Future<List<Account>> get accounts async {
+    await fetch();
     return _account;
   }
 
@@ -83,11 +84,11 @@ class AccountsProvider with ChangeNotifier {
 
   Future<List<Account>> toggled(String t) async {
     List<Account> newList = [];
-    await fetch();
+    List<Account> acc = await accounts;
     if (t == Toggles.all.name) {
-      newList = accounts;
+      newList = acc;
     } else {
-      for (var element in accounts) {
+      for (var element in acc) {
         if (t == Toggles.credit.name &&
             element.acc_type == Toggles.credit.name) {
           newList.add(element);
