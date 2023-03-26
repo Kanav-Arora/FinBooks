@@ -64,4 +64,8 @@ class ItemProvider with ChangeNotifier {
       rethrow;
     }
   }
+
+  Item getItemByName(String name) {
+    return _items.firstWhere((element) => element.name == name);
+  }
 }

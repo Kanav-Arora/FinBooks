@@ -25,13 +25,13 @@ class _AddItemsState extends State<AddItems> {
   final _formkey = GlobalKey<FormState>();
 
   late List<String> _gstSlabsList;
-  late var gstValue = "hehe";
+  var gstValue = null;
 
   @override
   void initState() {
     _isLoading = false;
     _gstSlabsList = <String>["5%", "12%", "18%", "28%"];
-    gstValue = "hehe";
+    var gstValue = null;
     super.initState();
   }
 
@@ -39,7 +39,7 @@ class _AddItemsState extends State<AddItems> {
     id: "",
     name: "",
     gstSlab: "",
-    quantity: "",
+    quantity: "0",
     price: "",
   );
 
@@ -224,47 +224,6 @@ class _AddItemsState extends State<AddItems> {
                               id: a.id,
                               name: a.name,
                               gstSlab: a.gstSlab,
-                              quantity: newValue.toString(),
-                              price: a.price,
-                            );
-                          },
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
-                            hintText: "Quantity",
-                            hintStyle: const TextStyle(
-                                color: Color.fromARGB(255, 130, 130, 130)),
-                            fillColor: const Color.fromARGB(255, 23, 23, 23),
-                            filled: true,
-                            hoverColor: Theme.of(context).colorScheme.secondary,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 181, 21, 221),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: size.width / 2,
-                        child: TextFormField(
-                          onSaved: (newValue) {
-                            a = Item(
-                              id: a.id,
-                              name: a.name,
-                              gstSlab: a.gstSlab,
                               quantity: a.quantity,
                               price: newValue.toString(),
                             );
@@ -272,7 +231,7 @@ class _AddItemsState extends State<AddItems> {
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
                           decoration: InputDecoration(
-                            hintText: "Price",
+                            hintText: "Price in Rupees",
                             hintStyle: const TextStyle(
                                 color: Color.fromARGB(255, 130, 130, 130)),
                             fillColor: const Color.fromARGB(255, 23, 23, 23),
@@ -291,13 +250,6 @@ class _AddItemsState extends State<AddItems> {
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Text(
-                        "in Rupees",
-                        style: th.textTheme.bodyMedium,
-                      )
                     ],
                   ),
                   const SizedBox(

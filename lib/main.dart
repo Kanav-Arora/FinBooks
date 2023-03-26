@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'package:accouting_software/providers/accounts_provider.dart';
+import 'package:accouting_software/providers/bill_provider.dart';
+import 'package:accouting_software/providers/cart_provider.dart';
 import 'package:accouting_software/providers/items_provider.dart';
 import 'package:accouting_software/screens/accounts/accounts_main.dart';
 import 'package:accouting_software/screens/accounts/add_account.dart';
+import 'package:accouting_software/screens/cart_screen.dart';
 import 'package:accouting_software/screens/home_screen.dart';
 import 'package:accouting_software/screens/items/add_items.dart';
 import 'package:accouting_software/screens/items/items_main.dart';
@@ -71,7 +74,9 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (ctx) => AccountsProvider()),
-        ChangeNotifierProvider(create: (ctx) => ItemProvider())
+        ChangeNotifierProvider(create: (ctx) => ItemProvider()),
+        ChangeNotifierProvider(create: (ctx) => BillProvider()),
+        ChangeNotifierProvider(create: (ctx) => CartProvider()),
       ],
       child: MaterialApp(
         title: 'Accounting App',
@@ -94,10 +99,12 @@ class _MyAppState extends State<MyApp> {
         darkTheme: ThemeData(
             primaryColor: const Color.fromARGB(255, 16, 16, 16),
             textTheme: const TextTheme(
-                titleLarge: TextStyle(color: Colors.white, fontSize: 22),
-                labelMedium: TextStyle(color: Colors.white, fontSize: 18),
-                bodyMedium: TextStyle(color: Colors.white, fontSize: 15),
-                titleMedium: TextStyle(color: Colors.white)),
+              titleLarge: TextStyle(color: Colors.white, fontSize: 22),
+              labelMedium: TextStyle(color: Colors.white, fontSize: 18),
+              bodyMedium: TextStyle(color: Colors.white, fontSize: 15),
+              bodySmall: TextStyle(color: Colors.white, fontSize: 12),
+              titleMedium: TextStyle(color: Colors.white),
+            ),
             colorScheme:
                 Theme.of(context).colorScheme.copyWith(secondary: Colors.white),
             iconTheme: IconThemeData(color: Colors.white, opacity: 1.0),
@@ -117,6 +124,7 @@ class _MyAppState extends State<MyApp> {
           AddItems.routeName: (ctx) => AddItems(),
           UserAccount.routeName: (ctx) => UserAccount(),
           AddSale.routeName: (ctx) => AddSale(),
+          CartScreen.routeName: (ctx) => CartScreen(),
         },
         initialRoute: FirebaseAuth.instance.currentUser == null
             ? LoginScreen.routeName

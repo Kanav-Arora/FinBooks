@@ -92,7 +92,7 @@ class _AddAccountState extends State<AddAccount> {
           textAlign: TextAlign.center,
         ),
         centerTitle: true,
-        actions: [const AppBarPopupmenuButton()],
+        actions: const [AppBarPopupmenuButton()],
       ),
       body: Container(
         width: size.width,
@@ -151,7 +151,7 @@ class _AddAccountState extends State<AddAccount> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 20,
                       ),
                       Expanded(
@@ -417,7 +417,7 @@ class _AddAccountState extends State<AddAccount> {
                   Row(
                     children: [
                       SizedBox(
-                        width: size.width / 2,
+                        width: (size.width - 20) / 2,
                         child: TextFormField(
                           onSaved: (newValue) {
                             a = Account(
@@ -457,7 +457,7 @@ class _AddAccountState extends State<AddAccount> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 20,
                       ),
                       Expanded(
@@ -494,8 +494,8 @@ class _AddAccountState extends State<AddAccount> {
                           borderColor: Colors.grey,
                           selectedBorderColor: th.colorScheme.secondary,
                           selectedColor: Colors.white,
-                          fillColor: Color.fromARGB(255, 23, 23, 23),
-                          color: Color.fromARGB(255, 23, 23, 23),
+                          fillColor: const Color.fromARGB(255, 23, 23, 23),
+                          color: const Color.fromARGB(255, 23, 23, 23),
                           constraints: const BoxConstraints(
                             minHeight: 40.0,
                             minWidth: 80.0,

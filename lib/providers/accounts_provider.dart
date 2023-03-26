@@ -100,4 +100,8 @@ class AccountsProvider with ChangeNotifier {
     }
     return newList;
   }
+
+  Account accountByName(String name) {
+    return _account.firstWhere((element) => element.acc_name == name);
+  }
 }
