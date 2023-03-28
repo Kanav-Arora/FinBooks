@@ -2,7 +2,7 @@ import 'package:accouting_software/classes/ordered_item.dart';
 import 'package:flutter/material.dart';
 
 class CartProvider with ChangeNotifier {
-  Map<String, OrderedItem> _cartItems = {};
+  final Map<String, OrderedItem> _cartItems = {};
 
   Map<String, OrderedItem> get cartItems {
     return _cartItems;
@@ -14,7 +14,7 @@ class CartProvider with ChangeNotifier {
 
   void add(String itemName, String price, String quantity, String discount,
       String gst) {
-    debugPrint('Item added ${itemName}');
+    debugPrint('Item added $itemName');
     if (_cartItems.containsKey(itemName)) {
       _cartItems.update(
         itemName,
@@ -42,6 +42,11 @@ class CartProvider with ChangeNotifier {
   void removeItem(String name) {
     debugPrint('item removed');
     _cartItems.removeWhere((key, value) => key == name);
+    notifyListeners();
+  }
+
+  void clearCart() {
+    _cartItems.clear();
     notifyListeners();
   }
 }

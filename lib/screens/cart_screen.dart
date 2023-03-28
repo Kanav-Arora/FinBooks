@@ -1,5 +1,9 @@
+import 'package:accouting_software/classes/bill.dart';
 import 'package:accouting_software/classes/ordered_item.dart';
+import 'package:accouting_software/providers/bill_provider.dart';
 import 'package:accouting_software/providers/cart_provider.dart';
+import 'package:accouting_software/screens/sale/add_sale.dart';
+import 'package:accouting_software/utils/utitlities.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,9 +20,11 @@ class _CartScreenState extends State<CartScreen> {
   TextEditingController taxableController = TextEditingController();
   TextEditingController gstController = TextEditingController();
   TextEditingController finalAmountController = TextEditingController();
+  var _isloading = false;
   @override
   void initState() {
     super.initState();
+    _isloading = false;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       taxableController.text = '₹ ${taxable.toStringAsFixed(2)}';
       gstController.text = '₹ ${gst.toStringAsFixed(2)}';
@@ -36,9 +42,10 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String accName = ModalRoute.of(context)!.settings.arguments.toString();
+    Bill argObject = ModalRoute.of(context)!.settings.arguments as Bill;
     final size = MediaQuery.of(context).size;
     final th = Theme.of(context);
+    final cartProvider = Provider.of<CartProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         foregroundColor: th.colorScheme.secondary,
@@ -51,7 +58,7 @@ class _CartScreenState extends State<CartScreen> {
           color: th.primaryColor,
           child: Column(
             children: [
-              Provider.of<CartProvider>(context, listen: false).itemCount == 0
+              cartProvider.itemCount == 0
                   ? const Expanded(
                       child: Center(child: Text('No Items Kiddo!')))
                   : Expanded(
@@ -322,16 +329,35 @@ class _CartScreenState extends State<CartScreen> {
                         side: BorderSide(
                             width: 1.0, color: th.colorScheme.secondary),
                       ),
-                      onPressed:
-                          Provider.of<CartProvider>(context, listen: false)
-                                      .itemCount ==
-                                  0
-                              ? null
-                              : () {},
-                      child: Text(
-                        'Generate Bill',
-                        style: th.textTheme.bodyMedium,
-                      )),
+                      onPressed: cartProvider.itemCount == 0
+                          ? null
+                          : () async {
+                              argObject.items =
+                                  cartProvider.cartItems.values.toList();
+                              try {
+                                setState(() {
+                                  _isloading = true;
+                                });
+                                await Provider.of<BillProvider>(context,
+                                        listen: false)
+                                    .createBill(context, argObject);
+                                cartProvider.clearCart();
+                                setState(() {
+                                  _isloading = false;
+                                });
+                                Navigator.of(context)
+                                    .pushReplacementNamed(AddSale.routeName);
+                              } catch (error) {
+                                Utilities()
+                                    .toastMessage('Unable to generate bill');
+                              }
+                            },
+                      child: _isloading == true
+                          ? const CircularProgressIndicator()
+                          : Text(
+                              'Generate Bill',
+                              style: th.textTheme.bodyMedium,
+                            )),
                   const SizedBox(
                     height: 40,
                   ),

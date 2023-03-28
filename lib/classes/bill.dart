@@ -5,7 +5,7 @@ class Bill {
   String paymentType;
   String accName;
   String billDate;
-  String dueDate;
+  String billType; // Sale or purchase
   List<OrderedItem> items = [];
 
   Bill({
@@ -13,6 +13,6 @@ class Bill {
     required this.paymentType,
     required this.accName,
     required this.billDate,
-    required this.dueDate,
+    required this.billType,
   });
 }

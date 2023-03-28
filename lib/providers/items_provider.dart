@@ -68,4 +68,9 @@ class ItemProvider with ChangeNotifier {
   Item getItemByName(String name) {
     return _items.firstWhere((element) => element.name == name);
   }
+
+  void updateQuantityBySale(String id, Item obj) {
+    _items.removeWhere((element) => element.id == id);
+    _items.insert(0, obj);
+  }
 }

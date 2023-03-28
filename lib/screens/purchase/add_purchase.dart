@@ -15,14 +15,14 @@ import '../cart_screen.dart';
 
 enum Toggles { cash, credit }
 
-class AddSale extends StatefulWidget {
-  static const String routeName = "AddSale";
+class AddPurchase extends StatefulWidget {
+  static const String routeName = "AddPurchase";
 
   @override
-  State<AddSale> createState() => _AddSaleState();
+  State<AddPurchase> createState() => _AddPurchaseState();
 }
 
-class _AddSaleState extends State<AddSale> {
+class _AddPurchaseState extends State<AddPurchase> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final List<bool> _selectedOption = <bool>[false, false];
   var _selectedToggle;
@@ -40,7 +40,11 @@ class _AddSaleState extends State<AddSale> {
   late Item _itemObj;
   final _formKey = GlobalKey<FormState>();
   Bill argObject = Bill(
-      billNo: "", paymentType: "", accName: "", billDate: "", billType: "sale");
+      billNo: "",
+      paymentType: "",
+      accName: "",
+      billDate: "",
+      billType: "purchase");
   var _showToggleError = false;
 
   @override
@@ -149,7 +153,7 @@ class _AddSaleState extends State<AddSale> {
           },
         ),
         title: Text(
-          'S A L E',
+          'P U R C H A S E',
           style: Theme.of(context).textTheme.titleMedium,
           textAlign: TextAlign.center,
         ),

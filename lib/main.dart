@@ -11,6 +11,7 @@ import 'package:accouting_software/screens/items/add_items.dart';
 import 'package:accouting_software/screens/items/items_main.dart';
 import 'package:accouting_software/screens/ledger%20accounts/ledger_main.dart';
 import 'package:accouting_software/screens/login_screen.dart';
+import 'package:accouting_software/screens/purchase/add_purchase.dart';
 import 'package:accouting_software/screens/sale/add_sale.dart';
 import 'package:accouting_software/screens/signup_screen.dart';
 import 'package:accouting_software/screens/user_account.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late StreamSubscription<User?> user;
+  @override
   void initState() {
     user = FirebaseAuth.instance.authStateChanges().listen((user) {
       if (user == null) {
@@ -107,7 +109,7 @@ class _MyAppState extends State<MyApp> {
             ),
             colorScheme:
                 Theme.of(context).colorScheme.copyWith(secondary: Colors.white),
-            iconTheme: IconThemeData(color: Colors.white, opacity: 1.0),
+            iconTheme: const IconThemeData(color: Colors.white, opacity: 1.0),
             appBarTheme: const AppBarTheme(
                 color: Color.fromARGB(255, 16, 16, 16),
                 titleTextStyle: TextStyle(color: Colors.white, fontSize: 35))),
@@ -116,15 +118,16 @@ class _MyAppState extends State<MyApp> {
           LoginScreen.routeName: (ctx) => LoginScreen(),
           SignupScreen.routeName: (ctx) => SignupScreen(),
           HomeScreen.routeName: (ctx) => HomeScreen(),
-          VerificationPage.routeName: (ctx) => VerificationPage(),
+          VerificationPage.routeName: (ctx) => const VerificationPage(),
           LedgerMain.routeName: (ctx) => LedgerMain(),
           AccountsMain.routeName: (ctx) => AccountsMain(),
           AddAccount.routeName: (ctx) => AddAccount(),
           ItemsMain.routeName: (ctx) => ItemsMain(),
-          AddItems.routeName: (ctx) => AddItems(),
-          UserAccount.routeName: (ctx) => UserAccount(),
+          AddItems.routeName: (ctx) => const AddItems(),
+          UserAccount.routeName: (ctx) => const UserAccount(),
           AddSale.routeName: (ctx) => AddSale(),
           CartScreen.routeName: (ctx) => CartScreen(),
+          AddPurchase.routeName: (ctx) => AddPurchase(),
         },
         initialRoute: FirebaseAuth.instance.currentUser == null
             ? LoginScreen.routeName
