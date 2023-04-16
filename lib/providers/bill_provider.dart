@@ -1,4 +1,5 @@
 import 'package:accouting_software/classes/bill.dart';
+import 'package:accouting_software/classes/ordered_item.dart';
 import 'package:accouting_software/providers/items_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -8,7 +9,7 @@ import 'package:provider/provider.dart';
 import '../classes/item.dart';
 
 class BillProvider with ChangeNotifier {
-  final List<Bill> _bills = [];
+  List<Bill> _bills = [];
   List<Bill> get bills {
     return _bills;
   }
@@ -22,6 +23,7 @@ class BillProvider with ChangeNotifier {
         "paymentType": newBill.paymentType,
         "accName": newBill.accName,
         "billDate": newBill.billDate,
+        "dueDate": newBill.dueDate,
         "billType": newBill.billType,
       });
       for (var element in newBill.items) {
@@ -50,9 +52,96 @@ class BillProvider with ChangeNotifier {
         itemProvider.updateQuantityBySale(obj.id, newObj);
         DatabaseReference refItems = userRef.child('items').child(obj.id);
         await refItems.update({"qty": newQuantity.toString()});
+        _bills.add(newBill);
       }
     } catch (error) {
       rethrow;
     }
+  }
+
+  Future snapshotValue(dataSnapshot) async {
+    List<Bill> temp = [];
+    dataSnapshot.value!.forEach((key, value) {
+      List<OrderedItem> ls = [];
+      value['items']!.forEach((inkey, inval) {
+        OrderedItem n = OrderedItem(
+            itemName: inkey,
+            price: inval['price'],
+            qty: inval['qty'],
+            disc: inval['disc'],
+            gst: inval['gst']);
+        ls.add(n);
+      });
+      Bill a = Bill(
+          billNo: key,
+          paymentType: value['paymentType'],
+          accName: value['accName'],
+          billDate: value['billDate'],
+          dueDate: value['dueDate'],
+          billType: value['billType']);
+      a.items = ls;
+      temp.add(a);
+    });
+    temp.sort((a, b) => a.billDate.compareTo(b.billDate));
+    _bills = temp;
+  }
+
+  Future<void> fetch() async {
+    var user = FirebaseAuth.instance.currentUser!.uid;
+    DatabaseReference ref =
+        FirebaseDatabase.instance.ref('user/$user').child('bills');
+    try {
+      final response = await ref.get();
+      if (response.value != null) {
+        snapshotValue(response);
+      } else {
+        _bills = [];
+      }
+      notifyListeners();
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  Future<List<String>> priceValues(String name) async {
+    await fetch();
+    String lastP = "0", minP = "", maxP = "0";
+    for (var element in bills) {
+      for (var m in element.items) {
+        if (m.itemName == name) {
+          lastP = lastP == "0" ? m.price : lastP;
+          minP = minP == "" ? m.price : minP;
+
+          if (double.parse(m.price) > double.parse(maxP)) {
+            maxP = m.price;
+          } else if (double.parse(m.price) < double.parse(minP)) {
+            minP = m.price;
+          }
+        }
+      }
+    }
+    List<String> ls = [lastP, minP, maxP];
+    return ls;
+  }
+
+  Future<List<BillItemDetail>> billByItemName(String name) async {
+    List<BillItemDetail> ls = [];
+    await fetch();
+    for (var element in bills) {
+      String quantity = "0", price = "0";
+      for (var m in element.items) {
+        if (m.itemName == name) {
+          quantity = m.qty;
+          price = m.price;
+        }
+      }
+      ls.add(BillItemDetail(
+          billNo: element.billNo,
+          accName: element.accName,
+          billDate: element.billDate,
+          qty: quantity,
+          price: price));
+    }
+    return ls;
   }
 }

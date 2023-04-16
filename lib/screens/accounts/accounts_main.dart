@@ -1,5 +1,6 @@
 import 'package:accouting_software/classes/account.dart';
 import 'package:accouting_software/providers/accounts_provider.dart';
+import 'package:accouting_software/providers/transaction_provider.dart';
 import 'package:accouting_software/screens/accounts/add_account.dart';
 import 'package:accouting_software/utils/utitlities.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +9,6 @@ import 'package:provider/provider.dart';
 import '../../icons/custom_icons_icons.dart';
 import '../../widgets/app_bar_popupmenubutton.dart';
 import '../app_drawer.dart';
-
-enum Toggles { all, credit, debit }
 
 class AccountsMain extends StatefulWidget {
   static const String routeName = "AccountsMain";
@@ -20,14 +19,9 @@ class AccountsMain extends StatefulWidget {
 
 class _AccountsMainState extends State<AccountsMain> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  final List<bool> _selectedOption = <bool>[true, false, false];
-  var _selectedToggle = Toggles.all;
-
   @override
   void initState() {
     // TODO: implement initState
-    _selectedToggle = Toggles.all;
     super.initState();
   }
 
@@ -35,20 +29,6 @@ class _AccountsMainState extends State<AccountsMain> {
   Widget build(BuildContext context) {
     final ThemeData th = Theme.of(context);
     final size = MediaQuery.of(context).size;
-    final List<Widget> toggleButtonOptions = [
-      Text(
-        'All',
-        style: th.textTheme.bodyMedium,
-      ),
-      Text(
-        'Credit',
-        style: th.textTheme.bodyMedium,
-      ),
-      Text(
-        'Debit',
-        style: th.textTheme.bodyMedium,
-      ),
-    ];
     return Scaffold(
       key: _scaffoldKey,
       drawer: AppDrawer(),
@@ -74,7 +54,7 @@ class _AccountsMainState extends State<AccountsMain> {
           textAlign: TextAlign.center,
         ),
         centerTitle: true,
-        actions: [const AppBarPopupmenuButton()],
+        actions: const [AppBarPopupmenuButton()],
       ),
       body: RefreshIndicator(
         onRefresh: () async {
@@ -94,47 +74,14 @@ class _AccountsMainState extends State<AccountsMain> {
                 const SizedBox(
                   height: 40,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ToggleButtons(
-                      onPressed: (int index) {
-                        setState(() {
-                          for (int i = 0; i < _selectedOption.length; i++) {
-                            _selectedOption[i] = i == index;
-                          }
-                          if (index == 0) {
-                            _selectedToggle = Toggles.all;
-                          } else if (index == 1) {
-                            _selectedToggle = Toggles.credit;
-                          } else {
-                            _selectedToggle = Toggles.debit;
-                          }
-                        });
-                      },
-                      borderRadius: const BorderRadius.all(Radius.circular(8)),
-                      borderColor: Colors.grey,
-                      selectedBorderColor: th.colorScheme.secondary,
-                      selectedColor: Colors.white,
-                      fillColor: Color.fromARGB(255, 23, 23, 23),
-                      color: Color.fromARGB(255, 23, 23, 23),
-                      constraints: const BoxConstraints(
-                        minHeight: 40.0,
-                        minWidth: 80.0,
-                      ),
-                      isSelected: _selectedOption,
-                      children: toggleButtonOptions,
-                    ),
-                    OutlinedButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(AddAccount.routeName);
-                      },
-                      child: Icon(
-                        Icons.add,
-                        color: th.colorScheme.secondary,
-                      ),
-                    ),
-                  ],
+                OutlinedButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(AddAccount.routeName);
+                  },
+                  child: Icon(
+                    Icons.add,
+                    color: th.colorScheme.secondary,
+                  ),
                 ),
                 const SizedBox(
                   height: 40,
@@ -169,7 +116,7 @@ class _AccountsMainState extends State<AccountsMain> {
                             DataColumn(
                               label: Expanded(
                                 child: Text(
-                                  'Type',
+                                  'Debit',
                                   style: th.textTheme.bodyMedium,
                                 ),
                               ),
@@ -177,7 +124,7 @@ class _AccountsMainState extends State<AccountsMain> {
                             DataColumn(
                               label: Expanded(
                                 child: Text(
-                                  'Amount',
+                                  'Credit',
                                   style: th.textTheme.bodyMedium,
                                 ),
                               ),
@@ -187,6 +134,10 @@ class _AccountsMainState extends State<AccountsMain> {
                             data.length,
                             (index) {
                               Account obj = data.elementAt(index);
+                              final d = Provider.of<TransactionProvider>(
+                                      context,
+                                      listen: false)
+                                  .dataByAccName(obj.acc_name);
                               return DataRow(
                                 cells: <DataCell>[
                                   DataCell(
@@ -196,10 +147,22 @@ class _AccountsMainState extends State<AccountsMain> {
                                     Text(obj.acc_name),
                                   ),
                                   DataCell(
-                                    Text(obj.acc_type),
+                                    Text(
+                                      d.debit.toStringAsFixed(2),
+                                      style: TextStyle(
+                                          color: d.debit > d.credit
+                                              ? Colors.redAccent
+                                              : th.colorScheme.secondary),
+                                    ),
                                   ),
-                                  const DataCell(
-                                    Text('0'),
+                                  DataCell(
+                                    Text(
+                                      d.credit.toStringAsFixed(2),
+                                      style: TextStyle(
+                                          color: d.credit > d.debit
+                                              ? Colors.greenAccent
+                                              : th.colorScheme.secondary),
+                                    ),
                                   ),
                                 ],
                               );
@@ -208,10 +171,10 @@ class _AccountsMainState extends State<AccountsMain> {
                         )));
                       }
                     }
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   },
                   future: Provider.of<AccountsProvider>(context, listen: false)
-                      .toggled(_selectedToggle.name),
+                      .accounts,
                 ),
               ],
             ),

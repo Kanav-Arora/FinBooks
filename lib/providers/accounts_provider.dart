@@ -22,7 +22,6 @@ class AccountsProvider with ChangeNotifier {
     try {
       await ref.set({
         "acc_name": a.acc_name,
-        "acc_type": a.acc_type,
         "address": a.address,
         "city": a.city,
         "state": a.state,
@@ -47,7 +46,6 @@ class AccountsProvider with ChangeNotifier {
       Account a = Account(
         id: key,
         acc_name: value['acc_name'],
-        acc_type: value['acc_type'],
         address: value['address'],
         city: value['city'],
         state: value['state'],
@@ -80,25 +78,6 @@ class AccountsProvider with ChangeNotifier {
     } catch (error) {
       rethrow;
     }
-  }
-
-  Future<List<Account>> toggled(String t) async {
-    List<Account> newList = [];
-    List<Account> acc = await accounts;
-    if (t == Toggles.all.name) {
-      newList = acc;
-    } else {
-      for (var element in acc) {
-        if (t == Toggles.credit.name &&
-            element.acc_type == Toggles.credit.name) {
-          newList.add(element);
-        } else if (t == Toggles.debit.name &&
-            element.acc_type == Toggles.debit.name) {
-          newList.add(element);
-        }
-      }
-    }
-    return newList;
   }
 
   Account accountByName(String name) {

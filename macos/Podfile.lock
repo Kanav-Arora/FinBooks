@@ -8,16 +8,18 @@ PODS:
     - Firebase/CoreOnly
     - FirebaseDatabase (~> 10.6.0)
   - firebase_auth (4.2.10):
-    - Firebase/Auth (= 10.6.0)
+    - Firebase/Auth (~> 10.6.0)
+    - Firebase/CoreOnly (~> 10.6.0)
     - firebase_core
-    - Flutter
+    - FlutterMacOS
   - firebase_core (2.8.0):
-    - Firebase/CoreOnly (= 10.6.0)
-    - Flutter
+    - Firebase/CoreOnly (~> 10.6.0)
+    - FlutterMacOS
   - firebase_database (10.0.16):
-    - Firebase/Database (= 10.6.0)
+    - Firebase/CoreOnly (~> 10.6.0)
+    - Firebase/Database (~> 10.6.0)
     - firebase_core
-    - Flutter
+    - FlutterMacOS
   - FirebaseAuth (10.6.0):
     - FirebaseCore (~> 10.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
@@ -32,10 +34,7 @@ PODS:
   - FirebaseDatabase (10.6.0):
     - FirebaseCore (~> 10.0)
     - leveldb-library (~> 1.22)
-  - Flutter (1.0.0)
-  - fluttertoast (0.0.2):
-    - Flutter
-    - Toast
+  - FlutterMacOS (1.0.0)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
@@ -61,18 +60,16 @@ PODS:
     - FlutterMacOS
   - PromisesObjC (2.2.0)
   - sqflite (0.0.2):
-    - Flutter
+    - FlutterMacOS
     - FMDB (>= 2.7.5)
-  - Toast (4.0.0)
 
 DEPENDENCIES:
-  - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
-  - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
-  - firebase_database (from `.symlinks/plugins/firebase_database/ios`)
-  - Flutter (from `Flutter`)
-  - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
-  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/ios`)
-  - sqflite (from `.symlinks/plugins/sqflite/ios`)
+  - firebase_auth (from `Flutter/ephemeral/.symlinks/plugins/firebase_auth/macos`)
+  - firebase_core (from `Flutter/ephemeral/.symlinks/plugins/firebase_core/macos`)
+  - firebase_database (from `Flutter/ephemeral/.symlinks/plugins/firebase_database/macos`)
+  - FlutterMacOS (from `Flutter/ephemeral`)
+  - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/macos`)
+  - sqflite (from `Flutter/ephemeral/.symlinks/plugins/sqflite/macos`)
 
 SPEC REPOS:
   trunk:
@@ -86,44 +83,39 @@ SPEC REPOS:
     - GTMSessionFetcher
     - leveldb-library
     - PromisesObjC
-    - Toast
 
 EXTERNAL SOURCES:
   firebase_auth:
-    :path: ".symlinks/plugins/firebase_auth/ios"
+    :path: Flutter/ephemeral/.symlinks/plugins/firebase_auth/macos
   firebase_core:
-    :path: ".symlinks/plugins/firebase_core/ios"
+    :path: Flutter/ephemeral/.symlinks/plugins/firebase_core/macos
   firebase_database:
-    :path: ".symlinks/plugins/firebase_database/ios"
-  Flutter:
-    :path: Flutter
-  fluttertoast:
-    :path: ".symlinks/plugins/fluttertoast/ios"
+    :path: Flutter/ephemeral/.symlinks/plugins/firebase_database/macos
+  FlutterMacOS:
+    :path: Flutter/ephemeral
   path_provider_foundation:
-    :path: ".symlinks/plugins/path_provider_foundation/ios"
+    :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/macos
   sqflite:
-    :path: ".symlinks/plugins/sqflite/ios"
+    :path: Flutter/ephemeral/.symlinks/plugins/sqflite/macos
 
 SPEC CHECKSUMS:
   Firebase: f13680471b021937f2230ea8503c7809d8c29806
-  firebase_auth: 5f52508d5f90511e809832d9b3aea90b8cea7b0e
-  firebase_core: 58542d7399889ebdbb034baa72d081e54c5c814d
-  firebase_database: bebecb0e8ddfb1d46a22e51219d48f6ee2e9563b
+  firebase_auth: 67a089d7684dc072f933704408e54a9957978c6e
+  firebase_core: 7cad6afc6d420690c239021131b133b3920d092e
+  firebase_database: 4c48bbe12a378bd83fff1ad96342e48c4f60a80b
   FirebaseAuth: 743e5cd568af59d6d99a91ea9300843672515cf7
   FirebaseCore: fa80ad16a62d52f67274b5b88304c3a318bbf9a4
   FirebaseCoreInternal: fa2899eb1f340054858d289e5a0fb935a0a74e52
   FirebaseDatabase: c3ab8f695e48d4c4431f8406b58ebe543be185d9
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  fluttertoast: eb263d302cc92e04176c053d2385237e9f43fad0
+  FlutterMacOS: ae6af50a8ea7d6103d888583d46bd8328a7e9811
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   GoogleUtilities: 9aa0ad5a7bc171f8bae016300bfcfa3fb8425749
   GTMSessionFetcher: c9e714f7eec91a55641e2bab9f45fd83a219b882
   leveldb-library: f03246171cce0484482ec291f88b6d563699ee06
   path_provider_foundation: c68054786f1b4f3343858c1e1d0caaded73f0be9
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
-  sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
-  Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
+  sqflite: a5789cceda41d54d23f31d6de539d65bb14100ea
 
-PODFILE CHECKSUM: ad039222394ce2d6e75df42ec138c57cbd947c84
+PODFILE CHECKSUM: a884f6dd3f7494f3892ee6c81feea3a3abbf9153
 
 COCOAPODS: 1.12.0

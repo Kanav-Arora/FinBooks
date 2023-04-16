@@ -8,7 +8,7 @@ import '../../icons/custom_icons_icons.dart';
 import '../../widgets/app_bar_popupmenubutton.dart';
 import '../app_drawer.dart';
 
-enum Toggles { all, credit, debit }
+enum Toggles { all, sale, purchase }
 
 class AddAccount extends StatefulWidget {
   static const String routeName = "AddAccount";
@@ -22,14 +22,14 @@ class _AddAccountState extends State<AddAccount> {
 
   var _isLoading = false;
   final List<bool> _selectedOption = <bool>[false, false];
-  var _selectedToggle = Toggles.credit;
+  var _selectedToggle = Toggles.sale;
 
   final _formkey = GlobalKey<FormState>();
 
   @override
   void initState() {
     // TODO: implement initState
-    _selectedToggle = Toggles.credit;
+    _selectedToggle = Toggles.purchase;
     _isLoading = false;
     super.initState();
   }
@@ -37,7 +37,6 @@ class _AddAccountState extends State<AddAccount> {
   Account a = Account(
       id: "",
       acc_name: "",
-      acc_type: "",
       address: "",
       city: "",
       state: "",
@@ -46,7 +45,7 @@ class _AddAccountState extends State<AddAccount> {
       pan_no: "",
       email: "",
       mobile_no: "",
-      credit_days: "",
+      credit_days: "0",
       interest_rate: "");
 
   void _saveForm() {
@@ -59,11 +58,11 @@ class _AddAccountState extends State<AddAccount> {
     final size = MediaQuery.of(context).size;
     final List<Widget> toggleButtonOptions = [
       Text(
-        'Credit',
+        'Sale',
         style: th.textTheme.bodyMedium,
       ),
       Text(
-        'Debit',
+        'Purchase',
         style: th.textTheme.bodyMedium,
       ),
     ];
@@ -117,7 +116,6 @@ class _AddAccountState extends State<AddAccount> {
                             a = Account(
                                 id: newValue.toString(),
                                 acc_name: a.acc_name,
-                                acc_type: a.acc_type,
                                 address: a.address,
                                 city: a.city,
                                 state: a.state,
@@ -160,7 +158,6 @@ class _AddAccountState extends State<AddAccount> {
                             a = Account(
                                 id: a.id,
                                 acc_name: newValue.toString(),
-                                acc_type: a.acc_type,
                                 address: a.address,
                                 city: a.city,
                                 state: a.state,
@@ -204,7 +201,6 @@ class _AddAccountState extends State<AddAccount> {
                       a = Account(
                           id: a.id,
                           acc_name: a.acc_name,
-                          acc_type: a.acc_type,
                           address: a.address,
                           city: a.city,
                           state: a.state,
@@ -245,7 +241,6 @@ class _AddAccountState extends State<AddAccount> {
                       a = Account(
                           id: a.id,
                           acc_name: a.acc_name,
-                          acc_type: a.acc_type,
                           address: a.address,
                           city: a.city,
                           state: a.state,
@@ -286,7 +281,6 @@ class _AddAccountState extends State<AddAccount> {
                       a = Account(
                           id: a.id,
                           acc_name: a.acc_name,
-                          acc_type: a.acc_type,
                           address: newValue.toString(),
                           city: a.city,
                           state: a.state,
@@ -332,7 +326,6 @@ class _AddAccountState extends State<AddAccount> {
                             a = Account(
                                 id: a.id,
                                 acc_name: a.acc_name,
-                                acc_type: a.acc_type,
                                 address: a.address,
                                 city: newValue.toString(),
                                 state: a.state,
@@ -375,7 +368,6 @@ class _AddAccountState extends State<AddAccount> {
                             a = Account(
                                 id: a.id,
                                 acc_name: a.acc_name,
-                                acc_type: a.acc_type,
                                 address: a.address,
                                 city: a.city,
                                 state: newValue.toString(),
@@ -423,7 +415,6 @@ class _AddAccountState extends State<AddAccount> {
                             a = Account(
                                 id: a.id,
                                 acc_name: a.acc_name,
-                                acc_type: a.acc_type,
                                 address: a.address,
                                 city: a.city,
                                 state: a.state,
@@ -461,47 +452,42 @@ class _AddAccountState extends State<AddAccount> {
                         width: 20,
                       ),
                       Expanded(
-                        child: ToggleButtons(
-                          onPressed: (int index) {
-                            setState(() {
-                              for (int i = 0; i < _selectedOption.length; i++) {
-                                _selectedOption[i] = i == index;
-                              }
-                              if (index == 0) {
-                                _selectedToggle = Toggles.credit;
-                              } else {
-                                _selectedToggle = Toggles.debit;
-                              }
-
-                              a = Account(
-                                  id: a.id,
-                                  acc_name: a.acc_name,
-                                  acc_type: _selectedToggle.name,
-                                  address: a.address,
-                                  city: a.city,
-                                  state: a.state,
-                                  pincode: a.pincode,
-                                  gst_no: a.gst_no,
-                                  pan_no: a.pan_no,
-                                  email: a.email,
-                                  mobile_no: a.mobile_no,
-                                  credit_days: a.credit_days,
-                                  interest_rate: a.interest_rate);
-                            });
+                        child: TextFormField(
+                          onSaved: (newValue) {
+                            a = Account(
+                                id: a.id,
+                                acc_name: a.acc_name,
+                                address: a.address,
+                                city: a.city,
+                                state: a.state,
+                                pincode: a.pincode,
+                                gst_no: a.gst_no,
+                                pan_no: a.pan_no,
+                                email: a.email,
+                                mobile_no: a.mobile_no,
+                                credit_days: newValue.toString(),
+                                interest_rate: a.interest_rate);
                           },
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(8)),
-                          borderColor: Colors.grey,
-                          selectedBorderColor: th.colorScheme.secondary,
-                          selectedColor: Colors.white,
-                          fillColor: const Color.fromARGB(255, 23, 23, 23),
-                          color: const Color.fromARGB(255, 23, 23, 23),
-                          constraints: const BoxConstraints(
-                            minHeight: 40.0,
-                            minWidth: 80.0,
+                          keyboardType: TextInputType.number,
+                          textInputAction: TextInputAction.next,
+                          decoration: InputDecoration(
+                            hintText: "Credit days",
+                            hintStyle: const TextStyle(
+                                color: Color.fromARGB(255, 130, 130, 130)),
+                            fillColor: const Color.fromARGB(255, 23, 23, 23),
+                            filled: true,
+                            hoverColor: Theme.of(context).colorScheme.secondary,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(
+                                color: Color.fromARGB(255, 181, 21, 221),
+                              ),
+                            ),
                           ),
-                          isSelected: _selectedOption,
-                          children: toggleButtonOptions,
                         ),
                       )
                     ],
@@ -518,7 +504,6 @@ class _AddAccountState extends State<AddAccount> {
                             a = Account(
                                 id: a.id,
                                 acc_name: a.acc_name,
-                                acc_type: a.acc_type,
                                 address: a.address,
                                 city: a.city,
                                 state: a.state,
@@ -561,7 +546,6 @@ class _AddAccountState extends State<AddAccount> {
                             a = Account(
                                 id: a.id,
                                 acc_name: a.acc_name,
-                                acc_type: a.acc_type,
                                 address: a.address,
                                 city: a.city,
                                 state: a.state,
@@ -577,99 +561,6 @@ class _AddAccountState extends State<AddAccount> {
                           textInputAction: TextInputAction.next,
                           decoration: InputDecoration(
                             hintText: "PAN No.",
-                            hintStyle: const TextStyle(
-                                color: Color.fromARGB(255, 130, 130, 130)),
-                            fillColor: const Color.fromARGB(255, 23, 23, 23),
-                            filled: true,
-                            hoverColor: Theme.of(context).colorScheme.secondary,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 181, 21, 221),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: (size.width - 20) / 2,
-                        child: TextFormField(
-                          initialValue: "0",
-                          onSaved: (newValue) {
-                            a = Account(
-                                id: a.id,
-                                acc_name: a.acc_name,
-                                acc_type: a.acc_type,
-                                address: a.address,
-                                city: a.city,
-                                state: a.state,
-                                pincode: a.pincode,
-                                gst_no: a.gst_no,
-                                pan_no: a.pan_no,
-                                email: a.email,
-                                mobile_no: a.mobile_no,
-                                credit_days: newValue.toString(),
-                                interest_rate: a.interest_rate);
-                          },
-                          keyboardType: TextInputType.number,
-                          textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
-                            hintText: "Credit days",
-                            hintStyle: const TextStyle(
-                                color: Color.fromARGB(255, 130, 130, 130)),
-                            fillColor: const Color.fromARGB(255, 23, 23, 23),
-                            filled: true,
-                            hoverColor: Theme.of(context).colorScheme.secondary,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 181, 21, 221),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Expanded(
-                        child: TextFormField(
-                          initialValue: "0",
-                          onSaved: (newValue) {
-                            a = Account(
-                                id: a.id,
-                                acc_name: a.acc_name,
-                                acc_type: a.acc_type,
-                                address: a.address,
-                                city: a.city,
-                                state: a.state,
-                                pincode: a.pincode,
-                                gst_no: a.gst_no,
-                                pan_no: a.pan_no,
-                                email: a.email,
-                                mobile_no: a.mobile_no,
-                                credit_days: a.credit_days,
-                                interest_rate: newValue.toString());
-                          },
-                          keyboardType: TextInputType.number,
-                          textInputAction: TextInputAction.done,
-                          decoration: InputDecoration(
-                            hintText: "Interest rate",
                             hintStyle: const TextStyle(
                                 color: Color.fromARGB(255, 130, 130, 130)),
                             fillColor: const Color.fromARGB(255, 23, 23, 23),

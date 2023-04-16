@@ -40,7 +40,13 @@ class _AddSaleState extends State<AddSale> {
   late Item _itemObj;
   final _formKey = GlobalKey<FormState>();
   Bill argObject = Bill(
-      billNo: "", paymentType: "", accName: "", billDate: "", billType: "sale");
+    billNo: "",
+    paymentType: "",
+    accName: "",
+    billDate: "",
+    dueDate: "",
+    billType: "sale",
+  );
   var _showToggleError = false;
 
   @override
@@ -51,7 +57,6 @@ class _AddSaleState extends State<AddSale> {
     _userAcc = Account(
       id: "",
       acc_name: "",
-      acc_type: "",
       address: "",
       city: "",
       state: "",
@@ -111,6 +116,7 @@ class _AddSaleState extends State<AddSale> {
         paymentType: (_selectedToggle as Toggles).name,
         accName: _selectedAccount,
         billDate: _billDateController.text,
+        dueDate: _dueDateController.text,
         billType: argObject.billType);
     return true;
   }
@@ -181,6 +187,7 @@ class _AddSaleState extends State<AddSale> {
                                 paymentType: argObject.paymentType,
                                 accName: argObject.accName,
                                 billDate: argObject.billDate,
+                                dueDate: argObject.dueDate,
                                 billType: argObject.billType);
                           },
                           validator: (value) {
@@ -593,8 +600,16 @@ class _AddSaleState extends State<AddSale> {
                     children: [
                       SizedBox(
                         width: (size.width - 40) / 2,
-                        child: TextField(
+                        child: TextFormField(
                           controller: _quantityController,
+                          validator: ((value) {
+                            if (_selectedItem == null) return null;
+                            if (double.parse(_itemObj.quantity) <
+                                double.parse(_quantityController.text)) {
+                              return 'Insufficient stock: ${_itemObj.quantity}';
+                            }
+                            return null;
+                          }),
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
                           decoration: InputDecoration(
@@ -622,7 +637,7 @@ class _AddSaleState extends State<AddSale> {
                         width: 20,
                       ),
                       Expanded(
-                        child: TextField(
+                        child: TextFormField(
                           controller: _discountController,
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
@@ -691,6 +706,9 @@ class _AddSaleState extends State<AddSale> {
                           onPressed: _selectedItem == null
                               ? null
                               : () {
+                                  final isValid =
+                                      _formKey.currentState!.validate();
+                                  if (!isValid) return;
                                   Provider.of<CartProvider>(context,
                                           listen: false)
                                       .add(

@@ -1,6 +1,7 @@
 import 'package:accouting_software/classes/item.dart';
 import 'package:accouting_software/providers/items_provider.dart';
 import 'package:accouting_software/screens/items/add_items.dart';
+import 'package:accouting_software/screens/items/items_detail.dart';
 import 'package:accouting_software/utils/utitlities.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -47,6 +48,7 @@ class ItemsMain extends StatelessWidget {
         actions: const [AppBarPopupmenuButton()],
       ),
       body: RefreshIndicator(
+        backgroundColor: th.primaryColor,
         onRefresh: () {
           return Provider.of<ItemProvider>(context, listen: false).fetch();
         },
@@ -81,6 +83,7 @@ class ItemsMain extends StatelessWidget {
                         final data = snapshot.data as List<Item>;
                         return Expanded(
                           child: DataTable(
+                            showCheckboxColumn: false,
                             columns: <DataColumn>[
                               DataColumn(
                                 label: Expanded(
@@ -120,6 +123,13 @@ class ItemsMain extends StatelessWidget {
                               (index) {
                                 Item obj = data.elementAt(index);
                                 return DataRow(
+                                  onSelectChanged: (value) {
+                                    if (value == true) {
+                                      Navigator.of(context).pushNamed(
+                                          ItemsDetail.routeName,
+                                          arguments: obj);
+                                    }
+                                  },
                                   cells: <DataCell>[
                                     DataCell(
                                       Text(obj.id),
@@ -141,7 +151,7 @@ class ItemsMain extends StatelessWidget {
                         );
                       }
                     }
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   }),
                   future:
                       Provider.of<ItemProvider>(context, listen: false).items,

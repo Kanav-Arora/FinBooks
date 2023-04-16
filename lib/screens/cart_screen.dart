@@ -2,10 +2,13 @@ import 'package:accouting_software/classes/bill.dart';
 import 'package:accouting_software/classes/ordered_item.dart';
 import 'package:accouting_software/providers/bill_provider.dart';
 import 'package:accouting_software/providers/cart_provider.dart';
+import 'package:accouting_software/providers/transaction_provider.dart';
+import 'package:accouting_software/screens/purchase/add_purchase.dart';
 import 'package:accouting_software/screens/sale/add_sale.dart';
 import 'package:accouting_software/utils/utitlities.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:accouting_software/classes/transaction.dart' as Trans;
 
 class CartScreen extends StatefulWidget {
   static const String routeName = "CartScreen";
@@ -334,6 +337,7 @@ class _CartScreenState extends State<CartScreen> {
                           : () async {
                               argObject.items =
                                   cartProvider.cartItems.values.toList();
+                              final navigator = Navigator.of(context);
                               try {
                                 setState(() {
                                   _isloading = true;
@@ -341,12 +345,39 @@ class _CartScreenState extends State<CartScreen> {
                                 await Provider.of<BillProvider>(context,
                                         listen: false)
                                     .createBill(context, argObject);
+                                String n = argObject.billType == "sale"
+                                    ? "Sale"
+                                    : "Purchase";
+                                Trans.Transaction a = Trans.Transaction(
+                                    name: "$n: ${argObject.billNo}",
+                                    acc_name: argObject.accName,
+                                    type: argObject.billType,
+                                    amount: finalAmountController.text,
+                                    date: argObject.billDate);
+                                await Provider.of<TransactionProvider>(context,
+                                        listen: false)
+                                    .addTransaction(a);
+                                if (argObject.paymentType == "cash") {
+                                  Trans.Transaction b = Trans.Transaction(
+                                      name: "Cash-$n: ${argObject.billNo}",
+                                      acc_name: argObject.accName,
+                                      type: n == "Sale"
+                                          ? "voucher-sale"
+                                          : "voucher-purchase",
+                                      amount: finalAmountController.text,
+                                      date: argObject.billDate);
+                                  await Provider.of<TransactionProvider>(
+                                          context,
+                                          listen: false)
+                                      .addTransaction(b);
+                                }
                                 cartProvider.clearCart();
                                 setState(() {
                                   _isloading = false;
                                 });
-                                Navigator.of(context)
-                                    .pushReplacementNamed(AddSale.routeName);
+                                navigator.pushReplacementNamed(n == "Sale"
+                                    ? AddSale.routeName
+                                    : AddPurchase.routeName);
                               } catch (error) {
                                 Utilities()
                                     .toastMessage('Unable to generate bill');

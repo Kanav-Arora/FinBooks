@@ -44,6 +44,7 @@ class _AddPurchaseState extends State<AddPurchase> {
       paymentType: "",
       accName: "",
       billDate: "",
+      dueDate: "",
       billType: "purchase");
   var _showToggleError = false;
 
@@ -55,7 +56,6 @@ class _AddPurchaseState extends State<AddPurchase> {
     _userAcc = Account(
       id: "",
       acc_name: "",
-      acc_type: "",
       address: "",
       city: "",
       state: "",
@@ -115,6 +115,7 @@ class _AddPurchaseState extends State<AddPurchase> {
         paymentType: (_selectedToggle as Toggles).name,
         accName: _selectedAccount,
         billDate: _billDateController.text,
+        dueDate: _dueDateController.text,
         billType: argObject.billType);
     return true;
   }
@@ -185,6 +186,7 @@ class _AddPurchaseState extends State<AddPurchase> {
                                 paymentType: argObject.paymentType,
                                 accName: argObject.accName,
                                 billDate: argObject.billDate,
+                                dueDate: argObject.dueDate,
                                 billType: argObject.billType);
                           },
                           validator: (value) {

@@ -33,8 +33,8 @@ class AppBarPopupmenu {
               style: TextStyle(color: Theme.of(ctx).colorScheme.secondary)),
           onTap: () async {
             await FirebaseAuth.instance.signOut();
-            Navigator.of(ctx).pop();
-            Navigator.of(ctx).pushReplacementNamed(LoginScreen.routeName);
+            Navigator.of(ctx).pushNamedAndRemoveUntil(
+                LoginScreen.routeName, (Route route) => false);
           },
         ),
       ),

@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 class Account {
   final String id;
   final String acc_name;
-  final String acc_type;
   final String address;
   final String city;
   final String state;
@@ -18,7 +17,6 @@ class Account {
   Account(
       {required this.id,
       required this.acc_name,
-      required this.acc_type,
       required this.address,
       required this.city,
       required this.state,
