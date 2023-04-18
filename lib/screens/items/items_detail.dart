@@ -355,7 +355,7 @@ class _ItemsDetailState extends State<ItemsDetail> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              Text(data.elementAt(1)),
+                              Text(data.elementAt(2)),
                             ],
                           ),
                           const SizedBox(
@@ -367,7 +367,7 @@ class _ItemsDetailState extends State<ItemsDetail> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              Text(data.elementAt(2)),
+                              Text(data.elementAt(1)),
                             ],
                           ),
                         ],
@@ -400,18 +400,23 @@ class _ItemsDetailState extends State<ItemsDetail> {
                       temp.sort((a, b) => a.billDate.compareTo(b.billDate));
                       return Column(
                         children: [
-                          SfCartesianChart(
-                            primaryXAxis: CategoryAxis(),
-                            title: ChartTitle(text: 'Price Change'),
-                            series: <LineSeries<BillItemDetail, String>>[
-                              LineSeries<BillItemDetail, String>(
-                                  dataSource: temp,
-                                  xValueMapper: (BillItemDetail b, _) =>
-                                      b.billDate,
-                                  yValueMapper: (BillItemDetail b, _) =>
-                                      double.parse(b.price))
-                            ],
-                          ),
+                          data.isNotEmpty
+                              ? SfCartesianChart(
+                                  primaryXAxis: CategoryAxis(),
+                                  title: ChartTitle(text: 'Price Change'),
+                                  series: <LineSeries<BillItemDetail, String>>[
+                                    LineSeries<BillItemDetail, String>(
+                                        dataSource: temp,
+                                        xValueMapper: (BillItemDetail b, _) =>
+                                            b.billDate,
+                                        yValueMapper: (BillItemDetail b, _) =>
+                                            double.parse(b.price),
+                                        dataLabelSettings:
+                                            const DataLabelSettings(
+                                                isVisible: true))
+                                  ],
+                                )
+                              : const SizedBox(),
                           Expanded(
                             child: ListView.builder(
                               itemBuilder: (ctx, index) {

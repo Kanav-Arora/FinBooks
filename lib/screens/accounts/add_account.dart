@@ -4,10 +4,6 @@ import 'package:accouting_software/screens/accounts/accounts_main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../icons/custom_icons_icons.dart';
-import '../../widgets/app_bar_popupmenubutton.dart';
-import '../app_drawer.dart';
-
 enum Toggles { all, sale, purchase }
 
 class AddAccount extends StatefulWidget {
@@ -68,30 +64,34 @@ class _AddAccountState extends State<AddAccount> {
     ];
     return Scaffold(
       key: _scaffoldKey,
-      drawer: AppDrawer(),
       appBar: AppBar(
         elevation: 0,
-        leading: Builder(
-          builder: (BuildContext ctx) {
-            return IconButton(
-              onPressed: () => _scaffoldKey.currentState!.openDrawer(),
-              icon: Container(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Icon(
-                    CustomIcons.th_thumb,
-                    size: 28,
-                    color: Theme.of(context).colorScheme.secondary,
-                  )),
-            );
-          },
-        ),
         title: Text(
           'A D D\nA C C O U N T',
           style: Theme.of(context).textTheme.titleMedium,
           textAlign: TextAlign.center,
         ),
         centerTitle: true,
-        actions: const [AppBarPopupmenuButton()],
+        actions: [
+          TextButton(
+            onPressed: _isLoading == true
+                ? null
+                : () async {
+                    _saveForm();
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    await Provider.of<AccountsProvider>(context, listen: false)
+                        .addAccount(a)
+                        .then((_) => Navigator.of(context)
+                            .pushReplacementNamed(AccountsMain.routeName));
+                  },
+            child: const Text(
+              'Add',
+              style: TextStyle(color: Colors.white, fontSize: 18),
+            ),
+          )
+        ],
       ),
       body: Container(
         width: size.width,
@@ -583,42 +583,6 @@ class _AddAccountState extends State<AddAccount> {
                   ),
                   const SizedBox(
                     height: 20,
-                  ),
-                  MaterialButton(
-                    onPressed: () async {
-                      _saveForm();
-                      setState(() {
-                        _isLoading = true;
-                      });
-                      await Provider.of<AccountsProvider>(context,
-                              listen: false)
-                          .addAccount(a)
-                          .then((_) => Navigator.of(context)
-                              .pushReplacementNamed(AccountsMain.routeName));
-                    },
-                    padding: const EdgeInsets.all(0),
-                    child: Container(
-                      height: 60,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        gradient: const LinearGradient(
-                          colors: [
-                            Color.fromARGB(255, 181, 21, 221),
-                            Color.fromARGB(255, 211, 40, 168),
-                          ],
-                          stops: [0.0, 1.0],
-                        ),
-                      ),
-                      child: Center(
-                        child: _isLoading == true
-                            ? const CircularProgressIndicator()
-                            : const Text(
-                                'Add',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 18),
-                              ),
-                      ),
-                    ),
                   ),
                 ],
               ),

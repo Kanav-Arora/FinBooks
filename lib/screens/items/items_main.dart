@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../icons/custom_icons_icons.dart';
-import '../../widgets/app_bar_popupmenubutton.dart';
 import '../app_drawer.dart';
 
 class ItemsMain extends StatelessWidget {
@@ -45,118 +44,119 @@ class ItemsMain extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         centerTitle: true,
-        actions: const [AppBarPopupmenuButton()],
+        actions: [
+          OutlinedButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(AddItems.routeName);
+            },
+            child: Icon(
+              Icons.add,
+              color: th.colorScheme.secondary,
+            ),
+          )
+        ],
       ),
       body: RefreshIndicator(
         backgroundColor: th.primaryColor,
         onRefresh: () {
           return Provider.of<ItemProvider>(context, listen: false).fetch();
         },
-        child: SingleChildScrollView(
-          child: Container(
-            width: size.width,
-            height: size.height,
-            color: th.primaryColor,
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 40,
-                ),
-                OutlinedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(AddItems.routeName);
-                  },
-                  child: Icon(
-                    Icons.add,
-                    color: th.colorScheme.secondary,
+        child: Container(
+          color: th.primaryColor,
+          child: SingleChildScrollView(
+            child: Container(
+              width: size.width,
+              height: size.height,
+              color: th.primaryColor,
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 40,
                   ),
-                ),
-                const SizedBox(
-                  height: 40,
-                ),
-                FutureBuilder(
-                  builder: ((context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      if (snapshot.hasError) {
-                        Utilities().toastMessage(snapshot.error.toString());
-                      } else if (snapshot.hasData) {
-                        final data = snapshot.data as List<Item>;
-                        return Expanded(
-                          child: DataTable(
-                            showCheckboxColumn: false,
-                            columns: <DataColumn>[
-                              DataColumn(
-                                label: Expanded(
-                                  child: Text(
-                                    'Id',
-                                    style: th.textTheme.bodyMedium,
+                  FutureBuilder(
+                    builder: ((context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (snapshot.hasError) {
+                          Utilities().toastMessage(snapshot.error.toString());
+                        } else if (snapshot.hasData) {
+                          final data = snapshot.data as List<Item>;
+                          return Expanded(
+                            child: DataTable(
+                              showCheckboxColumn: false,
+                              columns: <DataColumn>[
+                                DataColumn(
+                                  label: Expanded(
+                                    child: Text(
+                                      'Id',
+                                      style: th.textTheme.bodyMedium,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              DataColumn(
-                                label: Expanded(
-                                  child: Text(
-                                    'Name',
-                                    style: th.textTheme.bodyMedium,
+                                DataColumn(
+                                  label: Expanded(
+                                    child: Text(
+                                      'Name',
+                                      style: th.textTheme.bodyMedium,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              DataColumn(
-                                label: Expanded(
-                                  child: Text(
-                                    'Quantity',
-                                    style: th.textTheme.bodyMedium,
+                                DataColumn(
+                                  label: Expanded(
+                                    child: Text(
+                                      'Quantity',
+                                      style: th.textTheme.bodyMedium,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              DataColumn(
-                                label: Expanded(
-                                  child: Text(
-                                    'Price',
-                                    style: th.textTheme.bodyMedium,
+                                DataColumn(
+                                  label: Expanded(
+                                    child: Text(
+                                      'Price',
+                                      style: th.textTheme.bodyMedium,
+                                    ),
                                   ),
                                 ),
+                              ],
+                              rows: List<DataRow>.generate(
+                                data.length,
+                                (index) {
+                                  Item obj = data.elementAt(index);
+                                  return DataRow(
+                                    onSelectChanged: (value) {
+                                      if (value == true) {
+                                        Navigator.of(context).pushNamed(
+                                            ItemsDetail.routeName,
+                                            arguments: obj);
+                                      }
+                                    },
+                                    cells: <DataCell>[
+                                      DataCell(
+                                        Text(obj.id),
+                                      ),
+                                      DataCell(
+                                        Text(obj.name),
+                                      ),
+                                      DataCell(
+                                        Text(obj.quantity),
+                                      ),
+                                      DataCell(
+                                        Text(obj.price),
+                                      ),
+                                    ],
+                                  );
+                                },
                               ),
-                            ],
-                            rows: List<DataRow>.generate(
-                              data.length,
-                              (index) {
-                                Item obj = data.elementAt(index);
-                                return DataRow(
-                                  onSelectChanged: (value) {
-                                    if (value == true) {
-                                      Navigator.of(context).pushNamed(
-                                          ItemsDetail.routeName,
-                                          arguments: obj);
-                                    }
-                                  },
-                                  cells: <DataCell>[
-                                    DataCell(
-                                      Text(obj.id),
-                                    ),
-                                    DataCell(
-                                      Text(obj.name),
-                                    ),
-                                    DataCell(
-                                      Text(obj.quantity),
-                                    ),
-                                    DataCell(
-                                      Text(obj.price),
-                                    ),
-                                  ],
-                                );
-                              },
                             ),
-                          ),
-                        );
+                          );
+                        }
                       }
-                    }
-                    return const CircularProgressIndicator();
-                  }),
-                  future:
-                      Provider.of<ItemProvider>(context, listen: false).items,
-                ),
-              ],
+                      return const CircularProgressIndicator();
+                    }),
+                    future:
+                        Provider.of<ItemProvider>(context, listen: false).items,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

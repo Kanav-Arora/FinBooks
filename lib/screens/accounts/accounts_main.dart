@@ -1,4 +1,5 @@
 import 'package:accouting_software/classes/account.dart';
+import 'package:accouting_software/classes/account_data_object.dart';
 import 'package:accouting_software/providers/accounts_provider.dart';
 import 'package:accouting_software/providers/transaction_provider.dart';
 import 'package:accouting_software/screens/accounts/add_account.dart';
@@ -7,8 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../icons/custom_icons_icons.dart';
-import '../../widgets/app_bar_popupmenubutton.dart';
 import '../app_drawer.dart';
+
+class tabledata {
+  Account a;
+  AccountDataObject d;
+  tabledata(this.a, this.d);
+}
 
 class AccountsMain extends StatefulWidget {
   static const String routeName = "AccountsMain";
@@ -23,6 +29,18 @@ class _AccountsMainState extends State<AccountsMain> {
   void initState() {
     // TODO: implement initState
     super.initState();
+  }
+
+  Future<List<tabledata>> fut(BuildContext ctx) async {
+    List<Account> data1 =
+        await Provider.of<AccountsProvider>(context, listen: false).accounts;
+    List<tabledata> ls = [];
+    for (Account i in data1) {
+      final d = await Provider.of<TransactionProvider>(ctx, listen: false)
+          .dataByAccName(i.acc_name);
+      ls.add(tabledata(i, d));
+    }
+    return ls;
   }
 
   @override
@@ -54,16 +72,20 @@ class _AccountsMainState extends State<AccountsMain> {
           textAlign: TextAlign.center,
         ),
         centerTitle: true,
-        actions: const [AppBarPopupmenuButton()],
+        actions: [
+          OutlinedButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(AddAccount.routeName);
+            },
+            child: Icon(
+              Icons.add,
+              color: th.colorScheme.secondary,
+            ),
+          ),
+        ],
       ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          try {
-            await Provider.of<AccountsProvider>(context, listen: false).fetch();
-          } catch (error) {
-            Utilities().toastMessage(error.toString());
-          }
-        },
+      body: Container(
+        color: th.primaryColor,
         child: SingleChildScrollView(
           child: Container(
             width: size.width,
@@ -74,25 +96,13 @@ class _AccountsMainState extends State<AccountsMain> {
                 const SizedBox(
                   height: 40,
                 ),
-                OutlinedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(AddAccount.routeName);
-                  },
-                  child: Icon(
-                    Icons.add,
-                    color: th.colorScheme.secondary,
-                  ),
-                ),
-                const SizedBox(
-                  height: 40,
-                ),
                 FutureBuilder(
                   builder: (ctx, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       if (snapshot.hasError) {
                         Utilities().toastMessage('Some Error Occured');
                       } else if (snapshot.hasData) {
-                        final data = snapshot.data as List<Account>;
+                        final data = snapshot.data as List<tabledata>;
                         return Expanded(
                             child: SingleChildScrollView(
                                 child: DataTable(
@@ -133,11 +143,9 @@ class _AccountsMainState extends State<AccountsMain> {
                           rows: List<DataRow>.generate(
                             data.length,
                             (index) {
-                              Account obj = data.elementAt(index);
-                              final d = Provider.of<TransactionProvider>(
-                                      context,
-                                      listen: false)
-                                  .dataByAccName(obj.acc_name);
+                              tabledata o = data.elementAt(index);
+                              Account obj = o.a;
+                              AccountDataObject d = o.d;
                               return DataRow(
                                 cells: <DataCell>[
                                   DataCell(
@@ -173,8 +181,7 @@ class _AccountsMainState extends State<AccountsMain> {
                     }
                     return const CircularProgressIndicator();
                   },
-                  future: Provider.of<AccountsProvider>(context, listen: false)
-                      .accounts,
+                  future: fut(context),
                 ),
               ],
             ),

@@ -120,6 +120,8 @@ class BillProvider with ChangeNotifier {
         }
       }
     }
+
+    if (minP == "") minP = "0";
     List<String> ls = [lastP, minP, maxP];
     return ls;
   }
@@ -135,12 +137,14 @@ class BillProvider with ChangeNotifier {
           price = m.price;
         }
       }
-      ls.add(BillItemDetail(
-          billNo: element.billNo,
-          accName: element.accName,
-          billDate: element.billDate,
-          qty: quantity,
-          price: price));
+      if (quantity != "0") {
+        ls.add(BillItemDetail(
+            billNo: element.billNo,
+            accName: element.accName,
+            billDate: element.billDate,
+            qty: quantity,
+            price: price));
+      }
     }
     return ls;
   }

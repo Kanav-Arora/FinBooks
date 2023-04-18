@@ -65,7 +65,8 @@ class TransactionProvider with ChangeNotifier {
     }
   }
 
-  AccountDataObject dataByAccName(String accountName) {
+  Future<AccountDataObject> dataByAccName(String accountName) async {
+    await fetch();
     double credit = 0;
     double debit = 0;
     for (var element in _trans) {

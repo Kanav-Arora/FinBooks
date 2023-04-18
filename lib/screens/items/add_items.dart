@@ -4,10 +4,6 @@ import 'package:accouting_software/screens/items/items_main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../icons/custom_icons_icons.dart';
-import '../../widgets/app_bar_popupmenubutton.dart';
-import '../app_drawer.dart';
-
 class AddItems extends StatefulWidget {
   static const String routeName = "AddItems";
 
@@ -25,13 +21,13 @@ class _AddItemsState extends State<AddItems> {
   final _formkey = GlobalKey<FormState>();
 
   late List<String> _gstSlabsList;
-  var gstValue = null;
+  var gstValue;
 
   @override
   void initState() {
     _isLoading = false;
     _gstSlabsList = <String>["5%", "12%", "18%", "28%"];
-    var gstValue = null;
+    var gstValue;
     super.initState();
   }
 
@@ -53,30 +49,36 @@ class _AddItemsState extends State<AddItems> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       key: _scaffoldKey,
-      drawer: AppDrawer(),
       appBar: AppBar(
         elevation: 0,
-        leading: Builder(
-          builder: (BuildContext ctx) {
-            return IconButton(
-              onPressed: () => _scaffoldKey.currentState!.openDrawer(),
-              icon: Container(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Icon(
-                    CustomIcons.th_thumb,
-                    size: 28,
-                    color: Theme.of(context).colorScheme.secondary,
-                  )),
-            );
-          },
-        ),
         title: Text(
           'A D D\nI T E M',
           style: Theme.of(context).textTheme.titleMedium,
           textAlign: TextAlign.center,
         ),
         centerTitle: true,
-        actions: [const AppBarPopupmenuButton()],
+        actions: [
+          TextButton(
+            onPressed: _isLoading == true
+                ? null
+                : () async {
+                    _saveForm();
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    await Provider.of<ItemProvider>(context, listen: false)
+                        .AddItems(a)
+                        .then((_) => Navigator.of(context)
+                            .pushReplacementNamed(ItemsMain.routeName));
+                  },
+            child: Container(
+              child: const Text(
+                'Add',
+                style: TextStyle(color: Colors.white, fontSize: 18),
+              ),
+            ),
+          )
+        ],
       ),
       body: Container(
         width: size.width,
@@ -90,7 +92,7 @@ class _AddItemsState extends State<AddItems> {
               child: Column(
                 children: [
                   const SizedBox(
-                    height: 100,
+                    height: 40,
                   ),
                   Row(
                     children: [
@@ -255,41 +257,8 @@ class _AddItemsState extends State<AddItems> {
                   const SizedBox(
                     height: 40,
                   ),
-                  MaterialButton(
-                    onPressed: () async {
-                      _saveForm();
-                      setState(() {
-                        _isLoading = true;
-                      });
-                      await Provider.of<ItemProvider>(context, listen: false)
-                          .AddItems(a)
-                          .then((_) => Navigator.of(context)
-                              .pushReplacementNamed(ItemsMain.routeName));
-                    },
-                    padding: const EdgeInsets.all(0),
-                    child: Container(
-                      height: 60,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        gradient: const LinearGradient(
-                          colors: [
-                            Color.fromARGB(255, 181, 21, 221),
-                            Color.fromARGB(255, 211, 40, 168),
-                          ],
-                          stops: [0.0, 1.0],
-                        ),
-                      ),
-                      child: Center(
-                        child: _isLoading == true
-                            ? const CircularProgressIndicator()
-                            : const Text(
-                                'Add',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 18),
-                              ),
-                      ),
-                    ),
-                  ),
+                  const Text(
+                      "Note: Once added, only item GST slab and price can be changed."),
                 ],
               ),
             ),
