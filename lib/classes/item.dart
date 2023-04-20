@@ -1,9 +1,9 @@
 class Item {
   final String id;
   final String name;
-  final String gstSlab;
+  String gstSlab;
   final String quantity;
-  final String price;
+  String price;
 
   Item({
     required this.id,

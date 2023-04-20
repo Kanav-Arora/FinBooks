@@ -106,7 +106,9 @@ class BillProvider with ChangeNotifier {
   Future<List<String>> priceValues(String name) async {
     await fetch();
     String lastP = "0", minP = "", maxP = "0";
-    for (var element in bills) {
+    var temp = bills;
+    temp.sort(((a, b) => (a.billDate.compareTo(b.billDate)) * -1));
+    for (var element in temp) {
       for (var m in element.items) {
         if (m.itemName == name) {
           lastP = lastP == "0" ? m.price : lastP;

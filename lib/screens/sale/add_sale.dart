@@ -198,23 +198,12 @@ class _AddSaleState extends State<AddSale> {
                           },
                           keyboardType: TextInputType.text,
                           textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: "Id",
-                            hintStyle: const TextStyle(
+                            hintStyle: TextStyle(
                                 color: Color.fromARGB(255, 130, 130, 130)),
-                            fillColor: const Color.fromARGB(255, 23, 23, 23),
+                            fillColor: Color.fromARGB(255, 23, 23, 23),
                             filled: true,
-                            hoverColor: Theme.of(context).colorScheme.secondary,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 181, 21, 221),
-                              ),
-                            ),
                           ),
                         ),
                       ),
@@ -374,26 +363,12 @@ class _AddSaleState extends State<AddSale> {
                               controller: _billDateController,
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.next,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 hintText: "dd/mm/yy",
-                                hintStyle: const TextStyle(
+                                hintStyle: TextStyle(
                                     color: Color.fromARGB(255, 130, 130, 130)),
-                                fillColor:
-                                    const Color.fromARGB(255, 23, 23, 23),
+                                fillColor: Color.fromARGB(255, 23, 23, 23),
                                 filled: true,
-                                hoverColor:
-                                    Theme.of(context).colorScheme.secondary,
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide:
-                                      const BorderSide(color: Colors.grey),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: const BorderSide(
-                                    color: Color.fromARGB(255, 181, 21, 221),
-                                  ),
-                                ),
                               ),
                             ),
                           ),
@@ -432,26 +407,12 @@ class _AddSaleState extends State<AddSale> {
                               controller: _dueDateController,
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.next,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 hintText: "dd/mm/yy",
-                                hintStyle: const TextStyle(
+                                hintStyle: TextStyle(
                                     color: Color.fromARGB(255, 130, 130, 130)),
-                                fillColor:
-                                    const Color.fromARGB(255, 23, 23, 23),
+                                fillColor: Color.fromARGB(255, 23, 23, 23),
                                 filled: true,
-                                hoverColor:
-                                    Theme.of(context).colorScheme.secondary,
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide:
-                                      const BorderSide(color: Colors.grey),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: const BorderSide(
-                                    color: Color.fromARGB(255, 181, 21, 221),
-                                  ),
-                                ),
                               ),
                             ),
                           ),
@@ -582,7 +543,7 @@ class _AddSaleState extends State<AddSale> {
                           textInputAction: TextInputAction.next,
                           decoration: InputDecoration(
                             isDense: true,
-                            hintText: "GST",
+                            hintText: "GST (Fixed)",
                             hintStyle: const TextStyle(
                                 color: Color.fromARGB(255, 130, 130, 130)),
                             fillColor: const Color.fromARGB(255, 23, 23, 23),
@@ -612,24 +573,13 @@ class _AddSaleState extends State<AddSale> {
                           }),
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             isDense: true,
                             hintText: "Quantity",
-                            hintStyle: const TextStyle(
+                            hintStyle: TextStyle(
                                 color: Color.fromARGB(255, 130, 130, 130)),
-                            fillColor: const Color.fromARGB(255, 23, 23, 23),
+                            fillColor: Color.fromARGB(255, 23, 23, 23),
                             filled: true,
-                            hoverColor: Theme.of(context).colorScheme.secondary,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 181, 21, 221),
-                              ),
-                            ),
                           ),
                         ),
                       ),
@@ -641,31 +591,20 @@ class _AddSaleState extends State<AddSale> {
                           controller: _discountController,
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             isDense: true,
                             hintText: "Discount(%)",
-                            hintStyle: const TextStyle(
+                            hintStyle: TextStyle(
                                 color: Color.fromARGB(255, 130, 130, 130)),
-                            fillColor: const Color.fromARGB(255, 23, 23, 23),
+                            fillColor: Color.fromARGB(255, 23, 23, 23),
                             filled: true,
-                            hoverColor: Theme.of(context).colorScheme.secondary,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 181, 21, 221),
-                              ),
-                            ),
                           ),
                         ),
                       )
                     ],
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 40,
                   ),
                   Row(
                     children: [

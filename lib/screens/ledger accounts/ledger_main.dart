@@ -111,76 +111,80 @@ class _LedgerMainState extends State<LedgerMain> {
         width: size.width,
         height: size.height,
         color: Theme.of(context).primaryColor,
-        child: Column(
-          children: [
-            FutureBuilder(
-              builder: ((ctx, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  if (snapshot.hasError) {
-                    Utilities().toastMessage(snapshot.error.toString());
-                  } else if (snapshot.hasData) {
-                    var data = snapshot.data as List<Account>;
-                    return DropdownButton<String>(
-                        hint: Text(
-                          'Select an account',
-                          style: th.textTheme.bodyMedium!.copyWith(
-                              color: const Color.fromARGB(255, 130, 130, 130)),
-                          textAlign: TextAlign.center,
-                        ),
-                        value: _selectedValue,
-                        elevation: 16,
-                        dropdownColor: const Color.fromARGB(255, 23, 23, 23),
-                        items: data
-                            .map(
-                              (e) => DropdownMenuItem<String>(
-                                value: e.acc_name,
-                                child: Text(e.acc_name),
-                              ),
-                            )
-                            .toList(),
-                        onChanged: ((value) async {
-                          setState(() {
-                            _isloading = true;
-                          });
-                          listTrans = await Provider.of<TransactionProvider>(
-                                  context,
-                                  listen: false)
-                              .transByAccName(value.toString());
-                          setState(() {
-                            _selectedValue = value;
-                            _isloading = false;
-                          });
-                        }));
-                  }
-                }
-                return const Center(
-                    child: CircularProgressIndicator(
-                        valueColor:
-                            AlwaysStoppedAnimation<Color>(Colors.white)));
-              }),
-              future: Provider.of<AccountsProvider>(context, listen: false)
-                  .accounts,
-            ),
-            _selectedValue != null
-                ? _isloading == true
-                    ? const Center(
-                        child: CircularProgressIndicator(
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.white)))
-                    : Expanded(
-                        child: listTrans.isNotEmpty
-                            ? ListView.builder(
-                                itemBuilder: ((ctx, index) {
-                                  Transaction t = listTrans.elementAt(index);
-                                  return listItem(th, t);
-                                }),
-                                itemCount: listTrans.length,
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              FutureBuilder(
+                builder: ((ctx, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.hasError) {
+                      Utilities().toastMessage(snapshot.error.toString());
+                    } else if (snapshot.hasData) {
+                      var data = snapshot.data as List<Account>;
+                      return DropdownButton<String>(
+                          hint: Text(
+                            'Select an account',
+                            style: th.textTheme.bodyMedium!.copyWith(
+                                color:
+                                    const Color.fromARGB(255, 130, 130, 130)),
+                            textAlign: TextAlign.center,
+                          ),
+                          value: _selectedValue,
+                          elevation: 16,
+                          dropdownColor: const Color.fromARGB(255, 23, 23, 23),
+                          items: data
+                              .map(
+                                (e) => DropdownMenuItem<String>(
+                                  value: e.acc_name,
+                                  child: Text(e.acc_name),
+                                ),
                               )
-                            : const Center(
-                                child: Text('No transactions to show'),
-                              ))
-                : const SizedBox(),
-          ],
+                              .toList(),
+                          onChanged: ((value) async {
+                            setState(() {
+                              _isloading = true;
+                            });
+                            listTrans = await Provider.of<TransactionProvider>(
+                                    context,
+                                    listen: false)
+                                .transByAccName(value.toString());
+                            setState(() {
+                              _selectedValue = value;
+                              _isloading = false;
+                            });
+                          }));
+                    }
+                  }
+                  return const Center(
+                      child: CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white)));
+                }),
+                future: Provider.of<AccountsProvider>(context, listen: false)
+                    .accounts,
+              ),
+              _selectedValue != null
+                  ? _isloading == true
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.white)))
+                      : Expanded(
+                          child: listTrans.isNotEmpty
+                              ? ListView.builder(
+                                  itemBuilder: ((ctx, index) {
+                                    Transaction t = listTrans.elementAt(index);
+                                    return listItem(th, t);
+                                  }),
+                                  itemCount: listTrans.length,
+                                )
+                              : const Center(
+                                  child: Text('No transactions to show'),
+                                ))
+                  : const SizedBox(),
+            ],
+          ),
         ),
       ),
     );

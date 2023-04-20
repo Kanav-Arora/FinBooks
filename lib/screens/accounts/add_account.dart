@@ -129,23 +129,12 @@ class _AddAccountState extends State<AddAccount> {
                           },
                           keyboardType: TextInputType.text,
                           textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: "Id",
-                            hintStyle: const TextStyle(
+                            hintStyle: TextStyle(
                                 color: Color.fromARGB(255, 130, 130, 130)),
-                            fillColor: const Color.fromARGB(255, 23, 23, 23),
+                            fillColor: Color.fromARGB(255, 23, 23, 23),
                             filled: true,
-                            hoverColor: Theme.of(context).colorScheme.secondary,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 181, 21, 221),
-                              ),
-                            ),
                           ),
                         ),
                       ),
@@ -171,23 +160,12 @@ class _AddAccountState extends State<AddAccount> {
                           },
                           keyboardType: TextInputType.name,
                           textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: "Name",
-                            hintStyle: const TextStyle(
+                            hintStyle: TextStyle(
                                 color: Color.fromARGB(255, 130, 130, 130)),
-                            fillColor: const Color.fromARGB(255, 23, 23, 23),
+                            fillColor: Color.fromARGB(255, 23, 23, 23),
                             filled: true,
-                            hoverColor: Theme.of(context).colorScheme.secondary,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 181, 21, 221),
-                              ),
-                            ),
                           ),
                         ),
                       ),
@@ -214,23 +192,12 @@ class _AddAccountState extends State<AddAccount> {
                     },
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: "Email address",
-                      hintStyle: const TextStyle(
-                          color: Color.fromARGB(255, 130, 130, 130)),
-                      fillColor: const Color.fromARGB(255, 23, 23, 23),
+                      hintStyle:
+                          TextStyle(color: Color.fromARGB(255, 130, 130, 130)),
+                      fillColor: Color.fromARGB(255, 23, 23, 23),
                       filled: true,
-                      hoverColor: Theme.of(context).colorScheme.secondary,
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(color: Colors.grey),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(
-                          color: Color.fromARGB(255, 181, 21, 221),
-                        ),
-                      ),
                     ),
                   ),
                   const SizedBox(
@@ -254,23 +221,12 @@ class _AddAccountState extends State<AddAccount> {
                     },
                     keyboardType: TextInputType.phone,
                     textInputAction: TextInputAction.next,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: "Mobile no",
-                      hintStyle: const TextStyle(
-                          color: Color.fromARGB(255, 130, 130, 130)),
-                      fillColor: const Color.fromARGB(255, 23, 23, 23),
+                      hintStyle:
+                          TextStyle(color: Color.fromARGB(255, 130, 130, 130)),
+                      fillColor: Color.fromARGB(255, 23, 23, 23),
                       filled: true,
-                      hoverColor: Theme.of(context).colorScheme.secondary,
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(color: Colors.grey),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(
-                          color: Color.fromARGB(255, 181, 21, 221),
-                        ),
-                      ),
                     ),
                   ),
                   const SizedBox(
@@ -295,23 +251,12 @@ class _AddAccountState extends State<AddAccount> {
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
                     maxLines: 3,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: "Address",
-                      hintStyle: const TextStyle(
-                          color: Color.fromARGB(255, 130, 130, 130)),
-                      fillColor: const Color.fromARGB(255, 23, 23, 23),
+                      hintStyle:
+                          TextStyle(color: Color.fromARGB(255, 130, 130, 130)),
+                      fillColor: Color.fromARGB(255, 23, 23, 23),
                       filled: true,
-                      hoverColor: Theme.of(context).colorScheme.secondary,
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(color: Colors.grey),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(
-                          color: Color.fromARGB(255, 181, 21, 221),
-                        ),
-                      ),
                     ),
                   ),
                   const SizedBox(
@@ -339,23 +284,12 @@ class _AddAccountState extends State<AddAccount> {
                           },
                           keyboardType: TextInputType.text,
                           textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: "City",
-                            hintStyle: const TextStyle(
+                            hintStyle: TextStyle(
                                 color: Color.fromARGB(255, 130, 130, 130)),
-                            fillColor: const Color.fromARGB(255, 23, 23, 23),
+                            fillColor: Color.fromARGB(255, 23, 23, 23),
                             filled: true,
-                            hoverColor: Theme.of(context).colorScheme.secondary,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 181, 21, 221),
-                              ),
-                            ),
                           ),
                         ),
                       ),
@@ -381,23 +315,12 @@ class _AddAccountState extends State<AddAccount> {
                           },
                           keyboardType: TextInputType.text,
                           textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: "State",
-                            hintStyle: const TextStyle(
+                            hintStyle: TextStyle(
                                 color: Color.fromARGB(255, 130, 130, 130)),
-                            fillColor: const Color.fromARGB(255, 23, 23, 23),
+                            fillColor: Color.fromARGB(255, 23, 23, 23),
                             filled: true,
-                            hoverColor: Theme.of(context).colorScheme.secondary,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 181, 21, 221),
-                              ),
-                            ),
                           ),
                         ),
                       ),
@@ -428,23 +351,12 @@ class _AddAccountState extends State<AddAccount> {
                           },
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: "Pincode",
-                            hintStyle: const TextStyle(
+                            hintStyle: TextStyle(
                                 color: Color.fromARGB(255, 130, 130, 130)),
-                            fillColor: const Color.fromARGB(255, 23, 23, 23),
+                            fillColor: Color.fromARGB(255, 23, 23, 23),
                             filled: true,
-                            hoverColor: Theme.of(context).colorScheme.secondary,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 181, 21, 221),
-                              ),
-                            ),
                           ),
                         ),
                       ),
@@ -470,23 +382,12 @@ class _AddAccountState extends State<AddAccount> {
                           },
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: "Credit days",
-                            hintStyle: const TextStyle(
+                            hintStyle: TextStyle(
                                 color: Color.fromARGB(255, 130, 130, 130)),
-                            fillColor: const Color.fromARGB(255, 23, 23, 23),
+                            fillColor: Color.fromARGB(255, 23, 23, 23),
                             filled: true,
-                            hoverColor: Theme.of(context).colorScheme.secondary,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 181, 21, 221),
-                              ),
-                            ),
                           ),
                         ),
                       )
@@ -517,23 +418,12 @@ class _AddAccountState extends State<AddAccount> {
                           },
                           keyboardType: TextInputType.text,
                           textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: "GST No.",
-                            hintStyle: const TextStyle(
+                            hintStyle: TextStyle(
                                 color: Color.fromARGB(255, 130, 130, 130)),
-                            fillColor: const Color.fromARGB(255, 23, 23, 23),
+                            fillColor: Color.fromARGB(255, 23, 23, 23),
                             filled: true,
-                            hoverColor: Theme.of(context).colorScheme.secondary,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 181, 21, 221),
-                              ),
-                            ),
                           ),
                         ),
                       ),
@@ -559,23 +449,12 @@ class _AddAccountState extends State<AddAccount> {
                           },
                           keyboardType: TextInputType.text,
                           textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: "PAN No.",
-                            hintStyle: const TextStyle(
+                            hintStyle: TextStyle(
                                 color: Color.fromARGB(255, 130, 130, 130)),
-                            fillColor: const Color.fromARGB(255, 23, 23, 23),
+                            fillColor: Color.fromARGB(255, 23, 23, 23),
                             filled: true,
-                            hoverColor: Theme.of(context).colorScheme.secondary,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 181, 21, 221),
-                              ),
-                            ),
                           ),
                         ),
                       ),

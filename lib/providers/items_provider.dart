@@ -1,4 +1,3 @@
-import 'package:accouting_software/screens/items/add_items.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +27,7 @@ class ItemProvider with ChangeNotifier {
       _items.add(a);
       notifyListeners();
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
@@ -72,5 +71,24 @@ class ItemProvider with ChangeNotifier {
   void updateQuantityBySale(String id, Item obj) {
     _items.removeWhere((element) => element.id == id);
     _items.insert(0, obj);
+  }
+
+  Future<void> updateItem(Item obj, String gst, String price) async {
+    var user = FirebaseAuth.instance.currentUser!.uid;
+    var id = obj.id;
+    DatabaseReference ref =
+        FirebaseDatabase.instance.ref('user/$user').child('items').child(id);
+    try {
+      await ref.set({
+        "name": obj.name,
+        "qty": obj.quantity,
+        "gst": gst,
+        "price": price,
+      });
+      var ls = items;
+      notifyListeners();
+    } catch (error) {
+      rethrow;
+    }
   }
 }

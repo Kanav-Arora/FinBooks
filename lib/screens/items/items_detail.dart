@@ -1,11 +1,20 @@
 import 'package:accouting_software/classes/bill.dart';
 import 'package:accouting_software/classes/item.dart';
 import 'package:accouting_software/providers/bill_provider.dart';
+import 'package:accouting_software/providers/items_provider.dart';
+import 'package:accouting_software/screens/items/items_main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-
 import '../../utils/utitlities.dart';
+
+class FutData {
+  List<String> priceValueData = [];
+  List<BillItemDetail> graphData = [];
+  List<BillItemDetail> listData = [];
+
+  FutData(this.priceValueData, this.graphData, this.listData);
+}
 
 class ItemsDetail extends StatefulWidget {
   static const String routeName = "ItemsDetail";
@@ -15,26 +24,39 @@ class ItemsDetail extends StatefulWidget {
 }
 
 class _ItemsDetailState extends State<ItemsDetail> {
+  final ValueNotifier<String> _notifierGST = ValueNotifier("");
+  final ValueNotifier<String> _notifierPrice = ValueNotifier("");
+  final ValueNotifier<bool> _notifierEditable = ValueNotifier(false);
+
   final _formkey = GlobalKey<FormState>();
   late List<String> _gstSlabsList;
   var gstValue;
-  var _editable = false;
 
   @override
   void initState() {
     // TODO: implement initState
     _gstSlabsList = <String>["5%", "12%", "18%", "28%"];
-    var gstValue;
-    _editable = false;
     super.initState();
   }
 
   void initialize(Item a) {
-    if (gstValue == null) {
-      setState(() {
-        gstValue = a.gstSlab;
-      });
-    }
+    _notifierGST.value = a.gstSlab;
+    _notifierPrice.value = a.price;
+  }
+
+  Future<FutData> fut(Item obj) async {
+    List<String> priceValueData = [];
+    List<BillItemDetail> graphData = [];
+    List<BillItemDetail> listData = [];
+    priceValueData = await Provider.of<BillProvider>(context, listen: false)
+        .priceValues(obj.name);
+    List<BillItemDetail> data =
+        await Provider.of<BillProvider>(context, listen: false)
+            .billByItemName(obj.name);
+    data.sort((a, b) => ((a.billDate).compareTo(b.billDate)));
+    listData = List.from(data.reversed);
+    graphData = data;
+    return FutData(priceValueData, graphData, listData);
   }
 
   Widget BillItemDetailCard(ThemeData th, BillItemDetail b) {
@@ -94,6 +116,12 @@ class _ItemsDetailState extends State<ItemsDetail> {
       },
     );
     var appBar = AppBar(
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back_ios_new),
+        onPressed: () {
+          Navigator.of(context).pushNamed(ItemsMain.routeName);
+        },
+      ),
       foregroundColor: th.colorScheme.secondary,
       elevation: 0,
     );
@@ -109,339 +137,328 @@ class _ItemsDetailState extends State<ItemsDetail> {
         width: size.width,
         height: size.height,
         color: th.primaryColor,
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Icon(
-                    Icons.edit,
-                    color: th.colorScheme.secondary,
-                  ),
-                  Switch(
-                    trackColor: trackColor,
-                    activeColor: const Color.fromARGB(185, 23, 23, 23),
-                    inactiveThumbColor: const Color.fromARGB(185, 23, 23, 23),
-                    inactiveTrackColor: Colors.white,
-                    value: _editable,
-                    onChanged: (value) {
-                      setState(() {
-                        _editable = value;
-                      });
-                    },
-                  ),
-                  const Expanded(child: Text('')),
-                  TextButton(
-                      onPressed: null,
-                      child: Text(
-                        'Done',
-                        style: th.textTheme.bodyMedium!.copyWith(
-                            color: _editable == true
-                                ? th.colorScheme.secondary
-                                : Colors.grey),
-                      ))
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Form(
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: (size.width - 40) / 3,
-                          child: TextFormField(
-                            initialValue: obj.id,
-                            enabled: _editable,
-                            keyboardType: TextInputType.text,
-                            textInputAction: TextInputAction.next,
-                            decoration: InputDecoration(
-                              hintText: "Id",
-                              hintStyle: const TextStyle(
-                                  color: Color.fromARGB(255, 130, 130, 130)),
-                              fillColor: const Color.fromARGB(255, 23, 23, 23),
-                              filled: true,
-                              hoverColor:
-                                  Theme.of(context).colorScheme.secondary,
-                              enabledBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color.fromARGB(255, 181, 21, 221),
-                                ),
-                              ),
-                            ),
-                          ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              children: [
+                ValueListenableBuilder(
+                    valueListenable: _notifierEditable,
+                    builder: ((ctx, _, child) {
+                      return Row(children: [
+                        Icon(
+                          Icons.edit,
+                          color: th.colorScheme.secondary,
                         ),
-                        const SizedBox(
-                          width: 20,
+                        Switch(
+                          trackColor: trackColor,
+                          activeColor: const Color.fromARGB(185, 23, 23, 23),
+                          inactiveThumbColor:
+                              const Color.fromARGB(185, 23, 23, 23),
+                          inactiveTrackColor: Colors.white,
+                          value: _notifierEditable.value,
+                          onChanged: (bool value) {
+                            _notifierEditable.value = value;
+                            _notifierGST.notifyListeners();
+                            _notifierPrice.notifyListeners();
+                          },
                         ),
-                        Expanded(
-                          child: TextFormField(
-                            initialValue: obj.name,
-                            enabled: _editable,
-                            keyboardType: TextInputType.text,
-                            textInputAction: TextInputAction.next,
-                            decoration: InputDecoration(
-                              hintText: "Name",
-                              hintStyle: const TextStyle(
-                                  color: Color.fromARGB(255, 130, 130, 130)),
-                              fillColor: const Color.fromARGB(255, 23, 23, 23),
-                              filled: true,
-                              hoverColor:
-                                  Theme.of(context).colorScheme.secondary,
-                              enabledBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color.fromARGB(255, 181, 21, 221),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: (size.width - 40) / 3,
-                          child: DropdownButton<String>(
-                              iconSize: 0.0,
-                              alignment: AlignmentDirectional.center,
-                              hint: Text(
-                                'GST Slab',
-                                style: th.textTheme.bodyMedium!.copyWith(
-                                    color: const Color.fromARGB(
-                                        255, 130, 130, 130)),
-                                textAlign: TextAlign.center,
-                              ),
-                              value: gstValue,
-                              icon: const Icon(Icons.arrow_downward),
-                              elevation: 16,
-                              style: const TextStyle(color: Colors.deepPurple),
-                              underline: Container(
-                                height: 2,
-                                color: Colors.grey,
-                              ),
-                              dropdownColor:
-                                  const Color.fromARGB(255, 23, 23, 23),
-                              onChanged: _editable == true
-                                  ? (String? value) {
-                                      setState(() {
-                                        gstValue = value ?? "";
-                                      });
-                                      // a = Item(
-                                      //   id: a.id,
-                                      //   name: a.name,
-                                      //   gstSlab: value.toString(),
-                                      //   quantity: a.quantity,
-                                      //   price: a.price,
-                                      // );
-                                    }
-                                  : null,
-                              items: _gstSlabsList
-                                  .map<DropdownMenuItem<String>>(
-                                      (String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(
-                                    value,
-                                    style: th.textTheme.bodyMedium,
-                                  ),
-                                );
-                              }).toList()),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        SizedBox(
-                          width: (size.width - 40) / 3,
-                          child: TextFormField(
-                            initialValue: obj.price,
-                            enabled: _editable,
-                            keyboardType: TextInputType.text,
-                            textInputAction: TextInputAction.next,
-                            decoration: InputDecoration(
-                              prefixText: "₹ ",
-                              hintText: "Price",
-                              hintStyle: const TextStyle(
-                                  color: Color.fromARGB(255, 130, 130, 130)),
-                              fillColor: const Color.fromARGB(255, 23, 23, 23),
-                              filled: true,
-                              hoverColor:
-                                  Theme.of(context).colorScheme.secondary,
-                              enabledBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color.fromARGB(255, 181, 21, 221),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                          child: TextFormField(
-                            initialValue: obj.quantity,
-                            enabled: false,
-                            keyboardType: TextInputType.text,
-                            textInputAction: TextInputAction.next,
-                            decoration: InputDecoration(
-                              prefixText: "Qty ",
-                              hintText: "Quantity",
-                              hintStyle: const TextStyle(
-                                  color: Color.fromARGB(255, 130, 130, 130)),
-                              fillColor: const Color.fromARGB(255, 23, 23, 23),
-                              filled: true,
-                              hoverColor:
-                                  Theme.of(context).colorScheme.secondary,
-                              enabledBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: const UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color.fromARGB(255, 181, 21, 221),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        const Expanded(child: Text('')),
+                        TextButton(
+                            onPressed: () async {
+                              await Provider.of<ItemProvider>(context,
+                                      listen: false)
+                                  .updateItem(obj, _notifierGST.value,
+                                      _notifierPrice.value);
+                              _notifierEditable.value = false;
+                              _notifierEditable.notifyListeners();
+                            },
+                            child: Text(
+                              'Done',
+                              style: th.textTheme.bodyMedium!.copyWith(
+                                  color: _notifierEditable.value == true
+                                      ? th.colorScheme.secondary
+                                      : Colors.grey),
+                            ))
+                      ]);
+                    })),
+                const SizedBox(
+                  height: 20,
                 ),
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-              FutureBuilder(
-                builder: (ctx, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    if (snapshot.hasError) {
-                      Utilities().toastMessage(snapshot.error.toString());
-                    } else if (snapshot.hasData) {
-                      List<String> data = snapshot.data as List<String>;
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                Form(
+                  child: Column(
+                    children: [
+                      Row(
                         children: [
-                          Column(
-                            children: [
-                              const Text('Last Price:'),
-                              const SizedBox(
-                                height: 10,
+                          SizedBox(
+                            width: (size.width - 40) / 3,
+                            child: TextFormField(
+                              initialValue: obj.id,
+                              enabled: false,
+                              keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.next,
+                              decoration: const InputDecoration(
+                                hintText: "Id",
+                                hintStyle: TextStyle(
+                                    color: Color.fromARGB(255, 130, 130, 130)),
+                                fillColor: Color.fromARGB(255, 23, 23, 23),
+                                filled: true,
                               ),
-                              Text(data.elementAt(0)),
-                            ],
+                            ),
                           ),
                           const SizedBox(
-                            width: 5,
+                            width: 20,
                           ),
-                          Column(
-                            children: [
-                              const Text('Maximum Price:'),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Text(data.elementAt(2)),
-                            ],
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Column(
-                            children: [
-                              const Text('Minimum Price:'),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Text(data.elementAt(1)),
-                            ],
-                          ),
-                        ],
-                      );
-                    }
-                  }
-                  return const Center(
-                      child: CircularProgressIndicator(
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.white)));
-                },
-                future: Provider.of<BillProvider>(context, listen: false)
-                    .priceValues(obj.name),
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-              Expanded(
-                  child: FutureBuilder(
-                builder: (ctx, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    if (snapshot.hasError) {
-                      Utilities().toastMessage(snapshot.error.toString());
-                    } else if (snapshot.hasData) {
-                      List<BillItemDetail> data =
-                          snapshot.data as List<BillItemDetail>;
-                      data.sort(
-                          (a, b) => (a.billDate.compareTo(b.billDate) * -1));
-                      List<BillItemDetail> temp = data;
-                      temp.sort((a, b) => a.billDate.compareTo(b.billDate));
-                      return Column(
-                        children: [
-                          data.isNotEmpty
-                              ? SfCartesianChart(
-                                  primaryXAxis: CategoryAxis(),
-                                  title: ChartTitle(text: 'Price Change'),
-                                  series: <LineSeries<BillItemDetail, String>>[
-                                    LineSeries<BillItemDetail, String>(
-                                        dataSource: temp,
-                                        xValueMapper: (BillItemDetail b, _) =>
-                                            b.billDate,
-                                        yValueMapper: (BillItemDetail b, _) =>
-                                            double.parse(b.price),
-                                        dataLabelSettings:
-                                            const DataLabelSettings(
-                                                isVisible: true))
-                                  ],
-                                )
-                              : const SizedBox(),
                           Expanded(
-                            child: ListView.builder(
-                              itemBuilder: (ctx, index) {
-                                return BillItemDetailCard(
-                                    th, data.elementAt(index));
-                              },
-                              itemCount: data.length,
+                            child: TextFormField(
+                              initialValue: obj.name,
+                              enabled: false,
+                              keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.next,
+                              decoration: const InputDecoration(
+                                hintText: "Name",
+                                hintStyle: TextStyle(
+                                    color: Color.fromARGB(255, 130, 130, 130)),
+                                fillColor: Color.fromARGB(255, 23, 23, 23),
+                                filled: true,
+                              ),
                             ),
                           ),
                         ],
-                      );
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      ValueListenableBuilder(
+                        builder: (ctx, _, child) {
+                          return Row(
+                            children: [
+                              SizedBox(
+                                width: (size.width - 40) / 3,
+                                child: ValueListenableBuilder(
+                                  builder: (ctx, _, child) {
+                                    return DropdownButton<String>(
+                                        iconSize: 0.0,
+                                        alignment: AlignmentDirectional.center,
+                                        hint: Text(
+                                          'GST Slab',
+                                          style: th.textTheme.bodyMedium!
+                                              .copyWith(
+                                                  color: const Color.fromARGB(
+                                                      255, 130, 130, 130)),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        value: _notifierGST.value,
+                                        icon: const Icon(Icons.arrow_downward),
+                                        elevation: 16,
+                                        style: const TextStyle(
+                                            color: Colors.deepPurple),
+                                        underline: Container(
+                                          height: 2,
+                                          color: Colors.grey,
+                                        ),
+                                        dropdownColor: const Color.fromARGB(
+                                            255, 23, 23, 23),
+                                        onChanged: _notifierEditable.value
+                                            ? (String? value) {
+                                                _notifierGST.value =
+                                                    value.toString();
+                                                _notifierGST.notifyListeners();
+                                              }
+                                            : null,
+                                        items: _gstSlabsList
+                                            .map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(
+                                              value,
+                                              style: th.textTheme.bodyMedium,
+                                            ),
+                                          );
+                                        }).toList());
+                                  },
+                                  valueListenable: _notifierGST,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              SizedBox(
+                                width: (size.width - 40) / 3,
+                                child: ValueListenableBuilder(
+                                  builder: (ctx, _, child) {
+                                    return TextFormField(
+                                      onChanged: ((value) {
+                                        _notifierPrice.value = value;
+                                      }),
+                                      initialValue: _notifierPrice.value,
+                                      enabled: _notifierEditable.value,
+                                      keyboardType: TextInputType.text,
+                                      textInputAction: TextInputAction.next,
+                                      decoration: InputDecoration(
+                                        prefixText: "₹ ",
+                                        hintText: "Price",
+                                        hintStyle: const TextStyle(
+                                            color: Color.fromARGB(
+                                                255, 130, 130, 130)),
+                                        fillColor: const Color.fromARGB(
+                                            255, 23, 23, 23),
+                                        filled: true,
+                                        hoverColor: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
+                                        enabledBorder:
+                                            const UnderlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: Colors.grey),
+                                        ),
+                                        focusedBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: th.colorScheme.secondary,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  valueListenable: _notifierPrice,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: TextFormField(
+                                  initialValue: obj.quantity,
+                                  enabled: false,
+                                  keyboardType: TextInputType.text,
+                                  textInputAction: TextInputAction.next,
+                                  decoration: const InputDecoration(
+                                    prefixText: "Qty ",
+                                    hintText: "Quantity",
+                                    hintStyle: TextStyle(
+                                        color:
+                                            Color.fromARGB(255, 130, 130, 130)),
+                                    fillColor: Color.fromARGB(255, 23, 23, 23),
+                                    filled: true,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                        valueListenable: _notifierEditable,
+                      )
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 40,
+                ),
+                FutureBuilder(
+                  builder: ((ctx, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasError) {
+                        Utilities().toastMessage(snapshot.error.toString());
+                      } else if (snapshot.hasData) {
+                        final data = snapshot.data as FutData;
+                        List<String> priceValueData = data.priceValueData;
+                        List<BillItemDetail> graphData = data.graphData;
+                        List<BillItemDetail> listData = data.listData;
+                        return Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Column(
+                                  children: [
+                                    const Text('Last Price:'),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(priceValueData.elementAt(0)),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Column(
+                                  children: [
+                                    const Text('Maximum Price:'),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(priceValueData.elementAt(2)),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Column(
+                                  children: [
+                                    const Text('Minimum Price:'),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(priceValueData.elementAt(1)),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 40,
+                            ),
+                            listData.isNotEmpty
+                                ? SfCartesianChart(
+                                    backgroundColor: th.primaryColor,
+                                    plotAreaBorderColor: Colors.white,
+                                    primaryXAxis: CategoryAxis(
+                                        name: 'primaryXAxis',
+                                        labelStyle: TextStyle(
+                                            color: th.colorScheme.secondary)),
+                                    primaryYAxis: NumericAxis(
+                                        labelStyle: TextStyle(
+                                            color: th.colorScheme.secondary)),
+                                    series: <
+                                        LineSeries<BillItemDetail, String>>[
+                                      LineSeries<BillItemDetail, String>(
+                                          color: Colors.lightBlue,
+                                          trendlines: <Trendline>[
+                                            Trendline(
+                                                type: TrendlineType.linear,
+                                                color: Colors.greenAccent)
+                                          ],
+                                          dataSource: graphData,
+                                          xValueMapper: (BillItemDetail b, _) =>
+                                              b.billDate,
+                                          yValueMapper: (BillItemDetail b, _) =>
+                                              double.parse(b.price),
+                                          dataLabelSettings: DataLabelSettings(
+                                              textStyle: TextStyle(
+                                                  color:
+                                                      th.colorScheme.secondary),
+                                              isVisible: true))
+                                    ],
+                                  )
+                                : const SizedBox(),
+                            ...listData
+                                .map((e) => BillItemDetailCard(th, e))
+                                .toList(),
+                          ],
+                        );
+                      }
                     }
-                  }
-                  return const Center(
-                      child: SizedBox(
-                          width: 40.0,
-                          height: 40.0,
-                          child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                  Colors.white))));
-                },
-                future: Provider.of<BillProvider>(context, listen: false)
-                    .billByItemName(obj.name),
-              )),
-            ],
+                    return const SizedBox(
+                        width: 40.0,
+                        height: 40.0,
+                        child: CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white)));
+                  }),
+                  future: fut(obj),
+                ),
+              ],
+            ),
           ),
         ),
       ),

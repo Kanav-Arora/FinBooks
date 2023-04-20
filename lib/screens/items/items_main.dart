@@ -9,9 +9,22 @@ import 'package:provider/provider.dart';
 import '../../icons/custom_icons_icons.dart';
 import '../app_drawer.dart';
 
-class ItemsMain extends StatelessWidget {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+class ItemsMain extends StatefulWidget {
   static const String routeName = "ItemsMain";
+
+  @override
+  State<ItemsMain> createState() => _ItemsMainState();
+}
+
+class _ItemsMainState extends State<ItemsMain> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  var rebuild = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    var rebuild = false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,8 +71,11 @@ class ItemsMain extends StatelessWidget {
       ),
       body: RefreshIndicator(
         backgroundColor: th.primaryColor,
-        onRefresh: () {
-          return Provider.of<ItemProvider>(context, listen: false).fetch();
+        onRefresh: () async {
+          await Provider.of<ItemProvider>(context, listen: false).fetch();
+          setState(() {
+            rebuild = true;
+          });
         },
         child: Container(
           color: th.primaryColor,
@@ -124,9 +140,10 @@ class ItemsMain extends StatelessWidget {
                                   return DataRow(
                                     onSelectChanged: (value) {
                                       if (value == true) {
-                                        Navigator.of(context).pushNamed(
-                                            ItemsDetail.routeName,
-                                            arguments: obj);
+                                        Navigator.of(context)
+                                            .pushReplacementNamed(
+                                                ItemsDetail.routeName,
+                                                arguments: obj);
                                       }
                                     },
                                     cells: <DataCell>[
