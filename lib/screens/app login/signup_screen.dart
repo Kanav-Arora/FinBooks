@@ -1,6 +1,6 @@
 import 'package:accouting_software/icons/custom_icons_icons.dart';
-import 'package:accouting_software/screens/home_screen.dart';
-import 'package:accouting_software/screens/login_screen.dart';
+import 'package:accouting_software/screens/home/home_screen.dart';
+import 'package:accouting_software/screens/app%20login/login_screen.dart';
 import 'package:accouting_software/services/auth.dart';
 import 'package:accouting_software/utils/utitlities.dart';
 import 'package:flutter/material.dart';

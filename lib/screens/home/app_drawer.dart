@@ -1,10 +1,14 @@
 import 'package:accouting_software/screens/accounts/accounts_main.dart';
-import 'package:accouting_software/screens/home_screen.dart';
+import 'package:accouting_software/screens/home/home_screen.dart';
 import 'package:accouting_software/screens/items/items_main.dart';
 import 'package:accouting_software/screens/ledger%20accounts/ledger_main.dart';
 import 'package:accouting_software/screens/purchase/add_purchase.dart';
 import 'package:accouting_software/screens/sale/add_sale.dart';
+import 'package:accouting_software/screens/settings.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../app login/login_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -97,6 +101,31 @@ class AppDrawer extends StatelessWidget {
             ),
             title: Text('T R I A L\nB A L A N C E',
                 style: Theme.of(context).textTheme.bodyMedium),
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.settings,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+            onTap: () {
+              Navigator.of(context).pushNamed(Settings.routeName);
+            },
+            title: Text('S E T T I N G S',
+                style: Theme.of(context).textTheme.bodyMedium),
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.logout,
+              color: Theme.of(context).iconTheme.color,
+            ),
+            title: Text("S I G N  O U T",
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.secondary)),
+            onTap: () async {
+              await FirebaseAuth.instance.signOut();
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  LoginScreen.routeName, (Route route) => false);
+            },
           ),
         ],
       ),

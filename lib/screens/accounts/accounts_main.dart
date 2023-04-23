@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../icons/custom_icons_icons.dart';
-import '../app_drawer.dart';
+import '../home/app_drawer.dart';
 
 class tabledata {
   Account a;
@@ -73,7 +73,7 @@ class _AccountsMainState extends State<AccountsMain> {
         ),
         centerTitle: true,
         actions: [
-          OutlinedButton(
+          MaterialButton(
             onPressed: () {
               Navigator.of(context).pushNamed(AddAccount.routeName);
             },
@@ -91,99 +91,102 @@ class _AccountsMainState extends State<AccountsMain> {
             width: size.width,
             height: size.height,
             color: th.primaryColor,
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 40,
-                ),
-                FutureBuilder(
-                  builder: (ctx, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      if (snapshot.hasError) {
-                        Utilities().toastMessage('Some Error Occured');
-                      } else if (snapshot.hasData) {
-                        final data = snapshot.data as List<tabledata>;
-                        return Expanded(
-                            child: SingleChildScrollView(
-                                child: DataTable(
-                          columns: <DataColumn>[
-                            DataColumn(
-                              label: Expanded(
-                                child: Text(
-                                  'Id',
-                                  style: th.textTheme.bodyMedium,
-                                ),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Expanded(
-                                child: Text(
-                                  'Name',
-                                  style: th.textTheme.bodyMedium,
-                                ),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Expanded(
-                                child: Text(
-                                  'Debit',
-                                  style: th.textTheme.bodyMedium,
-                                ),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Expanded(
-                                child: Text(
-                                  'Credit',
-                                  style: th.textTheme.bodyMedium,
-                                ),
-                              ),
-                            ),
-                          ],
-                          rows: List<DataRow>.generate(
-                            data.length,
-                            (index) {
-                              tabledata o = data.elementAt(index);
-                              Account obj = o.a;
-                              AccountDataObject d = o.d;
-                              return DataRow(
-                                cells: <DataCell>[
-                                  DataCell(
-                                    Text(obj.id),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  FutureBuilder(
+                    builder: (ctx, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (snapshot.hasError) {
+                          Utilities().toastMessage('Some Error Occured');
+                        } else if (snapshot.hasData) {
+                          final data = snapshot.data as List<tabledata>;
+                          return Expanded(
+                              child: SingleChildScrollView(
+                                  child: DataTable(
+                            columns: <DataColumn>[
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'Id',
+                                    style: th.textTheme.bodyMedium,
                                   ),
-                                  DataCell(
-                                    Text(obj.acc_name),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'Name',
+                                    style: th.textTheme.bodyMedium,
                                   ),
-                                  DataCell(
-                                    Text(
-                                      d.debit.toStringAsFixed(2),
-                                      style: TextStyle(
-                                          color: d.debit > d.credit
-                                              ? Colors.redAccent
-                                              : th.colorScheme.secondary),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'Debit',
+                                    style: th.textTheme.bodyMedium,
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    'Credit',
+                                    style: th.textTheme.bodyMedium,
+                                  ),
+                                ),
+                              ),
+                            ],
+                            rows: List<DataRow>.generate(
+                              data.length,
+                              (index) {
+                                tabledata o = data.elementAt(index);
+                                Account obj = o.a;
+                                AccountDataObject d = o.d;
+                                return DataRow(
+                                  cells: <DataCell>[
+                                    DataCell(
+                                      Text(obj.id),
                                     ),
-                                  ),
-                                  DataCell(
-                                    Text(
-                                      d.credit.toStringAsFixed(2),
-                                      style: TextStyle(
-                                          color: d.credit > d.debit
-                                              ? Colors.greenAccent
-                                              : th.colorScheme.secondary),
+                                    DataCell(
+                                      Text(obj.acc_name),
                                     ),
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                        )));
+                                    DataCell(
+                                      Text(
+                                        d.debit.toStringAsFixed(2),
+                                        style: TextStyle(
+                                            color: d.debit > d.credit
+                                                ? Colors.redAccent
+                                                : th.colorScheme.secondary),
+                                      ),
+                                    ),
+                                    DataCell(
+                                      Text(
+                                        d.credit.toStringAsFixed(2),
+                                        style: TextStyle(
+                                            color: d.credit > d.debit
+                                                ? Colors.greenAccent
+                                                : th.colorScheme.secondary),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          )));
+                        }
                       }
-                    }
-                    return const CircularProgressIndicator();
-                  },
-                  future: fut(context),
-                ),
-              ],
+                      return const CircularProgressIndicator();
+                    },
+                    future: fut(context),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

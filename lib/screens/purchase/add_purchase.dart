@@ -3,14 +3,14 @@ import 'package:accouting_software/classes/item.dart';
 import 'package:accouting_software/providers/accounts_provider.dart';
 import 'package:accouting_software/providers/cart_provider.dart';
 import 'package:accouting_software/providers/items_provider.dart';
+import 'package:accouting_software/providers/settings_provider.dart';
 import 'package:accouting_software/utils/utitlities.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../classes/bill.dart';
 import '../../icons/custom_icons_icons.dart';
-import '../../widgets/app_bar_popupmenubutton.dart';
-import '../app_drawer.dart';
+import '../home/app_drawer.dart';
 import '../cart_screen.dart';
 
 enum Toggles { cash, credit }
@@ -124,6 +124,7 @@ class _AddPurchaseState extends State<AddPurchase> {
   Widget build(BuildContext context) {
     final ThemeData th = Theme.of(context);
     final size = MediaQuery.of(context).size;
+    final settingsProv = Provider.of<SettingsProvider>(context, listen: false);
     final List<Widget> toggleButtonOptions = [
       Text(
         'Credit',
@@ -159,7 +160,6 @@ class _AddPurchaseState extends State<AddPurchase> {
           textAlign: TextAlign.center,
         ),
         centerTitle: true,
-        actions: const [AppBarPopupmenuButton()],
       ),
       body: Container(
         width: size.width,
@@ -197,12 +197,20 @@ class _AddPurchaseState extends State<AddPurchase> {
                           },
                           keyboardType: TextInputType.text,
                           textInputAction: TextInputAction.next,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             hintText: "Id",
-                            hintStyle: TextStyle(
+                            hintStyle: const TextStyle(
                                 color: Color.fromARGB(255, 130, 130, 130)),
-                            fillColor: Color.fromARGB(255, 23, 23, 23),
+                            fillColor: settingsProv.isDark == true
+                                ? const Color.fromARGB(255, 23, 23, 23)
+                                : Colors.white,
                             filled: true,
+                            border: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color.fromARGB(255, 23, 23, 23),
+                                width: 4.0,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -279,8 +287,9 @@ class _AddPurchaseState extends State<AddPurchase> {
                                         ? Colors.redAccent
                                         : Colors.grey,
                                   ),
-                                  dropdownColor:
-                                      const Color.fromARGB(255, 23, 23, 23),
+                                  dropdownColor: settingsProv.isDark == true
+                                      ? const Color.fromARGB(255, 23, 23, 23)
+                                      : Colors.white,
                                   onChanged: (String? value) {
                                     setState(() {
                                       _selectedAccount = value ?? "";
@@ -362,12 +371,20 @@ class _AddPurchaseState extends State<AddPurchase> {
                               controller: _billDateController,
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.next,
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
                                 hintText: "dd/mm/yy",
-                                hintStyle: TextStyle(
+                                hintStyle: const TextStyle(
                                     color: Color.fromARGB(255, 130, 130, 130)),
-                                fillColor: Color.fromARGB(255, 23, 23, 23),
+                                fillColor: settingsProv.isDark == true
+                                    ? const Color.fromARGB(255, 23, 23, 23)
+                                    : Colors.white,
                                 filled: true,
+                                border: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color.fromARGB(255, 23, 23, 23),
+                                    width: 4.0,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -406,12 +423,20 @@ class _AddPurchaseState extends State<AddPurchase> {
                               controller: _dueDateController,
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.next,
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
                                 hintText: "dd/mm/yy",
-                                hintStyle: TextStyle(
+                                hintStyle: const TextStyle(
                                     color: Color.fromARGB(255, 130, 130, 130)),
-                                fillColor: Color.fromARGB(255, 23, 23, 23),
+                                fillColor: settingsProv.isDark == true
+                                    ? const Color.fromARGB(255, 23, 23, 23)
+                                    : Colors.white,
                                 filled: true,
+                                border: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color.fromARGB(255, 23, 23, 23),
+                                    width: 4.0,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -459,8 +484,9 @@ class _AddPurchaseState extends State<AddPurchase> {
                                     height: 2,
                                     color: Colors.grey,
                                   ),
-                                  dropdownColor:
-                                      const Color.fromARGB(255, 23, 23, 23),
+                                  dropdownColor: settingsProv.isDark == true
+                                      ? const Color.fromARGB(255, 23, 23, 23)
+                                      : Colors.white,
                                   onChanged: (String? value) {
                                     setState(() {
                                       _selectedItem = value ?? "";
@@ -525,9 +551,16 @@ class _AddPurchaseState extends State<AddPurchase> {
                             hintText: "Price",
                             hintStyle: const TextStyle(
                                 color: Color.fromARGB(255, 130, 130, 130)),
-                            fillColor: const Color.fromARGB(255, 23, 23, 23),
+                            fillColor: settingsProv.isDark == true
+                                ? const Color.fromARGB(255, 23, 23, 23)
+                                : Colors.white,
                             filled: true,
-                            hoverColor: Theme.of(context).colorScheme.secondary,
+                            border: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color.fromARGB(255, 23, 23, 23),
+                                width: 4.0,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -545,9 +578,16 @@ class _AddPurchaseState extends State<AddPurchase> {
                             hintText: "GST (Fixed)",
                             hintStyle: const TextStyle(
                                 color: Color.fromARGB(255, 130, 130, 130)),
-                            fillColor: const Color.fromARGB(255, 23, 23, 23),
+                            fillColor: settingsProv.isDark == true
+                                ? const Color.fromARGB(255, 23, 23, 23)
+                                : Colors.white,
                             filled: true,
-                            hoverColor: Theme.of(context).colorScheme.secondary,
+                            border: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color.fromARGB(255, 23, 23, 23),
+                                width: 4.0,
+                              ),
+                            ),
                           ),
                         ),
                       )
@@ -564,13 +604,21 @@ class _AddPurchaseState extends State<AddPurchase> {
                           controller: _quantityController,
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             isDense: true,
                             hintText: "Quantity",
-                            hintStyle: TextStyle(
+                            hintStyle: const TextStyle(
                                 color: Color.fromARGB(255, 130, 130, 130)),
-                            fillColor: Color.fromARGB(255, 23, 23, 23),
+                            fillColor: settingsProv.isDark == true
+                                ? const Color.fromARGB(255, 23, 23, 23)
+                                : Colors.white,
                             filled: true,
+                            border: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color.fromARGB(255, 23, 23, 23),
+                                width: 4.0,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -582,13 +630,21 @@ class _AddPurchaseState extends State<AddPurchase> {
                           controller: _discountController,
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             isDense: true,
                             hintText: "Discount(%)",
-                            hintStyle: TextStyle(
+                            hintStyle: const TextStyle(
                                 color: Color.fromARGB(255, 130, 130, 130)),
-                            fillColor: Color.fromARGB(255, 23, 23, 23),
+                            fillColor: settingsProv.isDark == true
+                                ? const Color.fromARGB(255, 23, 23, 23)
+                                : Colors.white,
                             filled: true,
+                            border: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color.fromARGB(255, 23, 23, 23),
+                                width: 4.0,
+                              ),
+                            ),
                           ),
                         ),
                       )

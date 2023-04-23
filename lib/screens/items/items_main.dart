@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../icons/custom_icons_icons.dart';
-import '../app_drawer.dart';
+import '../home/app_drawer.dart';
 
 class ItemsMain extends StatefulWidget {
   static const String routeName = "ItemsMain";
@@ -58,7 +58,7 @@ class _ItemsMainState extends State<ItemsMain> {
         ),
         centerTitle: true,
         actions: [
-          OutlinedButton(
+          MaterialButton(
             onPressed: () {
               Navigator.of(context).pushNamed(AddItems.routeName);
             },

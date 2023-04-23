@@ -1,6 +1,6 @@
 import 'package:accouting_software/icons/custom_icons_icons.dart';
-import 'package:accouting_software/screens/home_screen.dart';
-import 'package:accouting_software/screens/signup_screen.dart';
+import 'package:accouting_software/screens/home/home_screen.dart';
+import 'package:accouting_software/screens/app%20login/signup_screen.dart';
 import 'package:accouting_software/services/auth.dart';
 import 'package:accouting_software/utils/utitlities.dart';
 import 'package:firebase_auth/firebase_auth.dart';

@@ -2,6 +2,7 @@ import 'package:accouting_software/classes/bill.dart';
 import 'package:accouting_software/classes/item.dart';
 import 'package:accouting_software/providers/bill_provider.dart';
 import 'package:accouting_software/providers/items_provider.dart';
+import 'package:accouting_software/providers/settings_provider.dart';
 import 'package:accouting_software/screens/items/items_main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -106,6 +107,7 @@ class _ItemsDetailState extends State<ItemsDetail> {
     final ThemeData th = Theme.of(context);
     final size = MediaQuery.of(context).size;
     final obj = ModalRoute.of(context)!.settings.arguments as Item;
+    final settingsProv = Provider.of<SettingsProvider>(context, listen: false);
     final MaterialStateProperty<Color?> trackColor =
         MaterialStateProperty.resolveWith<Color?>(
       (Set<MaterialState> states) {
@@ -155,7 +157,7 @@ class _ItemsDetailState extends State<ItemsDetail> {
                           activeColor: const Color.fromARGB(185, 23, 23, 23),
                           inactiveThumbColor:
                               const Color.fromARGB(185, 23, 23, 23),
-                          inactiveTrackColor: Colors.white,
+                          inactiveTrackColor: th.colorScheme.secondary,
                           value: _notifierEditable.value,
                           onChanged: (bool value) {
                             _notifierEditable.value = value;
@@ -197,12 +199,20 @@ class _ItemsDetailState extends State<ItemsDetail> {
                               enabled: false,
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.next,
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
                                 hintText: "Id",
-                                hintStyle: TextStyle(
+                                hintStyle: const TextStyle(
                                     color: Color.fromARGB(255, 130, 130, 130)),
-                                fillColor: Color.fromARGB(255, 23, 23, 23),
+                                fillColor: settingsProv.isDark == true
+                                    ? const Color.fromARGB(255, 23, 23, 23)
+                                    : Colors.white,
                                 filled: true,
+                                border: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color.fromARGB(255, 23, 23, 23),
+                                    width: 4.0,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -215,12 +225,20 @@ class _ItemsDetailState extends State<ItemsDetail> {
                               enabled: false,
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.next,
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
                                 hintText: "Name",
-                                hintStyle: TextStyle(
+                                hintStyle: const TextStyle(
                                     color: Color.fromARGB(255, 130, 130, 130)),
-                                fillColor: Color.fromARGB(255, 23, 23, 23),
+                                fillColor: settingsProv.isDark == true
+                                    ? const Color.fromARGB(255, 23, 23, 23)
+                                    : Colors.white,
                                 filled: true,
+                                border: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color.fromARGB(255, 23, 23, 23),
+                                    width: 4.0,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -302,20 +320,16 @@ class _ItemsDetailState extends State<ItemsDetail> {
                                         hintStyle: const TextStyle(
                                             color: Color.fromARGB(
                                                 255, 130, 130, 130)),
-                                        fillColor: const Color.fromARGB(
-                                            255, 23, 23, 23),
+                                        fillColor: settingsProv.isDark == true
+                                            ? const Color.fromARGB(
+                                                255, 23, 23, 23)
+                                            : Colors.white,
                                         filled: true,
-                                        hoverColor: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
-                                        enabledBorder:
-                                            const UnderlineInputBorder(
-                                          borderSide:
-                                              BorderSide(color: Colors.grey),
-                                        ),
-                                        focusedBorder: UnderlineInputBorder(
+                                        border: const OutlineInputBorder(
                                           borderSide: BorderSide(
-                                            color: th.colorScheme.secondary,
+                                            color:
+                                                Color.fromARGB(255, 23, 23, 23),
+                                            width: 4.0,
                                           ),
                                         ),
                                       ),
@@ -333,14 +347,22 @@ class _ItemsDetailState extends State<ItemsDetail> {
                                   enabled: false,
                                   keyboardType: TextInputType.text,
                                   textInputAction: TextInputAction.next,
-                                  decoration: const InputDecoration(
+                                  decoration: InputDecoration(
                                     prefixText: "Qty ",
                                     hintText: "Quantity",
-                                    hintStyle: TextStyle(
+                                    hintStyle: const TextStyle(
                                         color:
                                             Color.fromARGB(255, 130, 130, 130)),
-                                    fillColor: Color.fromARGB(255, 23, 23, 23),
+                                    fillColor: settingsProv.isDark == true
+                                        ? const Color.fromARGB(255, 23, 23, 23)
+                                        : Colors.white,
                                     filled: true,
+                                    border: const OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color.fromARGB(255, 23, 23, 23),
+                                        width: 4.0,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),

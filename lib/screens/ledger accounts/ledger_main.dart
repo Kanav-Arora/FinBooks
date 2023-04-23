@@ -2,8 +2,7 @@ import 'package:accouting_software/classes/account.dart';
 import 'package:accouting_software/classes/transaction.dart';
 import 'package:accouting_software/providers/accounts_provider.dart';
 import 'package:accouting_software/providers/transaction_provider.dart';
-import 'package:accouting_software/screens/app_drawer.dart';
-import 'package:accouting_software/widgets/app_bar_popupmenubutton.dart';
+import 'package:accouting_software/screens/home/app_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../icons/custom_icons_icons.dart';
@@ -105,7 +104,6 @@ class _LedgerMainState extends State<LedgerMain> {
           textAlign: TextAlign.center,
         ),
         centerTitle: true,
-        actions: const [AppBarPopupmenuButton()],
       ),
       body: Container(
         width: size.width,
