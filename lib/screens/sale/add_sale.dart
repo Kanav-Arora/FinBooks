@@ -548,6 +548,8 @@ class _AddSaleState extends State<AddSale> {
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
                           decoration: InputDecoration(
+                            suffixText:
+                                "${settingsProv.currency.substring(0, 1)} ",
                             isDense: true,
                             hintText: "Price",
                             hintStyle: const TextStyle(
@@ -614,6 +616,7 @@ class _AddSaleState extends State<AddSale> {
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
                           decoration: InputDecoration(
+                            suffixText: "${settingsProv.units} ",
                             isDense: true,
                             hintText: "Quantity",
                             hintStyle: const TextStyle(
@@ -640,8 +643,9 @@ class _AddSaleState extends State<AddSale> {
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
                           decoration: InputDecoration(
+                            suffixText: "% ",
                             isDense: true,
-                            hintText: "Discount(%)",
+                            hintText: "Discount",
                             hintStyle: const TextStyle(
                                 color: Color.fromARGB(255, 130, 130, 130)),
                             fillColor: settingsProv.isDark == true

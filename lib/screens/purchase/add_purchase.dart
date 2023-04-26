@@ -547,6 +547,8 @@ class _AddPurchaseState extends State<AddPurchase> {
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
                           decoration: InputDecoration(
+                            suffixText:
+                                "${settingsProv.currency.substring(0, 1)} ",
                             isDense: true,
                             hintText: "Price",
                             hintStyle: const TextStyle(
@@ -605,6 +607,7 @@ class _AddPurchaseState extends State<AddPurchase> {
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
                           decoration: InputDecoration(
+                            suffixText: "${settingsProv.units} ",
                             isDense: true,
                             hintText: "Quantity",
                             hintStyle: const TextStyle(
@@ -631,6 +634,7 @@ class _AddPurchaseState extends State<AddPurchase> {
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
                           decoration: InputDecoration(
+                            suffixText: "% ",
                             isDense: true,
                             hintText: "Discount(%)",
                             hintStyle: const TextStyle(
