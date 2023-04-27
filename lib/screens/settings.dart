@@ -1,7 +1,10 @@
 import 'package:accouting_software/providers/settings_provider.dart';
+import 'package:accouting_software/utils/utitlities.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'home/home_screen.dart';
 
 class Settings extends StatefulWidget {
   static const String routeName = "Settings";
@@ -41,7 +44,16 @@ class _SettingsState extends State<Settings> {
             Icons.arrow_back_ios_new,
             color: th.colorScheme.secondary,
           ),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () async {
+            try {
+              await prov.pushChanges();
+            } catch (error) {
+              Utilities().toastMessage(error.toString());
+            }
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (c) => HomeScreen()),
+                (route) => false);
+          },
         ),
         title: Text(
           'S E T T I N G S',

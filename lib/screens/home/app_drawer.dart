@@ -5,6 +5,7 @@ import 'package:accouting_software/screens/ledger%20accounts/ledger_main.dart';
 import 'package:accouting_software/screens/purchase/add_purchase.dart';
 import 'package:accouting_software/screens/sale/add_sale.dart';
 import 'package:accouting_software/screens/settings.dart';
+import 'package:accouting_software/screens/voucher/voucher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -87,6 +88,9 @@ class AppDrawer extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyMedium),
           ),
           ListTile(
+            onTap: () {
+              Navigator.of(context).pushReplacementNamed(Voucher.routeName);
+            },
             leading: Icon(
               Icons.edit_note,
               color: Theme.of(context).colorScheme.secondary,

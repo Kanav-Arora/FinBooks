@@ -20,6 +20,7 @@ import 'package:accouting_software/screens/app%20login/signup_screen.dart';
 import 'package:accouting_software/screens/home/user_account.dart';
 import 'package:accouting_software/screens/app%20login/verification_page.dart';
 import 'package:accouting_software/screens/settings.dart';
+import 'package:accouting_software/screens/voucher/voucher.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -120,6 +121,7 @@ class _MyAppState extends State<MyApp> {
               AddPurchase.routeName: (ctx) => AddPurchase(),
               ItemsDetail.routeName: (ctx) => ItemsDetail(),
               Settings.routeName: (ctx) => Settings(),
+              Voucher.routeName: (ctx) => Voucher(),
             },
             initialRoute: FirebaseAuth.instance.currentUser == null
                 ? LoginScreen.routeName
