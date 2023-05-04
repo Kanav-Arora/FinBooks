@@ -2,6 +2,7 @@ import 'package:accouting_software/screens/accounts/accounts_main.dart';
 import 'package:accouting_software/screens/home/home_screen.dart';
 import 'package:accouting_software/screens/items/items_main.dart';
 import 'package:accouting_software/screens/ledger%20accounts/ledger_main.dart';
+import 'package:accouting_software/screens/operating%20expense/operating_expense.dart';
 import 'package:accouting_software/screens/purchase/add_purchase.dart';
 import 'package:accouting_software/screens/sale/add_sale.dart';
 import 'package:accouting_software/screens/settings.dart';
@@ -96,6 +97,18 @@ class AppDrawer extends StatelessWidget {
               color: Theme.of(context).colorScheme.secondary,
             ),
             title: Text('V O U C H E R',
+                style: Theme.of(context).textTheme.bodyMedium),
+          ),
+          ListTile(
+            onTap: () {
+              Navigator.of(context)
+                  .pushReplacementNamed(OperatingExpense.routeName);
+            },
+            leading: Icon(
+              Icons.description,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+            title: Text('O P E R A T I N G\nE X P E N S E S',
                 style: Theme.of(context).textTheme.bodyMedium),
           ),
           ListTile(

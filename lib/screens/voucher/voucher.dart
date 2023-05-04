@@ -29,6 +29,7 @@ class _VoucherState extends State<Voucher> {
   final ValueNotifier<double> _notifierBalance = ValueNotifier(0);
   final ValueNotifier<String> _notifierAccount = ValueNotifier("");
   final ValueNotifier<String> _notifierDate = ValueNotifier("");
+  final ValueNotifier<String> _notifierAmount = ValueNotifier("");
   final ValueNotifier<bool> _notifierTEPayment = ValueNotifier(false);
   final ValueNotifier<String> _notifierTogglePaymentType = ValueNotifier("");
   final ValueNotifier<List<bool>> _notifierSelectedTogglePayment =
@@ -39,6 +40,10 @@ class _VoucherState extends State<Voucher> {
   final ValueNotifier<bool> _notifierTEType = ValueNotifier(false);
   final ValueNotifier<bool> _notifierTEAccount = ValueNotifier(false);
   final formkey = GlobalKey<FormState>();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _amountController = TextEditingController();
+  Transaction t =
+      Transaction(name: "", acc_name: "", type: "", amount: "", date: "");
   @override
   void initState() {
     // TODO: implement initState
@@ -64,7 +69,7 @@ class _VoucherState extends State<Voucher> {
     _notifierBalance.value = (credit - debit).abs();
   }
 
-  void onSave() {
+  bool onSave() {
     bool ret = false;
     if (!formkey.currentState!.validate()) ret = true;
     if (_notifierTogglePaymentType.value == "") {
@@ -77,10 +82,21 @@ class _VoucherState extends State<Voucher> {
     }
     if (_notifierToggleBillType.value == "") {
       _notifierTEType.value = true;
-      _notifierTEAccount.notifyListeners();
       ret = true;
     }
-    if (ret) return;
+    if (ret == true) return false;
+    t = Transaction(
+        name: _notifierTogglePaymentType == PaymentTypeToggles.cash.toString()
+            ? "Cash-Voucher"
+            : "Cheque-Voucher",
+        acc_name: _notifierAccount.value,
+        type: _notifierToggleBillType.value == TypeToggles.pay.toString()
+            ? "voucher-purchase"
+            : "voucher-sale",
+        amount: "",
+        date: "");
+    formkey.currentState!.save();
+    return true;
   }
 
   Future<List<Account>> fut() async {
@@ -198,12 +214,10 @@ class _VoucherState extends State<Voucher> {
                                           }
                                           if (index == 0) {
                                             _notifierToggleBillType.value =
-                                                PaymentTypeToggles.cash
-                                                    .toString();
+                                                TypeToggles.pay.toString();
                                           } else {
                                             _notifierToggleBillType.value =
-                                                PaymentTypeToggles.cheque
-                                                    .toString();
+                                                TypeToggles.receive.toString();
                                           }
                                           _notifierTEType.value = false;
                                         },
@@ -245,6 +259,15 @@ class _VoucherState extends State<Voucher> {
                                 valueListenable: _notifierDate,
                                 builder: (ctx, value, child) {
                                   return TextFormField(
+                                    onSaved: (newValue) {
+                                      t = Transaction(
+                                          name: t.name,
+                                          acc_name: t.acc_name,
+                                          type: t.type,
+                                          amount: t.amount,
+                                          date: _notifierDate.value,
+                                          chequeNo: t.chequeNo);
+                                    },
                                     validator: (value) {
                                       if (value!.isEmpty) {
                                         return 'Select a date';
@@ -261,8 +284,12 @@ class _VoucherState extends State<Voucher> {
                                       if (picked != null) {
                                         _notifierDate.value =
                                             DateFormat.yMd().format(picked);
+                                        _dateController.text =
+                                            _notifierDate.value;
+                                        _notifierDate.notifyListeners();
                                       }
                                     },
+                                    controller: _dateController,
                                     keyboardType: TextInputType.text,
                                     textInputAction: TextInputAction.next,
                                     decoration: InputDecoration(
@@ -361,6 +388,12 @@ class _VoucherState extends State<Voucher> {
                                                         true;
                                                     getData(
                                                         _notifierAccount.value);
+                                                    _amountController.text =
+                                                        _notifierBalance.value
+                                                            .toString();
+                                                    _notifierAmount.value =
+                                                        _notifierBalance.value
+                                                            .toString();
                                                   },
                                                   items: data!.map<
                                                           DropdownMenuItem<
@@ -541,34 +574,57 @@ class _VoucherState extends State<Voucher> {
                                   SizedBox(
                                     width: (size.width - 40) / 2,
                                     height: 50,
-                                    child: TextFormField(
-                                      validator: (value) {
-                                        if (value!.isEmpty == true) {
-                                          return 'Enter amount';
-                                        }
-                                        return null;
-                                      },
-                                      keyboardType: TextInputType.number,
-                                      textInputAction: TextInputAction.next,
-                                      decoration: InputDecoration(
-                                        suffixText: "₹",
-                                        hintText: "Amount",
-                                        hintStyle: const TextStyle(
-                                            color: Color.fromARGB(
-                                                255, 130, 130, 130)),
-                                        fillColor: settingsProv.isDark == true
-                                            ? const Color.fromARGB(
-                                                255, 23, 23, 23)
-                                            : Colors.white,
-                                        filled: true,
-                                        border: const OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color:
-                                                Color.fromARGB(255, 23, 23, 23),
-                                            width: 4.0,
+                                    child: ValueListenableBuilder(
+                                      valueListenable: _notifierAmount,
+                                      builder: (context, value, child) {
+                                        return TextFormField(
+                                          validator: (value) {
+                                            if (value!.isEmpty == true) {
+                                              return 'Enter amount';
+                                            }
+                                            if (value == "0") {
+                                              return 'Amount can\'t be zero';
+                                            }
+                                            return null;
+                                          },
+                                          onSaved: (newValue) {
+                                            _notifierAmount.value =
+                                                newValue.toString();
+                                            _amountController.text =
+                                                _notifierAmount.value;
+                                            t = Transaction(
+                                                name: t.name,
+                                                acc_name: t.acc_name,
+                                                type: t.type,
+                                                amount: "₹ $newValue",
+                                                date: t.date,
+                                                chequeNo: t.chequeNo);
+                                          },
+                                          controller: _amountController,
+                                          keyboardType: TextInputType.number,
+                                          textInputAction: TextInputAction.next,
+                                          decoration: InputDecoration(
+                                            suffixText: "₹",
+                                            hintText: "Amount",
+                                            hintStyle: const TextStyle(
+                                                color: Color.fromARGB(
+                                                    255, 130, 130, 130)),
+                                            fillColor:
+                                                settingsProv.isDark == true
+                                                    ? const Color.fromARGB(
+                                                        255, 23, 23, 23)
+                                                    : Colors.white,
+                                            filled: true,
+                                            border: const OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Color.fromARGB(
+                                                    255, 23, 23, 23),
+                                                width: 4.0,
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ),
+                                        );
+                                      },
                                     ),
                                   ),
                                   const SizedBox(
@@ -590,6 +646,15 @@ class _VoucherState extends State<Voucher> {
                                               return 'Enter cheque no';
                                             }
                                             return null;
+                                          },
+                                          onSaved: (newValue) {
+                                            t = Transaction(
+                                                name: t.name,
+                                                acc_name: t.acc_name,
+                                                type: t.type,
+                                                amount: t.amount,
+                                                date: t.date,
+                                                chequeNo: newValue.toString());
                                           },
                                           keyboardType: TextInputType.number,
                                           textInputAction: TextInputAction.next,
@@ -627,8 +692,19 @@ class _VoucherState extends State<Voucher> {
                               SizedBox(
                                 width: 250,
                                 child: OutlinedButton(
-                                  onPressed: () {
-                                    onSave();
+                                  onPressed: () async {
+                                    if (!onSave()) return;
+                                    try {
+                                      await Provider.of<TransactionProvider>(
+                                              context,
+                                              listen: false)
+                                          .addTransaction(t);
+                                      Navigator.of(context)
+                                          .pushReplacementNamed(
+                                              Voucher.routeName);
+                                    } catch (err) {
+                                      Utilities().toastMessage(err.toString());
+                                    }
                                   },
                                   style: OutlinedButton.styleFrom(
                                     side: BorderSide(

@@ -20,6 +20,22 @@ class SettingsProvider with ChangeNotifier {
     currency = c;
   }
 
+  Future<void> fetch() async {
+    var user = FirebaseAuth.instance.currentUser!.uid;
+    DatabaseReference ref =
+        FirebaseDatabase.instance.ref('user/$user').child('settings');
+    try {
+      final response = await ref.get();
+      if (response.value != null) {
+        debugPrint(response.value.toString());
+      } else {
+        await pushChanges();
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   Future<void> pushChanges() async {
     var user = FirebaseAuth.instance.currentUser!.uid;
     DatabaseReference ref =

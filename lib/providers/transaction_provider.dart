@@ -60,7 +60,6 @@ class TransactionProvider with ChangeNotifier {
       _trans.add(t);
       notifyListeners();
     } catch (error) {
-      debugPrint(error.toString());
       rethrow;
     }
   }

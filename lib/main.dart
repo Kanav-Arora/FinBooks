@@ -14,6 +14,7 @@ import 'package:accouting_software/screens/items/items_detail.dart';
 import 'package:accouting_software/screens/items/items_main.dart';
 import 'package:accouting_software/screens/ledger%20accounts/ledger_main.dart';
 import 'package:accouting_software/screens/app%20login/login_screen.dart';
+import 'package:accouting_software/screens/operating%20expense/operating_expense.dart';
 import 'package:accouting_software/screens/purchase/add_purchase.dart';
 import 'package:accouting_software/screens/sale/add_sale.dart';
 import 'package:accouting_software/screens/app%20login/signup_screen.dart';
@@ -122,6 +123,7 @@ class _MyAppState extends State<MyApp> {
               ItemsDetail.routeName: (ctx) => ItemsDetail(),
               Settings.routeName: (ctx) => Settings(),
               Voucher.routeName: (ctx) => Voucher(),
+              OperatingExpense.routeName: (ctx) => OperatingExpense(),
             },
             initialRoute: FirebaseAuth.instance.currentUser == null
                 ? LoginScreen.routeName
