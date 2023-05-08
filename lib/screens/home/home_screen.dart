@@ -156,162 +156,169 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(
                         height: 30,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Container(
-                            decoration: data.isDark == false
-                                ? BoxDecoration(
-                                    border: Border.all(
-                                        color: th.colorScheme.secondary,
-                                        width: 0.5),
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(10)))
-                                : const BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                    color: Color.fromARGB(255, 22, 21, 27)),
-                            padding: const EdgeInsets.all(15),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                      Container(
+                        decoration: data.isDark == false
+                            ? BoxDecoration(
+                                border: Border.all(
+                                    color: th.colorScheme.secondary,
+                                    width: 0.5),
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(10)))
+                            : const BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                color: Color.fromARGB(255, 22, 21, 27)),
+                        padding: const EdgeInsets.all(15),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Profit/Loss',
+                                style: th.textTheme.labelSmall,
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Row(
                                 children: [
                                   Text(
-                                    'Profit/Loss',
-                                    style: th.textTheme.labelSmall,
+                                    "${data.curr} ${t.profit}",
+                                    style: th.textTheme.labelMedium,
                                   ),
                                   const SizedBox(
-                                    height: 20,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "${data.curr} ${t.profit}",
-                                        style: th.textTheme.labelMedium,
-                                      ),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      t.profitMonth > t.profitAverage
-                                          ? const Icon(
-                                              Icons.moving,
-                                              color: Colors.greenAccent,
-                                            )
-                                          : const Icon(
-                                              Icons.trending_down,
-                                              color: Colors.redAccent,
-                                            ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
+                                    width: 5,
                                   ),
                                   t.profitMonth > t.profitAverage
-                                      ? Text(
+                                      ? const Icon(
+                                          Icons.moving,
+                                          color: Colors.greenAccent,
+                                        )
+                                      : const Icon(
+                                          Icons.trending_down,
+                                          color: Colors.redAccent,
+                                        ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              t.profitMonth > t.profitAverage
+                                  ? Row(
+                                      children: [
+                                        Text(
                                           "${(t.profitMonth - t.profitAverage).toStringAsFixed(2)} ( ${((t.profitMonth - t.profitAverage) / t.profitAverage).toStringAsFixed(2)}% )",
                                           style: th.textTheme.labelSmall!
                                               .copyWith(
                                                   color: Colors.greenAccent,
                                                   fontSize: 12),
-                                        )
-                                      : Row(
-                                          children: [
-                                            Text(
-                                              "${(t.profitAverage - t.profitMonth).toStringAsFixed(2)} ( ${((t.profitMonth - t.profitAverage) / t.profitAverage).toStringAsFixed(2)}% )",
-                                              style: th.textTheme.labelSmall!
-                                                  .copyWith(
-                                                      color: Colors.redAccent,
-                                                      fontSize: 12),
-                                            ),
-                                            const SizedBox(
-                                              width: 5,
-                                            ),
-                                            Text('Less',
-                                                style: th.textTheme.labelSmall!
-                                                    .copyWith(fontSize: 12)),
-                                          ],
                                         ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                ]),
-                          ),
-                          Container(
-                            decoration: data.isDark == false
-                                ? BoxDecoration(
-                                    border: Border.all(
-                                        color: th.colorScheme.secondary,
-                                        width: 0.5),
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(10)))
-                                : const BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                    color: Color.fromARGB(255, 22, 21, 27)),
-                            padding: const EdgeInsets.all(15),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'COGS',
-                                    style: th.textTheme.labelSmall,
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "${data.curr} ${t.cogs}",
-                                        style: th.textTheme.labelMedium,
-                                      ),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      t.cogsMonth > t.cogsAverage
-                                          ? const Icon(
-                                              Icons.moving,
-                                              color: Colors.greenAccent,
-                                            )
-                                          : const Icon(
-                                              Icons.trending_down,
-                                              color: Colors.redAccent,
-                                            ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  t.cogsMonth > t.cogsAverage
-                                      ? Text(
-                                          "${(t.cogsMonth - t.cogsAverage).toStringAsFixed(2)} ( ${(t.cogsMonth - t.cogsAverage) / t.cogsAverage}% )",
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text('More',
+                                            style: th.textTheme.labelSmall!
+                                                .copyWith(fontSize: 12)),
+                                      ],
+                                    )
+                                  : Row(
+                                      children: [
+                                        Text(
+                                          "${(t.profitAverage - t.profitMonth).toStringAsFixed(2)} ( ${((t.profitMonth - t.profitAverage) / t.profitAverage).toStringAsFixed(2)}% )",
                                           style: th.textTheme.labelSmall!
                                               .copyWith(
-                                                  color: Colors.greenAccent,
+                                                  color: Colors.redAccent,
                                                   fontSize: 12),
-                                        )
-                                      : Row(
-                                          children: [
-                                            Text(
-                                              "${(t.cogsAverage - t.cogsMonth).toStringAsFixed(2)} ( ${(t.cogsMonth - t.cogsAverage) / t.cogsAverage}% )",
-                                              style: th.textTheme.labelSmall!
-                                                  .copyWith(
-                                                      color: Colors.redAccent,
-                                                      fontSize: 12),
-                                            ),
-                                            const SizedBox(
-                                              width: 5,
-                                            ),
-                                            Text('Less',
-                                                style: th.textTheme.labelSmall!
-                                                    .copyWith(fontSize: 12)),
-                                          ],
                                         ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text('Less',
+                                            style: th.textTheme.labelSmall!
+                                                .copyWith(fontSize: 12)),
+                                      ],
+                                    ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                            ]),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        decoration: data.isDark == false
+                            ? BoxDecoration(
+                                border: Border.all(
+                                    color: th.colorScheme.secondary,
+                                    width: 0.5),
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(10)))
+                            : const BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                color: Color.fromARGB(255, 22, 21, 27)),
+                        padding: const EdgeInsets.all(15),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'COGS',
+                                style: th.textTheme.labelSmall,
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "${data.curr} ${t.cogs}",
+                                    style: th.textTheme.labelMedium,
+                                  ),
                                   const SizedBox(
-                                    height: 10,
-                                  )
-                                ]),
-                          ),
-                        ],
+                                    width: 5,
+                                  ),
+                                  t.cogsMonth > t.cogsAverage
+                                      ? const Icon(
+                                          Icons.moving,
+                                          color: Colors.greenAccent,
+                                        )
+                                      : const Icon(
+                                          Icons.trending_down,
+                                          color: Colors.redAccent,
+                                        ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              t.cogsMonth > t.cogsAverage
+                                  ? Text(
+                                      "${(t.cogsMonth - t.cogsAverage).toStringAsFixed(2)} ( ${(t.cogsMonth - t.cogsAverage) / t.cogsAverage}% )",
+                                      style: th.textTheme.labelSmall!.copyWith(
+                                          color: Colors.greenAccent,
+                                          fontSize: 12),
+                                    )
+                                  : Row(
+                                      children: [
+                                        Text(
+                                          "${(t.cogsAverage - t.cogsMonth).toStringAsFixed(2)} ( ${(t.cogsMonth - t.cogsAverage) / t.cogsAverage}% )",
+                                          style: th.textTheme.labelSmall!
+                                              .copyWith(
+                                                  color: Colors.redAccent,
+                                                  fontSize: 12),
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text('Less',
+                                            style: th.textTheme.labelSmall!
+                                                .copyWith(fontSize: 12)),
+                                      ],
+                                    ),
+                              const SizedBox(
+                                height: 10,
+                              )
+                            ]),
                       ),
                       const SizedBox(
                         height: 20,
