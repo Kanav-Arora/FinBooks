@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:accouting_software/providers/accounts_provider.dart';
 import 'package:accouting_software/providers/bill_provider.dart';
 import 'package:accouting_software/providers/cart_provider.dart';
+import 'package:accouting_software/providers/expense_provider.dart';
 import 'package:accouting_software/providers/items_provider.dart';
 import 'package:accouting_software/providers/settings_provider.dart';
 import 'package:accouting_software/providers/transaction_provider.dart';
@@ -14,6 +15,7 @@ import 'package:accouting_software/screens/items/items_detail.dart';
 import 'package:accouting_software/screens/items/items_main.dart';
 import 'package:accouting_software/screens/ledger%20accounts/ledger_main.dart';
 import 'package:accouting_software/screens/app%20login/login_screen.dart';
+import 'package:accouting_software/screens/operating%20expense/all_expense.dart';
 import 'package:accouting_software/screens/operating%20expense/operating_expense.dart';
 import 'package:accouting_software/screens/purchase/add_purchase.dart';
 import 'package:accouting_software/screens/sale/add_sale.dart';
@@ -96,6 +98,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (ctx) => TransactionProvider()),
         ChangeNotifierProvider(
             create: (ctx) => SettingsProvider(savedThemeMode!.isDark)),
+        ChangeNotifierProvider(create: (ctx) => ExpenseProvider()),
       ],
       child: AdaptiveTheme(
         light: Themes.light,
@@ -124,6 +127,7 @@ class _MyAppState extends State<MyApp> {
               Settings.routeName: (ctx) => Settings(),
               Voucher.routeName: (ctx) => Voucher(),
               OperatingExpense.routeName: (ctx) => OperatingExpense(),
+              AllExpense.routeName: (ctx) => AllExpense(),
             },
             initialRoute: FirebaseAuth.instance.currentUser == null
                 ? LoginScreen.routeName

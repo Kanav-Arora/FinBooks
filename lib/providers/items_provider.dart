@@ -91,4 +91,13 @@ class ItemProvider with ChangeNotifier {
       rethrow;
     }
   }
+
+  Future<List<Item>> outOfStock() async {
+    await fetch();
+    List<Item> ls = [];
+    for (var element in _items) {
+      if (element.quantity == "0") ls.add(element);
+    }
+    return ls;
+  }
 }

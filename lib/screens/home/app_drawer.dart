@@ -2,6 +2,7 @@ import 'package:accouting_software/screens/accounts/accounts_main.dart';
 import 'package:accouting_software/screens/home/home_screen.dart';
 import 'package:accouting_software/screens/items/items_main.dart';
 import 'package:accouting_software/screens/ledger%20accounts/ledger_main.dart';
+import 'package:accouting_software/screens/operating%20expense/all_expense.dart';
 import 'package:accouting_software/screens/operating%20expense/operating_expense.dart';
 import 'package:accouting_software/screens/purchase/add_purchase.dart';
 import 'package:accouting_software/screens/sale/add_sale.dart';
@@ -23,8 +24,7 @@ class AppDrawer extends StatelessWidget {
       child: ListView(
         children: [
           Container(
-            height: MediaQuery.of(context).padding.top +
-                Scaffold.of(context).appBarMaxHeight!.toInt(),
+            height: MediaQuery.of(context).padding.top,
           ),
           ListTile(
             onTap: () => Navigator.of(context)
@@ -99,17 +99,42 @@ class AppDrawer extends StatelessWidget {
             title: Text('V O U C H E R',
                 style: Theme.of(context).textTheme.bodyMedium),
           ),
-          ListTile(
-            onTap: () {
-              Navigator.of(context)
-                  .pushReplacementNamed(OperatingExpense.routeName);
-            },
-            leading: Icon(
-              Icons.description,
-              color: Theme.of(context).colorScheme.secondary,
+          Theme(
+            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+            child: ExpansionTile(
+              title: const Text("O P E R A T I N G\nE X P E N S E S"),
+              leading: Icon(
+                Icons.description,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+              childrenPadding: const EdgeInsets.only(left: 20),
+              children: [
+                ListTile(
+                  onTap: () {
+                    Navigator.of(context)
+                        .pushReplacementNamed(AllExpense.routeName);
+                  },
+                  leading: Icon(
+                    Icons.stacked_bar_chart,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                  title: Text('All Expenses',
+                      style: Theme.of(context).textTheme.bodyMedium),
+                ),
+                ListTile(
+                  onTap: () {
+                    Navigator.of(context)
+                        .pushReplacementNamed(OperatingExpense.routeName);
+                  },
+                  leading: Icon(
+                    Icons.add,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                  title: Text('Add Expenses',
+                      style: Theme.of(context).textTheme.bodyMedium),
+                ),
+              ],
             ),
-            title: Text('O P E R A T I N G\nE X P E N S E S',
-                style: Theme.of(context).textTheme.bodyMedium),
           ),
           ListTile(
             leading: Icon(

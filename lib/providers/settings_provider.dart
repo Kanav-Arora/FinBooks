@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -20,14 +21,26 @@ class SettingsProvider with ChangeNotifier {
     currency = c;
   }
 
-  Future<void> fetch() async {
+  Future snapshotValue(dataSnapshot, BuildContext context) async {
+    var val = dataSnapshot.value['isdark'] as bool;
+    if (val != isDark) {
+      isDark = val;
+      isDark == true
+          ? AdaptiveTheme.of(context).setDark()
+          : AdaptiveTheme.of(context).setLight();
+    }
+    units = dataSnapshot.value['units'] as String;
+    currency = dataSnapshot.value['currency'] as String;
+  }
+
+  Future<void> fetch(BuildContext ctx) async {
     var user = FirebaseAuth.instance.currentUser!.uid;
     DatabaseReference ref =
         FirebaseDatabase.instance.ref('user/$user').child('settings');
     try {
       final response = await ref.get();
       if (response.value != null) {
-        debugPrint(response.value.toString());
+        snapshotValue(response, ctx);
       } else {
         await pushChanges();
       }

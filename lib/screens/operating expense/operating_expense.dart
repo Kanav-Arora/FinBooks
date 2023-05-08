@@ -1,3 +1,6 @@
+import 'package:accouting_software/classes/expense.dart';
+import 'package:accouting_software/providers/expense_provider.dart';
+import 'package:accouting_software/utils/utitlities.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -17,18 +20,20 @@ class _OperatingExpenseState extends State<OperatingExpense> {
   final ValueNotifier<bool> _notifierTEExpCat = ValueNotifier(false);
   final TextEditingController _dateController = TextEditingController();
   final ValueNotifier<String> _notifierDate = ValueNotifier("");
+  final ValueNotifier<String> _notifierAmount = ValueNotifier("");
   final TextEditingController _controllerMessage = TextEditingController();
   final _formkey = GlobalKey<FormState>();
+  Expense e = Expense(category: "", date: "", amount: "");
   List<String> exp = [
-    "Rent",
-    "Salaries and wages",
     "Accounting and legal fees",
     "Bank charges",
-    "Sales and marketing fees",
     "Office supplies",
+    "Rent",
     "Repairs",
+    "Salaries and wages",
+    "Sales and marketing fees",
     "Utilities expenses",
-    "Other"
+    "Other",
   ];
 
   bool onSave() {
@@ -38,8 +43,13 @@ class _OperatingExpenseState extends State<OperatingExpense> {
       _notifierTEExpCat.value = true;
       ret = true;
     }
-
     if (ret) return true;
+    _formkey.currentState!.save();
+    e = Expense(
+        category: _notifierExpCat.value,
+        date: _notifierDate.value,
+        amount: _notifierAmount.value,
+        message: _controllerMessage.text.toString());
     return false;
   }
 
@@ -60,7 +70,7 @@ class _OperatingExpenseState extends State<OperatingExpense> {
                 (route) => false),
           ),
           title: Text(
-            'O P E R A T I N G\nE X P E N S E S',
+            'A D D\nE X P E N S E',
             style: Theme.of(context).textTheme.titleMedium,
             textAlign: TextAlign.center,
           ),
@@ -77,66 +87,63 @@ class _OperatingExpenseState extends State<OperatingExpense> {
               const SizedBox(
                 height: 20,
               ),
+              ValueListenableBuilder(
+                valueListenable: _notifierExpCat,
+                builder: (ctx, value, child) {
+                  return ValueListenableBuilder(
+                    valueListenable: _notifierTEExpCat,
+                    builder: (ctx, value, child) {
+                      return DropdownButton<String>(
+                          isExpanded: true,
+                          hint: Text(
+                            'Select a Category',
+                            style: th.textTheme.bodyMedium!.copyWith(
+                                color:
+                                    const Color.fromARGB(255, 130, 130, 130)),
+                            textAlign: TextAlign.center,
+                          ),
+                          value: _notifierExpCat.value == ""
+                              ? null
+                              : _notifierExpCat.value,
+                          elevation: 16,
+                          style: const TextStyle(
+                              color: Color.fromARGB(255, 136, 78, 236)),
+                          underline: Container(
+                            height: 2,
+                            color: (_notifierTEExpCat.value == true &&
+                                    _notifierExpCat.value == "")
+                                ? Colors.redAccent
+                                : Colors.grey,
+                          ),
+                          dropdownColor: settingsProv.isDark == true
+                              ? const Color.fromARGB(255, 23, 23, 23)
+                              : Colors.white,
+                          onChanged: (String? value) {
+                            _notifierExpCat.value = value.toString();
+                          },
+                          items:
+                              exp.map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: th.textTheme.bodyMedium,
+                              ),
+                            );
+                          }).toList());
+                    },
+                  );
+                },
+              ),
+              const SizedBox(
+                height: 20,
+              ),
               Form(
                 key: _formkey,
                 child: Row(
                   children: [
                     SizedBox(
-                      width: (size.width - 50) / 1.5,
-                      child: ValueListenableBuilder(
-                        valueListenable: _notifierExpCat,
-                        builder: (ctx, value, child) {
-                          return ValueListenableBuilder(
-                            valueListenable: _notifierTEExpCat,
-                            builder: (ctx, value, child) {
-                              return DropdownButton<String>(
-                                  isExpanded: true,
-                                  hint: Text(
-                                    'Select a Category',
-                                    style: th.textTheme.bodyMedium!.copyWith(
-                                        color: const Color.fromARGB(
-                                            255, 130, 130, 130)),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  value: _notifierExpCat.value == ""
-                                      ? null
-                                      : _notifierExpCat.value,
-                                  elevation: 16,
-                                  style: const TextStyle(
-                                      color: Color.fromARGB(255, 136, 78, 236)),
-                                  underline: Container(
-                                    height: 2,
-                                    color: (_notifierTEExpCat.value == true &&
-                                            _notifierExpCat.value == "")
-                                        ? Colors.redAccent
-                                        : Colors.grey,
-                                  ),
-                                  dropdownColor: settingsProv.isDark == true
-                                      ? const Color.fromARGB(255, 23, 23, 23)
-                                      : Colors.white,
-                                  onChanged: (String? value) {
-                                    _notifierExpCat.value = value.toString();
-                                  },
-                                  items: exp.map<DropdownMenuItem<String>>(
-                                      (String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(
-                                        value,
-                                        style: th.textTheme.bodyMedium,
-                                      ),
-                                    );
-                                  }).toList());
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    Expanded(
-                        child: SizedBox(
+                      width: (size.width - 50) / 2,
                       height: 50,
                       child: ValueListenableBuilder(
                           valueListenable: _notifierDate,
@@ -147,6 +154,9 @@ class _OperatingExpenseState extends State<OperatingExpense> {
                                   return 'Select a date';
                                 }
                                 return null;
+                              },
+                              onSaved: (newValue) {
+                                _notifierDate.value = newValue.toString();
                               },
                               onTap: () async {
                                 final DateTime? picked = await showDatePicker(
@@ -181,7 +191,47 @@ class _OperatingExpenseState extends State<OperatingExpense> {
                               ),
                             );
                           }),
-                    ))
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    SizedBox(
+                      width: (size.width - 50) / 2,
+                      height: 50,
+                      child: ValueListenableBuilder(
+                          valueListenable: _notifierAmount,
+                          builder: (ctx, value, child) {
+                            return TextFormField(
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Enter an amount';
+                                }
+                                return null;
+                              },
+                              onSaved: (newValue) {
+                                _notifierAmount.value = newValue.toString();
+                              },
+                              keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.next,
+                              decoration: InputDecoration(
+                                prefixText: settingsProv.currency,
+                                hintText: "Amount",
+                                hintStyle: const TextStyle(
+                                    color: Color.fromARGB(255, 130, 130, 130)),
+                                fillColor: settingsProv.isDark == true
+                                    ? const Color.fromARGB(255, 23, 23, 23)
+                                    : Colors.white,
+                                filled: true,
+                                border: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color.fromARGB(255, 23, 23, 23),
+                                    width: 4.0,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
+                    ),
                   ],
                 ),
               ),
@@ -215,8 +265,16 @@ class _OperatingExpenseState extends State<OperatingExpense> {
               SizedBox(
                 width: 250,
                 child: OutlinedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (onSave()) return;
+                    try {
+                      await Provider.of<ExpenseProvider>(context, listen: false)
+                          .addExpense(e);
+                      Navigator.of(context)
+                          .pushReplacementNamed(OperatingExpense.routeName);
+                    } catch (error) {
+                      Utilities().toastMessage(error.toString());
+                    }
                   },
                   style: OutlinedButton.styleFrom(
                     side:

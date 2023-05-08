@@ -2,6 +2,11 @@ class Expense {
   String category;
   String date;
   String message = "";
+  String amount;
 
-  Expense(this.category, this.date);
+  Expense(
+      {required this.category,
+      required this.date,
+      required this.amount,
+      this.message = ""});
 }

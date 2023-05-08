@@ -1,5 +1,10 @@
 import 'package:accouting_software/classes/account_data_object.dart';
+import 'package:accouting_software/classes/expense.dart';
+import 'package:accouting_software/classes/transactions_stat.dart';
+import 'package:accouting_software/providers/expense_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import '../classes/transaction.dart' as Tran;
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -91,5 +96,104 @@ class TransactionProvider with ChangeNotifier {
     }
     ls.sort(((a, b) => (a.date.compareTo(b.date) * -1)));
     return ls;
+  }
+
+  Future<TransStat> stats(
+      BuildContext ctx, DateTime start, DateTime end) async {
+    await fetch();
+    TransStat obj = TransStat();
+    double credit = 0;
+    double debit = 0;
+    double revenue = 0;
+    double revMonth = 0;
+    double cogs = 0;
+    double cogsMonth = 0;
+    double profit = 0;
+    double profitAvg = 0;
+    double profitMonth = 0;
+    Map<int, double> cashflow = {};
+    for (var element in _trans) {
+      var curr = DateFormat.yMd().parse(element.date);
+      if ((start.compareTo(curr) < 0 || start.compareTo(curr) == 0) &&
+          (end.compareTo(curr) > 0 || end.compareTo(curr) == 0)) {
+        // cashflow, revenue and revMonth
+        if (element.type == "sale") {
+          if (!cashflow.containsKey(curr.month)) {
+            cashflow[curr.month] = 0;
+          }
+          cashflow[curr.month] =
+              cashflow[curr.month]! + double.parse(element.amount.substring(2));
+          revenue += double.parse(element.amount.substring(2));
+          if (curr.month == DateTime.now().month) {
+            revMonth += double.parse(element.amount.substring(2));
+          }
+        }
+
+        if (element.type == "purchase") {
+          cogs += double.parse(element.amount.substring(2));
+          if (curr.month == DateTime.now().month) {
+            cogsMonth += double.parse(element.amount.substring(2));
+          }
+        }
+
+        // credits total
+        if (element.type == "sale" || element.type == "voucher-purchase") {
+          credit += double.parse(element.amount.substring(2));
+        } // debits total
+        else if (element.type == "purchase" || element.type == "voucher-sale") {
+          debit += double.parse(element.amount.substring(2));
+        }
+      }
+    }
+
+    List<Expense> ls =
+        await Provider.of<ExpenseProvider>(ctx, listen: false).exp;
+    for (var each in ls) {
+      var curr = DateFormat.yMd().parse(each.date);
+      if ((start.compareTo(curr) < 0 || start.compareTo(curr) == 0) &&
+          (end.compareTo(curr) > 0 || end.compareTo(curr) == 0)) {
+        profit -= double.parse(each.amount);
+        if (curr.month == DateTime.now().month) {
+          profitMonth -= double.parse(each.amount);
+        }
+        if (!cashflow.containsKey(curr.month)) {
+          cashflow[curr.month] = 0;
+        }
+        cashflow[curr.month] =
+            cashflow[curr.month]! - double.parse(each.amount);
+      }
+    }
+    double sum = 0;
+    int count = 0;
+    cashflow.forEach((key, value) {
+      sum += value;
+      count++;
+    });
+    obj.avg = ((sum) / count).toStringAsFixed(2);
+    obj.credit = credit.toStringAsFixed(2);
+    obj.debit = debit.toStringAsFixed(2);
+    List<List<String>> graphCashFlow = [];
+    cashflow.forEach((key, value) {
+      String month = DateFormat('MMMM').format(DateTime(0, key));
+      String v = value.toStringAsFixed(2);
+      graphCashFlow.add([month, v]);
+    });
+    graphCashFlow.sort((a, b) => a[0].compareTo(b[0]));
+    obj.graphCashFlow = graphCashFlow;
+    int months = (DateTime.now().month - 3);
+    obj.revenue = revenue;
+    obj.revMonth = revMonth;
+    obj.avgRev = months != 0 ? revenue / months : 0;
+    obj.cogs = cogs;
+    obj.cogsMonth = cogsMonth;
+    obj.cogsAverage = months != 0 ? cogs / months : 0;
+    obj.profit = profit + revenue - cogs;
+    obj.profitMonth = profitMonth + revMonth - cogsMonth;
+    // debugPrint(obj.profit.toString());
+    // debugPrint(obj.profitMonth.toString());
+    // debugPrint(months.toString());
+    obj.profitAverage = months != 0 ? obj.profit / months : 0;
+    // debugPrint(obj.profitAverage.toString());
+    return obj;
   }
 }
