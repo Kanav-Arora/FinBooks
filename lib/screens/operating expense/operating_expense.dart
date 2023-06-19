@@ -143,7 +143,7 @@ class _OperatingExpenseState extends State<OperatingExpense> {
                 child: Row(
                   children: [
                     SizedBox(
-                      width: (size.width - 50) / 2,
+                      width: (size.width - 60) / 2,
                       height: 50,
                       child: ValueListenableBuilder(
                           valueListenable: _notifierDate,
@@ -193,10 +193,10 @@ class _OperatingExpenseState extends State<OperatingExpense> {
                           }),
                     ),
                     const SizedBox(
-                      width: 20,
+                      width: 25,
                     ),
                     SizedBox(
-                      width: (size.width - 50) / 2,
+                      width: (size.width - 60) / 2,
                       height: 50,
                       child: ValueListenableBuilder(
                           valueListenable: _notifierAmount,

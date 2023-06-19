@@ -5,6 +5,7 @@ import 'package:accouting_software/screens/ledger%20accounts/ledger_main.dart';
 import 'package:accouting_software/screens/operating%20expense/all_expense.dart';
 import 'package:accouting_software/screens/operating%20expense/operating_expense.dart';
 import 'package:accouting_software/screens/purchase/add_purchase.dart';
+import 'package:accouting_software/screens/reports/pl.dart';
 import 'package:accouting_software/screens/sale/add_sale.dart';
 import 'package:accouting_software/screens/settings.dart';
 import 'package:accouting_software/screens/voucher/voucher.dart';
@@ -136,13 +137,30 @@ class AppDrawer extends StatelessWidget {
               ],
             ),
           ),
-          ListTile(
-            leading: Icon(
-              Icons.description,
-              color: Theme.of(context).colorScheme.secondary,
+          Theme(
+            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+            child: ExpansionTile(
+              title: const Text("R E P O R T S"),
+              leading: Icon(
+                Icons.document_scanner,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+              childrenPadding: const EdgeInsets.only(left: 20),
+              children: [
+                ListTile(
+                  onTap: () {
+                    Navigator.of(context)
+                        .pushReplacementNamed(PLStatement.routeName);
+                  },
+                  leading: Icon(
+                    Icons.monetization_on,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                  title: Text('PL Statement',
+                      style: Theme.of(context).textTheme.bodyMedium),
+                ),
+              ],
             ),
-            title: Text('T R I A L\nB A L A N C E',
-                style: Theme.of(context).textTheme.bodyMedium),
           ),
           ListTile(
             leading: Icon(

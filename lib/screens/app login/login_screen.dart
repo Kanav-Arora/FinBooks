@@ -1,20 +1,25 @@
-import 'package:accouting_software/icons/custom_icons_icons.dart';
+import 'package:accouting_software/providers/settings_provider.dart';
+import 'package:accouting_software/screens/app%20login/verification_page.dart';
 import 'package:accouting_software/screens/home/home_screen.dart';
 import 'package:accouting_software/screens/app%20login/signup_screen.dart';
 import 'package:accouting_software/services/auth.dart';
 import 'package:accouting_software/utils/utitlities.dart';
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
-  static final String routeName = "LoginScreen";
-
+  static const String routeName = "LoginScreen";
+  AdaptiveThemeMode mode;
+  LoginScreen(this.mode, {super.key});
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<LoginScreen> createState() => _LoginScreenState(mode);
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  AdaptiveThemeMode mode;
+  _LoginScreenState(this.mode);
   final _formkey = GlobalKey<FormState>();
   var _isLoading = false;
   String email = "", password = "";
@@ -33,8 +38,14 @@ class _LoginScreenState extends State<LoginScreen> {
     if (isValid == false) return;
     _formkey.currentState!.save();
     try {
-      await Auth().login(email, password).whenComplete(() =>
-          Navigator.of(context).pushReplacementNamed(HomeScreen.routeName));
+      await Auth().login(email, password).whenComplete(() {
+        if (FirebaseAuth.instance.currentUser!.emailVerified == true) {
+          Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+        } else {
+          Navigator.of(context)
+              .pushReplacementNamed(VerificationPage.routeName);
+        }
+      });
     } catch (e) {
       Utilities().toastMessage(e.toString());
     }
@@ -43,6 +54,8 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    final settingsProv = Provider.of<SettingsProvider>(context, listen: false);
+    debugPrint(settingsProv.isDark.toString());
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
@@ -75,7 +88,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       Text(
                         'Email',
-                        style: Theme.of(context).textTheme.labelMedium,
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelMedium!
+                            .copyWith(fontSize: 18),
                       ),
                       const SizedBox(
                         height: 20,
@@ -89,22 +105,22 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.next,
-                        style: Theme.of(context).textTheme.labelMedium,
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelMedium!
+                            .copyWith(fontSize: 18),
                         decoration: InputDecoration(
                           hintText: 'abc@example.com',
                           hintStyle: const TextStyle(
                               color: Color.fromARGB(255, 130, 130, 130)),
-                          fillColor: const Color.fromARGB(255, 23, 23, 23),
+                          fillColor: mode == AdaptiveThemeMode.dark
+                              ? const Color.fromARGB(255, 23, 23, 23)
+                              : Colors.white,
                           filled: true,
-                          hoverColor: Theme.of(context).colorScheme.secondary,
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(color: Colors.grey),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(
-                              color: Color.fromARGB(255, 181, 21, 221),
+                          border: const OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color.fromARGB(255, 23, 23, 23),
+                              width: 4.0,
                             ),
                           ),
                         ),
@@ -114,7 +130,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       Text(
                         'Password',
-                        style: Theme.of(context).textTheme.labelMedium,
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelMedium!
+                            .copyWith(fontSize: 18),
                       ),
                       const SizedBox(
                         height: 20,
@@ -129,23 +148,22 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                         keyboardType: TextInputType.text,
                         textInputAction: TextInputAction.done,
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary),
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelMedium!
+                            .copyWith(fontSize: 18),
                         decoration: InputDecoration(
                           hintText: 'Pick a strong password',
                           hintStyle: const TextStyle(
                               color: Color.fromARGB(255, 130, 130, 130)),
-                          fillColor: const Color.fromARGB(255, 23, 23, 23),
+                          fillColor: mode == AdaptiveThemeMode.dark
+                              ? const Color.fromARGB(255, 23, 23, 23)
+                              : Colors.white,
                           filled: true,
-                          hoverColor: Theme.of(context).colorScheme.secondary,
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(color: Colors.grey),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(
-                              color: Color.fromARGB(255, 181, 21, 221),
+                          border: const OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color.fromARGB(255, 23, 23, 23),
+                              width: 4.0,
                             ),
                           ),
                         ),
@@ -216,32 +234,32 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(
                     height: 30,
                   ),
-                  Container(
-                    child: Center(
-                      child: MaterialButton(
-                        onPressed: () {},
-                        padding: const EdgeInsets.all(0),
-                        child: Container(
-                          width: 120,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: const Color.fromARGB(255, 23, 23, 23),
-                            border: Border.all(
-                              color: const Color.fromARGB(255, 130, 130, 130),
-                            ),
-                          ),
-                          child: const Center(
-                            child: Icon(
-                              CustomIcons.google,
-                              size: 30,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  // Container(
+                  //   child: Center(
+                  //     child: MaterialButton(
+                  //       onPressed: () {},
+                  //       padding: const EdgeInsets.all(0),
+                  //       child: Container(
+                  //         width: 120,
+                  //         height: 60,
+                  //         decoration: BoxDecoration(
+                  //           borderRadius: BorderRadius.circular(15),
+                  //           color: const Color.fromARGB(255, 23, 23, 23),
+                  //           border: Border.all(
+                  //             color: const Color.fromARGB(255, 130, 130, 130),
+                  //           ),
+                  //         ),
+                  //         child: const Center(
+                  //           child: Icon(
+                  //             CustomIcons.google,
+                  //             size: 30,
+                  //             color: Colors.white,
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
               const Spacer()

@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "1033184374253",
+    "firebase_url": "https://financify-accounting-default-rtdb.firebaseio.com",
     "project_id": "financify-accounting",
     "storage_bucket": "financify-accounting.appspot.com"
   },
@@ -14,7 +15,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "1033184374253-76ahncifqo41178kul6skkkc89ejrtu7.apps.googleusercontent.com",
+          "client_id": "1033184374253-5t8att41vo6h90kncm6gpeil8scjvqbi.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,8 +28,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1033184374253-76ahncifqo41178kul6skkkc89ejrtu7.apps.googleusercontent.com",
+              "client_id": "1033184374253-5t8att41vo6h90kncm6gpeil8scjvqbi.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1033184374253-0760akrvass6ahoeij7trrjhivn8iiks.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.accoutingSoftware"
+              }
             }
           ]
         }

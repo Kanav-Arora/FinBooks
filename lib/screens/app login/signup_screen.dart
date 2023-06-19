@@ -1,13 +1,14 @@
 import 'package:accouting_software/icons/custom_icons_icons.dart';
+import 'package:accouting_software/screens/app%20login/verification_page.dart';
 import 'package:accouting_software/screens/home/home_screen.dart';
 import 'package:accouting_software/screens/app%20login/login_screen.dart';
 import 'package:accouting_software/services/auth.dart';
 import 'package:accouting_software/utils/utitlities.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class SignupScreen extends StatefulWidget {
-  static final String routeName = 'SignupScreen';
+  static const String routeName = 'SignupScreen';
 
   @override
   State<SignupScreen> createState() => _SignupScreenState();
@@ -45,7 +46,12 @@ class _SignupScreenState extends State<SignupScreen> {
           setState(() {
             _isLoading = false;
           });
-          Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+          if (FirebaseAuth.instance.currentUser!.emailVerified) {
+            Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+          } else {
+            Navigator.of(context)
+                .pushReplacementNamed(VerificationPage.routeName);
+          }
         });
       });
     } catch (e) {
@@ -287,32 +293,32 @@ class _SignupScreenState extends State<SignupScreen> {
                   const SizedBox(
                     height: 30,
                   ),
-                  Container(
-                    child: Center(
-                      child: MaterialButton(
-                        onPressed: () {},
-                        padding: const EdgeInsets.all(0),
-                        child: Container(
-                          width: 130,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: const Color.fromARGB(255, 23, 23, 23),
-                            border: Border.all(
-                              color: const Color.fromARGB(255, 130, 130, 130),
-                            ),
-                          ),
-                          child: const Center(
-                            child: Icon(
-                              CustomIcons.google,
-                              size: 30,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  // Container(
+                  //   child: Center(
+                  //     child: MaterialButton(
+                  //       onPressed: () {},
+                  //       padding: const EdgeInsets.all(0),
+                  //       child: Container(
+                  //         width: 130,
+                  //         height: 60,
+                  //         decoration: BoxDecoration(
+                  //           borderRadius: BorderRadius.circular(15),
+                  //           color: const Color.fromARGB(255, 23, 23, 23),
+                  //           border: Border.all(
+                  //             color: const Color.fromARGB(255, 130, 130, 130),
+                  //           ),
+                  //         ),
+                  //         child: const Center(
+                  //           child: Icon(
+                  //             CustomIcons.google,
+                  //             size: 30,
+                  //             color: Colors.white,
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
               const Spacer()

@@ -572,7 +572,7 @@ class _VoucherState extends State<Voucher> {
                               Row(
                                 children: [
                                   SizedBox(
-                                    width: (size.width - 40) / 2,
+                                    width: (size.width - 50) / 2,
                                     height: 50,
                                     child: ValueListenableBuilder(
                                       valueListenable: _notifierAmount,
@@ -628,10 +628,10 @@ class _VoucherState extends State<Voucher> {
                                     ),
                                   ),
                                   const SizedBox(
-                                    width: 10,
+                                    width: 15,
                                   ),
                                   SizedBox(
-                                    width: (size.width - 40) / 2,
+                                    width: (size.width - 50) / 2,
                                     height: 50,
                                     child: ValueListenableBuilder(
                                       valueListenable:

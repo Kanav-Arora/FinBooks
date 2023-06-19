@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -25,7 +28,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,21 +49,12 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAv48uqTXLoMoVj4gwbvTnMAWc3INyqY9k',
-    appId: '1:1033184374253:web:33e353a008ec17eee28be4',
-    messagingSenderId: '1033184374253',
-    projectId: 'financify-accounting',
-    authDomain: 'financify-accounting.firebaseapp.com',
-    storageBucket: 'financify-accounting.appspot.com',
-    measurementId: 'G-L59NZXJNE5',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCjPjjWX6LnY4L76H5du02ojHWiqMv9DqI',
     appId: '1:1033184374253:android:83f105d0619d5600e28be4',
     messagingSenderId: '1033184374253',
     projectId: 'financify-accounting',
+    databaseURL: 'https://financify-accounting-default-rtdb.firebaseio.com',
     storageBucket: 'financify-accounting.appspot.com',
   );
 
@@ -66,16 +63,7 @@ class DefaultFirebaseOptions {
     appId: '1:1033184374253:ios:000604823aab814ee28be4',
     messagingSenderId: '1033184374253',
     projectId: 'financify-accounting',
-    storageBucket: 'financify-accounting.appspot.com',
-    iosClientId: '1033184374253-0760akrvass6ahoeij7trrjhivn8iiks.apps.googleusercontent.com',
-    iosBundleId: 'com.example.accoutingSoftware',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBj5Mo-FYaiLRTG4dDf174S5MpU96AeJBI',
-    appId: '1:1033184374253:ios:000604823aab814ee28be4',
-    messagingSenderId: '1033184374253',
-    projectId: 'financify-accounting',
+    databaseURL: 'https://financify-accounting-default-rtdb.firebaseio.com',
     storageBucket: 'financify-accounting.appspot.com',
     iosClientId: '1033184374253-0760akrvass6ahoeij7trrjhivn8iiks.apps.googleusercontent.com',
     iosBundleId: 'com.example.accoutingSoftware',

@@ -1,5 +1,6 @@
 import 'package:accouting_software/classes/expense.dart';
 import 'package:accouting_software/providers/expense_provider.dart';
+import 'package:accouting_software/screens/operating%20expense/list_expense.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,10 +16,6 @@ class AllExpense extends StatefulWidget {
 }
 
 class _AllExpenseState extends State<AllExpense> {
-  Widget ListCard(Expense e) {
-    return const Card(child: Text('I am card'));
-  }
-
   @override
   Widget build(BuildContext context) {
     final ThemeData th = Theme.of(context);
@@ -86,13 +83,15 @@ class _AllExpenseState extends State<AllExpense> {
                           title: Text(cat),
                           children: [
                             Row(
-                              children: const [
-                                Expanded(
+                              children: [
+                                const Expanded(
                                   child: SizedBox(),
                                 ),
                                 MaterialButton(
-                                  onPressed: null,
-                                  child: Text('Show All'),
+                                  onPressed: () => Navigator.of(context)
+                                      .pushNamed(ListExpense.routeName,
+                                          arguments: cat),
+                                  child: const Text('Show All'),
                                 ),
                               ],
                             ),

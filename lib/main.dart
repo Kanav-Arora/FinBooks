@@ -16,8 +16,10 @@ import 'package:accouting_software/screens/items/items_main.dart';
 import 'package:accouting_software/screens/ledger%20accounts/ledger_main.dart';
 import 'package:accouting_software/screens/app%20login/login_screen.dart';
 import 'package:accouting_software/screens/operating%20expense/all_expense.dart';
+import 'package:accouting_software/screens/operating%20expense/list_expense.dart';
 import 'package:accouting_software/screens/operating%20expense/operating_expense.dart';
 import 'package:accouting_software/screens/purchase/add_purchase.dart';
+import 'package:accouting_software/screens/reports/pl.dart';
 import 'package:accouting_software/screens/sale/add_sale.dart';
 import 'package:accouting_software/screens/app%20login/signup_screen.dart';
 import 'package:accouting_software/screens/home/user_account.dart';
@@ -25,7 +27,6 @@ import 'package:accouting_software/screens/app%20login/verification_page.dart';
 import 'package:accouting_software/screens/settings.dart';
 import 'package:accouting_software/screens/voucher/voucher.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'firebase_options.dart';
@@ -38,16 +39,20 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final savedThemeMode = await AdaptiveTheme.getThemeMode();
   await Firebase.initializeApp(
+    name: "FinBooks",
     options: DefaultFirebaseOptions.currentPlatform,
   );
   // await FirebaseAuth.instance.signOut();
   runApp(
-    DevicePreview(
-      enabled: true,
-      builder: (context) => MyApp(
-        savedThemeMode: savedThemeMode,
-      ),
+    MyApp(
+      savedThemeMode: savedThemeMode,
     ),
+    // DevicePreview(
+    //   enabled: true,
+    //   builder: (context) => MyApp(
+    //     savedThemeMode: savedThemeMode,
+    //   ),
+    // ),
   );
 }
 
@@ -113,10 +118,12 @@ class _MyAppState extends State<MyApp> {
         builder: (light, dark) {
           return MaterialApp(
             title: 'Accounting App',
+            debugShowCheckedModeBanner: false,
             darkTheme: dark,
             theme: light,
             routes: {
-              LoginScreen.routeName: (ctx) => LoginScreen(),
+              LoginScreen.routeName: (ctx) =>
+                  LoginScreen(savedThemeMode ?? AdaptiveThemeMode.light),
               SignupScreen.routeName: (ctx) => SignupScreen(),
               HomeScreen.routeName: (ctx) => HomeScreen(),
               VerificationPage.routeName: (ctx) => const VerificationPage(),
@@ -134,11 +141,13 @@ class _MyAppState extends State<MyApp> {
               Voucher.routeName: (ctx) => Voucher(),
               OperatingExpense.routeName: (ctx) => OperatingExpense(),
               AllExpense.routeName: (ctx) => AllExpense(),
+              PLStatement.routeName: (ctx) => PLStatement(),
+              ListExpense.routeName: (ctx) => ListExpense(),
             },
             initialRoute: FirebaseAuth.instance.currentUser == null
                 ? LoginScreen.routeName
                 : HomeScreen.routeName,
-            home: LoginScreen(),
+            home: LoginScreen(savedThemeMode ?? AdaptiveThemeMode.light),
           );
         },
       ),
