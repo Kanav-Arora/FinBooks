@@ -1,6 +1,7 @@
 import 'package:accouting_software/classes/account.dart';
 import 'package:accouting_software/classes/transaction.dart';
 import 'package:accouting_software/providers/accounts_provider.dart';
+import 'package:accouting_software/providers/settings_provider.dart';
 import 'package:accouting_software/providers/transaction_provider.dart';
 import 'package:accouting_software/screens/home/app_drawer.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class _LedgerMainState extends State<LedgerMain> {
     super.initState();
   }
 
-  Widget listItem(ThemeData th, Transaction b) {
+  Widget listItem(ThemeData th, Transaction b, String curr) {
     return Card(
       color: th.primaryColor,
       margin: const EdgeInsets.all(10.0),
@@ -44,7 +45,7 @@ class _LedgerMainState extends State<LedgerMain> {
                 style: th.textTheme.bodyMedium,
               ),
               Text(
-                b.amount,
+                curr + b.amount.substring(1),
                 style: th.textTheme.bodyMedium!.copyWith(
                     color: b.type == "sale"
                         ? Colors.greenAccent
@@ -79,6 +80,7 @@ class _LedgerMainState extends State<LedgerMain> {
   Widget build(BuildContext context) {
     final ThemeData th = Theme.of(context);
     final size = MediaQuery.of(context).size;
+    final settingsProv = Provider.of<SettingsProvider>(context, listen: false);
     return Scaffold(
       key: _scaffoldKey,
       drawer: AppDrawer(),
@@ -120,38 +122,44 @@ class _LedgerMainState extends State<LedgerMain> {
                       Utilities().toastMessage(snapshot.error.toString());
                     } else if (snapshot.hasData) {
                       var data = snapshot.data as List<Account>;
-                      return DropdownButton<String>(
-                          hint: Text(
-                            'Select an account',
-                            style: th.textTheme.bodyMedium!.copyWith(
-                                color:
-                                    const Color.fromARGB(255, 130, 130, 130)),
-                            textAlign: TextAlign.center,
-                          ),
-                          value: _selectedValue,
-                          elevation: 16,
-                          dropdownColor: const Color.fromARGB(255, 23, 23, 23),
-                          items: data
-                              .map(
-                                (e) => DropdownMenuItem<String>(
-                                  value: e.acc_name,
-                                  child: Text(e.acc_name),
-                                ),
-                              )
-                              .toList(),
-                          onChanged: ((value) async {
-                            setState(() {
-                              _isloading = true;
-                            });
-                            listTrans = await Provider.of<TransactionProvider>(
-                                    context,
-                                    listen: false)
-                                .transByAccName(value.toString());
-                            setState(() {
-                              _selectedValue = value;
-                              _isloading = false;
-                            });
-                          }));
+                      return Container(
+                        margin: const EdgeInsets.all(20),
+                        child: DropdownButton<String>(
+                            isExpanded: true,
+                            hint: Text(
+                              'Select an account',
+                              style: th.textTheme.bodyMedium!.copyWith(
+                                  color:
+                                      const Color.fromARGB(255, 130, 130, 130)),
+                              textAlign: TextAlign.center,
+                            ),
+                            value: _selectedValue,
+                            elevation: 16,
+                            dropdownColor:
+                                const Color.fromARGB(255, 23, 23, 23),
+                            items: data
+                                .map(
+                                  (e) => DropdownMenuItem<String>(
+                                    value: e.acc_name,
+                                    child: Text(e.acc_name),
+                                  ),
+                                )
+                                .toList(),
+                            onChanged: ((value) async {
+                              setState(() {
+                                _isloading = true;
+                              });
+                              listTrans =
+                                  await Provider.of<TransactionProvider>(
+                                          context,
+                                          listen: false)
+                                      .transByAccName(value.toString());
+                              setState(() {
+                                _selectedValue = value;
+                                _isloading = false;
+                              });
+                            })),
+                      );
                     }
                   }
                   return const Center(
@@ -173,7 +181,8 @@ class _LedgerMainState extends State<LedgerMain> {
                               ? ListView.builder(
                                   itemBuilder: ((ctx, index) {
                                     Transaction t = listTrans.elementAt(index);
-                                    return listItem(th, t);
+                                    return listItem(th, t,
+                                        settingsProv.currency.substring(0, 1));
                                   }),
                                   itemCount: listTrans.length,
                                 )

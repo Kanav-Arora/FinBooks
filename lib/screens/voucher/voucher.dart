@@ -1,14 +1,15 @@
 import 'package:accouting_software/classes/account.dart';
 import 'package:accouting_software/providers/accounts_provider.dart';
 import 'package:accouting_software/providers/transaction_provider.dart';
-import 'package:accouting_software/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../classes/transaction.dart';
+import '../../icons/custom_icons_icons.dart';
 import '../../providers/settings_provider.dart';
 import '../../utils/utitlities.dart';
+import '../home/app_drawer.dart';
 
 enum TypeToggles { pay, receive }
 
@@ -112,6 +113,8 @@ class _VoucherState extends State<Voucher> {
     final ThemeData th = Theme.of(context);
     final size = MediaQuery.of(context).size;
     final settingsProv = Provider.of<SettingsProvider>(context, listen: false);
+    String curr = settingsProv.currency.substring(0, 1);
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     final List<Widget> toggleButtonOptionsType = [
       SizedBox(
         width: 90,
@@ -157,15 +160,22 @@ class _VoucherState extends State<Voucher> {
       ),
     ];
     return Scaffold(
+      key: scaffoldKey,
+      drawer: AppDrawer(),
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios_new,
-            color: th.colorScheme.secondary,
-          ),
-          onPressed: () => Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (c) => HomeScreen()),
-              (route) => false),
+        leading: Builder(
+          builder: (BuildContext ctx) {
+            return IconButton(
+              onPressed: () => scaffoldKey.currentState!.openDrawer(),
+              icon: Container(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Icon(
+                    CustomIcons.th_thumb,
+                    size: 28,
+                    color: Theme.of(context).colorScheme.secondary,
+                  )),
+            );
+          },
         ),
         title: Text(
           'V O U C H E R',
@@ -604,7 +614,7 @@ class _VoucherState extends State<Voucher> {
                                           keyboardType: TextInputType.number,
                                           textInputAction: TextInputAction.next,
                                           decoration: InputDecoration(
-                                            suffixText: "₹",
+                                            suffixText: curr,
                                             hintText: "Amount",
                                             hintStyle: const TextStyle(
                                                 color: Color.fromARGB(

@@ -4,9 +4,10 @@ import 'package:accouting_software/screens/operating%20expense/list_expense.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../icons/custom_icons_icons.dart';
 import '../../providers/settings_provider.dart';
 import '../../utils/utitlities.dart';
-import '../home/home_screen.dart';
+import '../home/app_drawer.dart';
 
 class AllExpense extends StatefulWidget {
   static const String routeName = "AllExpense";
@@ -32,16 +33,24 @@ class _AllExpenseState extends State<AllExpense> {
       "Utilities expenses",
       "Other",
     ];
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
+        key: scaffoldKey,
+        drawer: AppDrawer(),
         appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios_new,
-              color: th.colorScheme.secondary,
-            ),
-            onPressed: () => Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (c) => HomeScreen()),
-                (route) => false),
+          leading: Builder(
+            builder: (BuildContext ctx) {
+              return IconButton(
+                onPressed: () => scaffoldKey.currentState!.openDrawer(),
+                icon: Container(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: Icon(
+                      CustomIcons.th_thumb,
+                      size: 28,
+                      color: Theme.of(context).colorScheme.secondary,
+                    )),
+              );
+            },
           ),
           title: Text(
             'A L L\nE X P E N S E S',
@@ -52,6 +61,7 @@ class _AllExpenseState extends State<AllExpense> {
           elevation: 0,
         ),
         body: Container(
+          padding: const EdgeInsets.all(10),
           width: size.width,
           height: size.height,
           color: th.primaryColor,
@@ -80,7 +90,10 @@ class _AllExpenseState extends State<AllExpense> {
                         data: Theme.of(context)
                             .copyWith(dividerColor: Colors.transparent),
                         child: ExpansionTile(
-                          title: Text(cat),
+                          title: Text(
+                            cat,
+                            style: th.textTheme.titleLarge,
+                          ),
                           children: [
                             Row(
                               children: [
@@ -91,7 +104,10 @@ class _AllExpenseState extends State<AllExpense> {
                                   onPressed: () => Navigator.of(context)
                                       .pushNamed(ListExpense.routeName,
                                           arguments: cat),
-                                  child: const Text('Show All'),
+                                  child: Text(
+                                    'Show All',
+                                    style: th.textTheme.titleMedium,
+                                  ),
                                 ),
                               ],
                             ),

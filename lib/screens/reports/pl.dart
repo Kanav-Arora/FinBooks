@@ -1,10 +1,12 @@
+import 'package:accouting_software/classes/pl_stat.dart';
 import 'package:accouting_software/services/pl_statement_backend.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../icons/custom_icons_icons.dart';
 import '../../providers/settings_provider.dart';
 import '../../utils/utitlities.dart';
-import '../home/home_screen.dart';
+import '../home/app_drawer.dart';
 
 class PLStatement extends StatefulWidget {
   static const String routeName = "PLStatement";
@@ -15,6 +17,7 @@ class PLStatement extends StatefulWidget {
 
 class _PLStatementState extends State<PLStatement> {
   ValueNotifier<double> statementData = ValueNotifier(0.0);
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -22,15 +25,22 @@ class _PLStatementState extends State<PLStatement> {
     final size = MediaQuery.of(context).size;
     final settingsProv = Provider.of<SettingsProvider>(context, listen: false);
     return Scaffold(
+      key: scaffoldKey,
+      drawer: AppDrawer(),
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios_new,
-            color: th.colorScheme.secondary,
-          ),
-          onPressed: () => Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (c) => HomeScreen()),
-              (route) => false),
+        leading: Builder(
+          builder: (BuildContext ctx) {
+            return IconButton(
+              onPressed: () => scaffoldKey.currentState!.openDrawer(),
+              icon: Container(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Icon(
+                    CustomIcons.th_thumb,
+                    size: 28,
+                    color: Theme.of(context).colorScheme.secondary,
+                  )),
+            );
+          },
         ),
         title: Text(
           'P L\nS T A T E M E N T',
@@ -39,15 +49,15 @@ class _PLStatementState extends State<PLStatement> {
         ),
         centerTitle: true,
         elevation: 0,
-        actions: [
-          MaterialButton(
-            onPressed: null,
-            child: Icon(
-              Icons.download,
-              color: th.colorScheme.secondary,
-            ),
-          )
-        ],
+        // actions: [
+        //   MaterialButton(
+        //     onPressed: null,
+        //     child: Icon(
+        //       Icons.download,
+        //       color: th.colorScheme.secondary,
+        //     ),
+        //   )
+        // ],
       ),
       body: Container(
           color: th.primaryColor,
@@ -57,7 +67,7 @@ class _PLStatementState extends State<PLStatement> {
                 if (snapshot.hasError) {
                   Utilities().toastMessage(snapshot.error.toString());
                 } else if (snapshot.hasData) {
-                  final data = snapshot.data as Map<int, double>;
+                  final data = snapshot.data as Map<String, PLStat>;
                   final yrs = data.keys;
                   return Padding(
                     padding: const EdgeInsets.all(10.0),
@@ -77,7 +87,8 @@ class _PLStatementState extends State<PLStatement> {
                                 child: OutlinedButton(
                                   onPressed: () {
                                     statementData.value =
-                                        data[yrs.elementAt(index)] as double;
+                                        data[yrs.elementAt(index)]!
+                                            .gross_profit;
                                   },
                                   style: OutlinedButton.styleFrom(
                                     shape: const StadiumBorder(),
@@ -88,7 +99,7 @@ class _PLStatementState extends State<PLStatement> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(2.0),
                                     child: Text(
-                                      yrs.elementAt(index).toString(),
+                                      yrs.elementAt(index),
                                       style: th.textTheme.bodyMedium,
                                     ),
                                   ),

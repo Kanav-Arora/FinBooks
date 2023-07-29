@@ -1,5 +1,6 @@
 import 'package:accouting_software/classes/item.dart';
 import 'package:accouting_software/providers/items_provider.dart';
+import 'package:accouting_software/providers/settings_provider.dart';
 import 'package:accouting_software/screens/items/add_items.dart';
 import 'package:accouting_software/screens/items/items_detail.dart';
 import 'package:accouting_software/utils/utitlities.dart';
@@ -30,6 +31,8 @@ class _ItemsMainState extends State<ItemsMain> {
   Widget build(BuildContext context) {
     final ThemeData th = Theme.of(context);
     final size = MediaQuery.of(context).size;
+    final settingsProv = Provider.of<SettingsProvider>(context, listen: false);
+    String curr = settingsProv.currency.substring(0, 1);
     return Scaffold(
       key: _scaffoldKey,
       drawer: AppDrawer(),
@@ -127,7 +130,7 @@ class _ItemsMainState extends State<ItemsMain> {
                                 DataColumn(
                                   label: Expanded(
                                     child: Text(
-                                      'Price',
+                                      'Price ($curr)',
                                       style: th.textTheme.bodyMedium,
                                     ),
                                   ),

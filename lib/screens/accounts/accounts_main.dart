@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../icons/custom_icons_icons.dart';
+import '../../providers/settings_provider.dart';
 import '../home/app_drawer.dart';
 
 class tabledata {
@@ -47,6 +48,7 @@ class _AccountsMainState extends State<AccountsMain> {
   Widget build(BuildContext context) {
     final ThemeData th = Theme.of(context);
     final size = MediaQuery.of(context).size;
+    final settingsProv = Provider.of<SettingsProvider>(context, listen: false);
     return Scaffold(
       key: _scaffoldKey,
       drawer: AppDrawer(),
@@ -128,7 +130,7 @@ class _AccountsMainState extends State<AccountsMain> {
                               DataColumn(
                                 label: Expanded(
                                   child: Text(
-                                    'Debit',
+                                    'Debit (${settingsProv.currency.substring(0, 1)})',
                                     style: th.textTheme.bodyMedium,
                                   ),
                                 ),
@@ -136,7 +138,7 @@ class _AccountsMainState extends State<AccountsMain> {
                               DataColumn(
                                 label: Expanded(
                                   child: Text(
-                                    'Credit',
+                                    'Credit (${settingsProv.currency.substring(0, 1)})',
                                     style: th.textTheme.bodyMedium,
                                   ),
                                 ),
