@@ -21,6 +21,7 @@ class _SignupScreenState extends State<SignupScreen> {
   var _isLoading = false;
 
   String email = "", password = "";
+  bool viz = false;
 
   @override
   void initState() {
@@ -28,6 +29,7 @@ class _SignupScreenState extends State<SignupScreen> {
     emailValid = false;
     passValid = false;
     _isLoading = false;
+    viz = false;
     super.initState();
   }
 
@@ -198,13 +200,42 @@ class _SignupScreenState extends State<SignupScreen> {
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.secondary),
                         decoration: InputDecoration(
-                          suffixIcon: passValid == true
-                              ? const Icon(
-                                  CustomIcons.ok_circled,
-                                  color: Colors.green,
-                                  size: 18,
-                                )
-                              : null,
+                          suffixIcon: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              passValid == true
+                                  ? const IconButton(
+                                      onPressed: null,
+                                      icon: Icon(
+                                        CustomIcons.ok_circled,
+                                        color: Colors.green,
+                                        size: 18,
+                                      ))
+                                  : const SizedBox(
+                                      width: 0,
+                                      height: 0,
+                                    ),
+                              IconButton(
+                                icon: viz == false
+                                    ? const Icon(
+                                        Icons.visibility_off_outlined,
+                                        color:
+                                            Color.fromARGB(255, 130, 130, 130),
+                                      )
+                                    : const Icon(
+                                        Icons.visibility_outlined,
+                                        color:
+                                            Color.fromARGB(255, 130, 130, 130),
+                                      ),
+                                onPressed: () {
+                                  setState(() {
+                                    viz = !viz;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
                           hintText: 'Pick a strong password',
                           hintStyle: const TextStyle(
                               color: Color.fromARGB(255, 130, 130, 130)),

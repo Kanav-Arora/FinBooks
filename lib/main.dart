@@ -9,6 +9,7 @@ import 'package:accouting_software/providers/transaction_provider.dart';
 import 'package:accouting_software/screens/accounts/accounts_main.dart';
 import 'package:accouting_software/screens/accounts/add_account.dart';
 import 'package:accouting_software/screens/app%20login/email_update_verification.dart';
+import 'package:accouting_software/screens/app%20login/password_reset.dart';
 import 'package:accouting_software/screens/app%20login/re_auth_screen.dart';
 import 'package:accouting_software/screens/cart_screen.dart';
 import 'package:accouting_software/screens/home/home_screen.dart';
@@ -134,7 +135,7 @@ class _MyAppState extends State<MyApp> {
               AddAccount.routeName: (ctx) => AddAccount(),
               ItemsMain.routeName: (ctx) => ItemsMain(),
               AddItems.routeName: (ctx) => const AddItems(),
-              UserAccount.routeName: (ctx) => UserAccount(),
+              UserAccount.routeName: (ctx) => const UserAccount(),
               AddSale.routeName: (ctx) => AddSale(),
               CartScreen.routeName: (ctx) => CartScreen(),
               AddPurchase.routeName: (ctx) => AddPurchase(),
@@ -148,7 +149,8 @@ class _MyAppState extends State<MyApp> {
               EmailUpdateVerification.routeName: (ctx) =>
                   const EmailUpdateVerification(),
               ReAuthScreen.routeName: (ctx) =>
-                  ReAuthScreen(savedThemeMode ?? AdaptiveThemeMode.light)
+                  ReAuthScreen(savedThemeMode ?? AdaptiveThemeMode.light),
+              PasswordReset.routeName: (ctx) => PasswordReset(),
             },
             initialRoute: FirebaseAuth.instance.currentUser == null
                 ? LoginScreen.routeName

@@ -127,10 +127,6 @@ class _ItemsDetailState extends State<ItemsDetail> {
       foregroundColor: th.colorScheme.secondary,
       elevation: 0,
     );
-    double screenHeightMinusAppBarMinusStatusBar =
-        MediaQuery.of(context).size.height -
-            appBar.preferredSize.height -
-            MediaQuery.of(context).padding.top;
 
     initialize(obj);
     return Scaffold(

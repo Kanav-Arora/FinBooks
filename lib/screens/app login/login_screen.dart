@@ -1,4 +1,5 @@
 import 'package:accouting_software/providers/settings_provider.dart';
+import 'package:accouting_software/screens/app%20login/password_reset.dart';
 import 'package:accouting_software/screens/app%20login/verification_page.dart';
 import 'package:accouting_software/screens/home/home_screen.dart';
 import 'package:accouting_software/screens/app%20login/signup_screen.dart';
@@ -23,13 +24,11 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formkey = GlobalKey<FormState>();
   var _isLoading = false;
   String email = "", password = "";
-  var _visPass = false;
 
   @override
   void initState() {
     // TODO: implement initState
     _isLoading = false;
-    _visPass = false;
     super.initState();
   }
 
@@ -55,7 +54,8 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final settingsProv = Provider.of<SettingsProvider>(context, listen: false);
-    debugPrint(settingsProv.isDark.toString());
+    final th = Theme.of(context);
+    ValueNotifier viz = ValueNotifier(false);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
@@ -138,42 +138,77 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      TextFormField(
-                        obscureText: _visPass == true ? false : true,
-                        validator: (value) {
-                          return value!.isEmpty == true ? 'Empty' : null;
-                        },
-                        onSaved: (newValue) {
-                          password = newValue as String;
-                        },
-                        keyboardType: TextInputType.text,
-                        textInputAction: TextInputAction.done,
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelMedium!
-                            .copyWith(fontSize: 18),
-                        decoration: InputDecoration(
-                          hintText: 'Pick a strong password',
-                          hintStyle: const TextStyle(
-                              color: Color.fromARGB(255, 130, 130, 130)),
-                          fillColor: mode == AdaptiveThemeMode.dark
-                              ? const Color.fromARGB(255, 23, 23, 23)
-                              : Colors.white,
-                          filled: true,
-                          border: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color.fromARGB(255, 23, 23, 23),
-                              width: 4.0,
-                            ),
-                          ),
-                        ),
-                      ),
+                      ValueListenableBuilder(
+                          valueListenable: viz,
+                          builder: (context, value, child) {
+                            return TextFormField(
+                              obscureText: viz.value == false ? true : false,
+                              validator: (value) {
+                                return value!.isEmpty == true ? 'Empty' : null;
+                              },
+                              onSaved: (newValue) {
+                                password = newValue as String;
+                              },
+                              keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.done,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelMedium!
+                                  .copyWith(fontSize: 18),
+                              decoration: InputDecoration(
+                                suffixIcon: IconButton(
+                                  icon: viz.value == false
+                                      ? const Icon(
+                                          Icons.visibility_off_outlined,
+                                          color: Color.fromARGB(
+                                              255, 130, 130, 130),
+                                        )
+                                      : const Icon(
+                                          Icons.visibility_outlined,
+                                          color: Color.fromARGB(
+                                              255, 130, 130, 130),
+                                        ),
+                                  onPressed: () {
+                                    viz.value = !viz.value;
+                                  },
+                                ),
+                                hintText: 'Pick a strong password',
+                                hintStyle: const TextStyle(
+                                    color: Color.fromARGB(255, 130, 130, 130)),
+                                fillColor: mode == AdaptiveThemeMode.dark
+                                    ? const Color.fromARGB(255, 23, 23, 23)
+                                    : Colors.white,
+                                filled: true,
+                                border: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color.fromARGB(255, 23, 23, 23),
+                                    width: 4.0,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
                     ],
                   ),
                 ),
               ),
               const SizedBox(
-                height: 50,
+                height: 5,
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pushReplacementNamed(PasswordReset.routeName);
+                  },
+                  child: Text('Forgot Password ?',
+                      style: th.textTheme.bodyMedium!.copyWith(
+                          color: const Color.fromARGB(255, 97, 151, 246))),
+                ),
+              ),
+              const SizedBox(
+                height: 25,
               ),
               Column(
                 children: [
