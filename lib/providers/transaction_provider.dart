@@ -173,12 +173,30 @@ class TransactionProvider with ChangeNotifier {
     obj.credit = credit.toStringAsFixed(2);
     obj.debit = debit.toStringAsFixed(2);
     List<List<String>> graphCashFlow = [];
+    Map<String, String> temp = {
+      "January": "",
+      "February": "",
+      "March": "",
+      "April": "",
+      "May": "",
+      "June": "",
+      "August": "",
+      "July": "",
+      "September": "",
+      "October": "",
+      "November": "",
+      "December": "",
+    };
     cashflow.forEach((key, value) {
       String month = DateFormat('MMMM').format(DateTime(0, key));
       String v = value.toStringAsFixed(2);
-      graphCashFlow.add([month, v]);
+      temp[month] = v;
     });
-    graphCashFlow.sort((a, b) => a[0].compareTo(b[0]));
+    temp.forEach((key, value) {
+      if (value != "") {
+        graphCashFlow.add([key, value]);
+      }
+    });
     obj.graphCashFlow = graphCashFlow;
     int months = (DateTime.now().month - 3);
     obj.revenue = revenue;

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Themes {
   static final light = ThemeData.light().copyWith(
     primaryColor: Colors.white,
     textTheme: TextTheme(
       titleLarge: const TextStyle(color: Colors.black, fontSize: 22),
-      labelMedium: TextStyle(color: Colors.black, fontSize: 18),
+      labelMedium: const TextStyle(color: Colors.black, fontSize: 18),
       bodyMedium: const TextStyle(color: Colors.black, fontSize: 15),
       bodySmall: const TextStyle(color: Colors.black, fontSize: 12),
       titleMedium: const TextStyle(color: Colors.black),

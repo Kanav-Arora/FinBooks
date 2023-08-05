@@ -1,4 +1,5 @@
 class Expense {
+  String id = "";
   String category;
   String date;
   String message = "";
@@ -8,5 +9,6 @@ class Expense {
       {required this.category,
       required this.date,
       required this.amount,
+      this.id = "",
       this.message = ""});
 }

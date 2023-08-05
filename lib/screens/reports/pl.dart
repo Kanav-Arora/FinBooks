@@ -16,14 +16,16 @@ class PLStatement extends StatefulWidget {
 }
 
 class _PLStatementState extends State<PLStatement> {
-  ValueNotifier<double> statementData = ValueNotifier(0.0);
+  ValueNotifier<PLStat> statementData = ValueNotifier(PLStat());
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  bool firstLoad = true;
 
   @override
   Widget build(BuildContext context) {
     final ThemeData th = Theme.of(context);
     final size = MediaQuery.of(context).size;
     final settingsProv = Provider.of<SettingsProvider>(context, listen: false);
+    final String curr = settingsProv.currency.substring(0, 1);
     return Scaffold(
       key: scaffoldKey,
       drawer: AppDrawer(),
@@ -69,14 +71,14 @@ class _PLStatementState extends State<PLStatement> {
                 } else if (snapshot.hasData) {
                   final data = snapshot.data as Map<String, PLStat>;
                   final yrs = data.keys;
-                  return Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                      children: [
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        SizedBox(
+                  return Column(
+                    children: [
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: SizedBox(
                           height: 30,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
@@ -86,9 +88,9 @@ class _PLStatementState extends State<PLStatement> {
                                     const EdgeInsets.symmetric(horizontal: 5),
                                 child: OutlinedButton(
                                   onPressed: () {
+                                    firstLoad = false;
                                     statementData.value =
-                                        data[yrs.elementAt(index)]!
-                                            .gross_profit;
+                                        data[yrs.elementAt(index)] as PLStat;
                                   },
                                   style: OutlinedButton.styleFrom(
                                     shape: const StadiumBorder(),
@@ -109,15 +111,203 @@ class _PLStatementState extends State<PLStatement> {
                             itemCount: yrs.length,
                           ),
                         ),
-                        Expanded(
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Expanded(
+                          child: SizedBox(
+                        width: double.infinity,
+                        child: SingleChildScrollView(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 20),
                             child: ValueListenableBuilder(
-                          builder: (context, value, child) {
-                            return Center(child: Text(value.toString()));
-                          },
-                          valueListenable: statementData,
-                        )),
-                      ],
-                    ),
+                              builder: (context, value, child) {
+                                if (firstLoad == true) {
+                                  return const Center(
+                                      child: Text(
+                                          'Please select a financial year to fetch report'));
+                                }
+                                return Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Revenue',
+                                          style: th.textTheme.labelLarge!
+                                              .copyWith(color: Colors.blue),
+                                        ),
+                                        const Expanded(
+                                          child: SizedBox(),
+                                        )
+                                      ],
+                                    ),
+                                    const Divider(
+                                      thickness: 2,
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                'Sales',
+                                                style: th.textTheme.labelMedium,
+                                              ),
+                                              Text(
+                                                '${value.sales}',
+                                                style: th.textTheme.labelMedium,
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 15,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                'Cost of Goods Sold',
+                                                style: th.textTheme.labelMedium,
+                                              ),
+                                              Text(
+                                                '${value.cogs * -1}',
+                                                style: th.textTheme.labelMedium,
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 15,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Expanded(child: SizedBox()),
+                                              Text(
+                                                '${value.sales - value.cogs}',
+                                                style: th.textTheme.labelMedium!
+                                                    .copyWith(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Expense',
+                                          style: th.textTheme.labelLarge!
+                                              .copyWith(color: Colors.blue),
+                                        ),
+                                        const Expanded(
+                                          child: SizedBox(),
+                                        )
+                                      ],
+                                    ),
+                                    const Divider(
+                                      thickness: 2,
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      child: Column(
+                                        children: [
+                                          ...value.expenseCat.entries.map((e) {
+                                            return Column(
+                                              children: [
+                                                Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        e.key,
+                                                        style: th.textTheme
+                                                            .labelMedium,
+                                                      ),
+                                                      Text('${e.value}',
+                                                          style: th.textTheme
+                                                              .labelMedium),
+                                                    ]),
+                                                const SizedBox(
+                                                  height: 15,
+                                                ),
+                                              ],
+                                            );
+                                          }),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Expanded(child: SizedBox()),
+                                              Text(
+                                                '${value.expenseTotal}',
+                                                style: th.textTheme.labelMedium!
+                                                    .copyWith(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 40,
+                                    ),
+                                    const Divider(
+                                      thickness: 2,
+                                    ),
+                                    Container(
+                                        padding: const EdgeInsets.all(10),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              'Net Income',
+                                              style: th.textTheme.labelLarge,
+                                            ),
+                                            Text(
+                                              '${value.sales - value.cogs - value.expenseTotal}',
+                                              style: th.textTheme.labelMedium!
+                                                  .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                            ),
+                                          ],
+                                        )),
+                                    const Divider(
+                                      thickness: 2,
+                                    ),
+                                  ],
+                                );
+                              },
+                              valueListenable: statementData,
+                            ),
+                          ),
+                        ),
+                      )),
+                    ],
                   );
                 }
               }

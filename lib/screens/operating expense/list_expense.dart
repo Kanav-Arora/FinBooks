@@ -78,8 +78,75 @@ class ListExpense extends StatelessWidget {
                   padding: const EdgeInsets.all(10.0),
                   child: ListView.builder(
                     itemBuilder: (context, index) {
-                      return cardTile(
-                          settingsProv.currency, ls.elementAt(index), th);
+                      final item = ls.elementAt(index) as Expense;
+                      return Dismissible(
+                        direction: DismissDirection.endToStart,
+                        background: Container(
+                          alignment: Alignment.centerRight,
+                          color: Colors.redAccent,
+                          child: const Padding(
+                            padding: EdgeInsets.all(15),
+                            child: Icon(Icons.delete, color: Colors.white),
+
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.end,
+                            //   children: const [
+                            //     ,
+                            //     SizedBox(
+                            //       width: 8.0,
+                            //     ),
+                            //     Text('Move to favorites',
+                            //         style: TextStyle(color: Colors.white)),
+                            //   ],
+                            // ),
+                          ),
+                        ),
+                        confirmDismiss: (DismissDirection direction) async {
+                          return await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                backgroundColor: th.primaryColor,
+                                actionsAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                actionsPadding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 10),
+                                title: const Text("Delete"),
+                                content: const Text(
+                                    "Are you sure you want to delete this expense"),
+                                actions: <Widget>[
+                                  TextButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(false),
+                                      child: Text(
+                                        "No",
+                                        style: th.textTheme.labelMedium,
+                                      )),
+                                  TextButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(true),
+                                      child: Text(
+                                        "Yes",
+                                        style: th.textTheme.labelMedium,
+                                      )),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        key: Key(item.id),
+                        onDismissed: (direction) async {
+                          try {
+                            await Provider.of<ExpenseProvider>(context,
+                                    listen: false)
+                                .removeExpense(item.id, item.category);
+                          } catch (error) {
+                            Utilities().toastMessage(error.toString());
+                          }
+                          Utilities().successMessage('Expense deleted');
+                        },
+                        child: cardTile(settingsProv.currency, item, th),
+                      );
                     },
                     itemCount: ls!.length,
                   ),

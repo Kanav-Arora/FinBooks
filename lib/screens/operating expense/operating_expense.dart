@@ -214,7 +214,8 @@ class _OperatingExpenseState extends State<OperatingExpense> {
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.next,
                               decoration: InputDecoration(
-                                prefixText: settingsProv.currency,
+                                prefixText:
+                                    settingsProv.currency.substring(0, 1),
                                 hintText: "Amount",
                                 hintStyle: const TextStyle(
                                     color: Color.fromARGB(255, 130, 130, 130)),

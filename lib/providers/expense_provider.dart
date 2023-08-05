@@ -26,6 +26,7 @@ class ExpenseProvider with ChangeNotifier {
             category: key1,
             date: value2['date'],
             amount: value2['amount'],
+            id: key2,
             message: value2['message']);
         tempexp.add(e);
       });
@@ -65,10 +66,16 @@ class ExpenseProvider with ChangeNotifier {
         .child('operatingexp')
         .child(e.category);
     try {
+      String newKey = ref.push().key as String;
       await ref
-          .push()
+          .child(newKey)
           .set({"date": e.date, "amount": e.amount, "message": e.message});
+      e.id = newKey;
       _exp.add(e);
+      if (!_catexp.containsKey(e.category)) {
+        debugPrint("this area executed");
+        _catexp[e.category] = [];
+      }
       _catexp[e.category]!.add(e);
       notifyListeners();
     } catch (error) {
@@ -145,5 +152,19 @@ class ExpenseProvider with ChangeNotifier {
       totalExpenseofFiscalYear
     ];
     return ret;
+  }
+
+  Future<void> removeExpense(String id, String category) async {
+    var user = FirebaseAuth.instance.currentUser!.uid;
+    try {
+      await FirebaseDatabase.instance
+          .ref('user/$user')
+          .child('operatingexp')
+          .child(category)
+          .child(id)
+          .remove();
+    } catch (error) {
+      rethrow;
+    }
   }
 }
