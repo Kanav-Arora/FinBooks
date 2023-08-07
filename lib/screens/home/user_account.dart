@@ -1,4 +1,5 @@
 import 'package:accouting_software/screens/app%20login/re_auth_screen.dart';
+import 'package:accouting_software/utils/utitlities.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -45,33 +46,59 @@ class _UserAccountState extends State<UserAccount> {
               valueListenable: _notifierDone,
               builder: (context, value, child) {
                 return TextButton(
-                  onPressed: _notifierDone.value == false
-                      ? null
-                      : () async {
-                          if (_nameController.text != "" &&
-                              _nameController.text != data.displayName) {
-                            await data.updateDisplayName(_nameController.text);
-                          }
-                          // if (_phoneController.text != "" &&
-                          //     _phoneController.text != data.phoneNumber) {
-                          //   await data.updatePhoneNumber(PhoneAuthCredential);
-                          // }
-                          if (_emailController.text != data.email &&
-                              _emailController.text != "") {
-                            Navigator.of(context).pushNamed(
-                                ReAuthScreen.routeName,
-                                arguments: _emailController.text);
-                          }
-                        },
-                  child: Text(
-                    'Done',
-                    style: th.textTheme.bodyMedium!.copyWith(
-                        fontSize: 17,
-                        color: _notifierDone.value == false
-                            ? Colors.grey
-                            : Colors.white),
-                  ),
-                );
+                    onPressed: _notifierDone.value == false
+                        ? null
+                        : () async {
+                            if (_nameController.text != "" &&
+                                _nameController.text != data.displayName) {
+                              try {
+                                await data
+                                    .updateDisplayName(_nameController.text)
+                                    .whenComplete(() {
+                                  _notifierDone.value = false;
+                                });
+                                Utilities().successMessage(
+                                    "Name updated successfully");
+                              } catch (error) {
+                                Utilities().toastMessage(error.toString());
+                              }
+                            }
+
+                            if ((_phoneController.text != "" &&
+                                    _phoneController.text !=
+                                        data.phoneNumber) &&
+                                _emailController.text != data.email &&
+                                _emailController.text != "") {
+                              Utilities().toastMessage(
+                                  "Unable to update phone number and email at same time.");
+                              // _phoneController.text = data.phoneNumber == null
+                              //     ? ""
+                              //     : data.phoneNumber as String;
+                              // _emailController.text = data.email == null
+                              //     ? ""
+                              //     : data.email as String;
+                              Navigator.of(context)
+                                  .pushReplacementNamed(UserAccount.routeName);
+                            }
+                            // if (_phoneController.text != "" &&
+                            //     _phoneController.text != data.phoneNumber) {
+                            //   await data.updatePhoneNumber(PhoneAuthCredential);
+                            // }
+                            else if (_emailController.text != data.email &&
+                                _emailController.text != "") {
+                              Navigator.of(context).pushNamed(
+                                  ReAuthScreen.routeName,
+                                  arguments: _emailController.text);
+                            }
+                          },
+                    child: Text(
+                      'Done',
+                      style: th.textTheme.bodyMedium!.copyWith(
+                          fontSize: 17,
+                          color: _notifierDone.value == false
+                              ? Colors.grey
+                              : Colors.white),
+                    ));
               }),
         ],
       ),
@@ -82,6 +109,9 @@ class _UserAccountState extends State<UserAccount> {
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Column(children: [
+            const SizedBox(
+              height: 10,
+            ),
             Row(
               children: [
                 SizedBox(
@@ -215,7 +245,21 @@ class _UserAccountState extends State<UserAccount> {
                 },
                 valueListenable: _notifierVerified,
               ),
-            )
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            SizedBox(
+                width: size.width,
+                child: Text(
+                  'Note:',
+                  style: th.textTheme.bodyMedium!.copyWith(fontSize: 16),
+                )),
+            const SizedBox(
+              height: 5,
+            ),
+            const Text(
+                'Phone Number and Email are sensitive information and updating them involves various verification process. Hence they can be changed one at a time')
           ]),
         ),
       ),
