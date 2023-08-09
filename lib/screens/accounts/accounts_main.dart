@@ -49,6 +49,73 @@ class _AccountsMainState extends State<AccountsMain> {
     final ThemeData th = Theme.of(context);
     final size = MediaQuery.of(context).size;
     final settingsProv = Provider.of<SettingsProvider>(context, listen: false);
+    final String deviceType;
+    List<DataColumn> tableHeaders;
+    if (size.width <= 411) {
+      deviceType = "s";
+      tableHeaders = [
+        DataColumn(
+          label: Expanded(
+            child: Text(
+              'Id',
+              style: th.textTheme.bodyMedium,
+            ),
+          ),
+        ),
+        DataColumn(
+          label: Expanded(
+            child: Text(
+              'Name',
+              style: th.textTheme.bodyMedium,
+            ),
+          ),
+        ),
+        DataColumn(
+          label: Expanded(
+            child: Text(
+              'Balance (${settingsProv.currency.substring(0, 1)})',
+              style: th.textTheme.bodyMedium,
+            ),
+          ),
+        ),
+      ];
+    } else {
+      deviceType = "m";
+      tableHeaders = [
+        DataColumn(
+          label: Expanded(
+            child: Text(
+              'Id',
+              style: th.textTheme.bodyMedium,
+            ),
+          ),
+        ),
+        DataColumn(
+          label: Expanded(
+            child: Text(
+              'Name',
+              style: th.textTheme.bodyMedium,
+            ),
+          ),
+        ),
+        DataColumn(
+          label: Expanded(
+            child: Text(
+              'Debit (${settingsProv.currency.substring(0, 1)})',
+              style: th.textTheme.bodyMedium,
+            ),
+          ),
+        ),
+        DataColumn(
+          label: Expanded(
+            child: Text(
+              'Credit (${settingsProv.currency.substring(0, 1)})',
+              style: th.textTheme.bodyMedium,
+            ),
+          ),
+        ),
+      ];
+    }
     return Scaffold(
       key: _scaffoldKey,
       drawer: AppDrawer(),
@@ -110,40 +177,7 @@ class _AccountsMainState extends State<AccountsMain> {
                           return Expanded(
                               child: SingleChildScrollView(
                                   child: DataTable(
-                            columns: <DataColumn>[
-                              DataColumn(
-                                label: Expanded(
-                                  child: Text(
-                                    'Id',
-                                    style: th.textTheme.bodyMedium,
-                                  ),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Expanded(
-                                  child: Text(
-                                    'Name',
-                                    style: th.textTheme.bodyMedium,
-                                  ),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Expanded(
-                                  child: Text(
-                                    'Debit (${settingsProv.currency.substring(0, 1)})',
-                                    style: th.textTheme.bodyMedium,
-                                  ),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Expanded(
-                                  child: Text(
-                                    'Credit (${settingsProv.currency.substring(0, 1)})',
-                                    style: th.textTheme.bodyMedium,
-                                  ),
-                                ),
-                              ),
-                            ],
+                            columns: tableHeaders,
                             rows: List<DataRow>.generate(
                               data.length,
                               (index) {
@@ -151,32 +185,56 @@ class _AccountsMainState extends State<AccountsMain> {
                                 Account obj = o.a;
                                 AccountDataObject d = o.d;
                                 return DataRow(
-                                  cells: <DataCell>[
-                                    DataCell(
-                                      Text(obj.id),
-                                    ),
-                                    DataCell(
-                                      Text(obj.acc_name),
-                                    ),
-                                    DataCell(
-                                      Text(
-                                        d.debit.toStringAsFixed(2),
-                                        style: TextStyle(
-                                            color: d.debit > d.credit
-                                                ? Colors.redAccent
-                                                : th.colorScheme.secondary),
-                                      ),
-                                    ),
-                                    DataCell(
-                                      Text(
-                                        d.credit.toStringAsFixed(2),
-                                        style: TextStyle(
-                                            color: d.credit > d.debit
-                                                ? Colors.greenAccent
-                                                : th.colorScheme.secondary),
-                                      ),
-                                    ),
-                                  ],
+                                  cells: deviceType == "m"
+                                      ? <DataCell>[
+                                          DataCell(
+                                            Text(obj.id),
+                                          ),
+                                          DataCell(
+                                            Text(obj.acc_name),
+                                          ),
+                                          DataCell(
+                                            Text(
+                                              d.debit.toStringAsFixed(2),
+                                              style: TextStyle(
+                                                  color: d.debit > d.credit
+                                                      ? Colors.redAccent
+                                                      : th.colorScheme
+                                                          .secondary),
+                                            ),
+                                          ),
+                                          DataCell(
+                                            Text(
+                                              d.credit.toStringAsFixed(2),
+                                              style: TextStyle(
+                                                  color: d.credit > d.debit
+                                                      ? Colors.greenAccent
+                                                      : th.colorScheme
+                                                          .secondary),
+                                            ),
+                                          )
+                                        ]
+                                      : [
+                                          DataCell(
+                                            Text(obj.id),
+                                          ),
+                                          DataCell(
+                                            Text(obj.acc_name),
+                                          ),
+                                          DataCell(
+                                            Text(
+                                              (d.credit - d.debit)
+                                                  .toStringAsFixed(2),
+                                              style: TextStyle(
+                                                  color: d.credit - d.debit > 0
+                                                      ? Colors.greenAccent
+                                                      : d.credit - d.debit < 0
+                                                          ? Colors.redAccent
+                                                          : th.colorScheme
+                                                              .secondary),
+                                            ),
+                                          )
+                                        ],
                                 );
                               },
                             ),

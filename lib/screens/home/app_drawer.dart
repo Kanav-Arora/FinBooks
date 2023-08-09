@@ -18,8 +18,14 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final double drawerWidth;
+    if (size.width <= 390) {
+      drawerWidth = size.width / 1.5;
+    } else {
+      drawerWidth = size.width / 1.7;
+    }
     return Drawer(
-      width: size.width / 1.7,
+      width: drawerWidth,
       backgroundColor: Theme.of(context).primaryColor,
       elevation: 2,
       child: ListView(

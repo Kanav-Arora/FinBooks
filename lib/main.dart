@@ -30,6 +30,7 @@ import 'package:accouting_software/screens/app%20login/verification_page.dart';
 import 'package:accouting_software/screens/settings.dart';
 import 'package:accouting_software/screens/voucher/voucher.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'firebase_options.dart';
@@ -47,15 +48,15 @@ void main() async {
   );
   // await FirebaseAuth.instance.signOut();
   runApp(
-    MyApp(
-      savedThemeMode: savedThemeMode,
-    ),
-    // DevicePreview(
-    //   enabled: true,
-    //   builder: (context) => MyApp(
-    //     savedThemeMode: savedThemeMode,
-    //   ),
+    // MyApp(
+    //   savedThemeMode: savedThemeMode,
     // ),
+    DevicePreview(
+      enabled: true,
+      builder: (context) => MyApp(
+        savedThemeMode: savedThemeMode,
+      ),
+    ),
   );
 }
 
@@ -122,6 +123,9 @@ class _MyAppState extends State<MyApp> {
           return MaterialApp(
             title: 'Accounting App',
             debugShowCheckedModeBanner: false,
+            useInheritedMediaQuery: true,
+            locale: DevicePreview.locale(context),
+            builder: DevicePreview.appBuilder,
             darkTheme: dark,
             theme: light,
             routes: {
