@@ -51,8 +51,15 @@ dependencies:
   flutter_screenutil: ^5.7.0
 
 dev_dependencies:
+  flutter_native_splash: ^2.2.18
   flutter_test:
     sdk: flutter
+
+flutter_native_splash:
+  android: true
+  ios: true
+  color: "#000000"
+  image: assets/img/splash.png
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

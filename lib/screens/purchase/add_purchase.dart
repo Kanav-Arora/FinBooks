@@ -241,9 +241,9 @@ class _AddPurchaseState extends State<AddPurchase> {
                         selectedColor: Colors.white,
                         fillColor: const Color.fromARGB(255, 23, 23, 23),
                         color: const Color.fromARGB(255, 23, 23, 23),
-                        constraints: const BoxConstraints(
+                        constraints: BoxConstraints(
                           minHeight: 40.0,
-                          minWidth: 80.0,
+                          minWidth: (size.width - 80) / 4,
                         ),
                         isSelected: _selectedOption,
                         children: toggleButtonOptions,

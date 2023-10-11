@@ -179,7 +179,7 @@ class _AddSaleState extends State<AddSale> {
                   Row(
                     children: [
                       SizedBox(
-                        width: (size.width - 20) / 2,
+                        width: (size.width - 40) / 2,
                         child: TextFormField(
                           onSaved: (newValue) {
                             argObject = Bill(
@@ -242,9 +242,9 @@ class _AddSaleState extends State<AddSale> {
                         selectedColor: Colors.white,
                         fillColor: const Color.fromARGB(255, 23, 23, 23),
                         color: const Color.fromARGB(255, 23, 23, 23),
-                        constraints: const BoxConstraints(
-                          minHeight: 40.0,
-                          minWidth: 80.0,
+                        constraints: BoxConstraints(
+                          minHeight: 50.0,
+                          minWidth: (size.width - 80) / 4,
                         ),
                         isSelected: _selectedOption,
                         children: toggleButtonOptions,

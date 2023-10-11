@@ -36,27 +36,30 @@ import 'package:flutter/material.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'utils/theme.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   final savedThemeMode = await AdaptiveTheme.getThemeMode();
+  await Future.delayed(const Duration(seconds: 3));
+  FlutterNativeSplash.remove();
   await Firebase.initializeApp(
     name: "FinBooks",
     options: DefaultFirebaseOptions.currentPlatform,
   );
   // await FirebaseAuth.instance.signOut();
   runApp(
-    // MyApp(
-    //   savedThemeMode: savedThemeMode,
-    // ),
-    DevicePreview(
-      enabled: true,
-      builder: (context) => MyApp(
-        savedThemeMode: savedThemeMode,
-      ),
+    MyApp(
+      savedThemeMode: savedThemeMode,
     ),
+    // DevicePreview(
+    //   enabled: true,
+    //   builder: (context) => MyApp(
+    //     savedThemeMode: savedThemeMode,
+    //   ),
+    // ),
   );
 }
 

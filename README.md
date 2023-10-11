@@ -16,6 +16,7 @@ FinBooks is an accounting and inventory management software. With FinBooks, you 
 **Server:** Firebase
 
 ***Flutter packages used:***
+
 - Adaptive Theme
 
     It helpes to manage and switching theme data.
@@ -23,7 +24,7 @@ FinBooks is an accounting and inventory management software. With FinBooks, you 
 
     It offers very UI friendly charts. FinBooks' used various chart to show financial reports and data.
 - FirebaseAuth / FirebaseCore / FirebaseDataBase
-    
+
     These packages helps to interact with firebase services using API calls.
 
 - Cached Network Images
@@ -33,4 +34,15 @@ FinBooks is an accounting and inventory management software. With FinBooks, you 
 
     This package is to be used in development mode only. It helps to test the code on various devices without running on multiple emulators.
 
+## Preview
 
+<img src="./screenshots/dashboard.png" width=175 height=400> &nbsp; &nbsp;
+<img src="./screenshots/accounts.png" width=175 height=400> 
+
+## License
+
+This project is licensed under the [GNU AFFERO GENERAL PUBLIC LICENSE Version 3](LICENSE).
+
+## Contributing
+
+Please read [Contribution Guide](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.

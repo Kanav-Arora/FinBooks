@@ -115,6 +115,7 @@ class _VoucherState extends State<Voucher> {
     final settingsProv = Provider.of<SettingsProvider>(context, listen: false);
     String curr = settingsProv.currency.substring(0, 1);
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
     final List<Widget> toggleButtonOptionsType = [
       SizedBox(
         width: 90,
@@ -159,6 +160,9 @@ class _VoucherState extends State<Voucher> {
         ),
       ),
     ];
+
+    final deviceType = size.width <= 420 ? "s" : "m";
+
     return Scaffold(
       key: scaffoldKey,
       drawer: AppDrawer(),
@@ -339,168 +343,80 @@ class _VoucherState extends State<Voucher> {
                           final data = snapshot.data;
                           return Column(
                             children: [
-                              Row(
-                                children: [
-                                  SizedBox(
-                                    width: (size.width - 50) / 2,
-                                    height: 50,
-                                    child: ValueListenableBuilder(
-                                      valueListenable: _notifierAccount,
-                                      builder: (ctx, value, child) {
-                                        return ValueListenableBuilder(
-                                            valueListenable: _notifierTEAccount,
-                                            builder: (ctx, value, child) {
-                                              return DropdownButton<String>(
-                                                  isExpanded: true,
-                                                  hint: Text(
-                                                    'Select an account',
-                                                    style: th
-                                                        .textTheme.bodyMedium!
-                                                        .copyWith(
-                                                            color: const Color
-                                                                    .fromARGB(
-                                                                255,
-                                                                130,
-                                                                130,
-                                                                130)),
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                  value: _notifierAccount.value ==
-                                                          ""
-                                                      ? null
-                                                      : _notifierAccount.value,
-                                                  elevation: 16,
-                                                  style: const TextStyle(
-                                                      color: Color.fromARGB(
-                                                          255, 136, 78, 236)),
-                                                  underline: Container(
-                                                    height: 2,
-                                                    color: (_notifierTEAccount
-                                                                    .value ==
+                              SizedBox(
+                                width: (size.width - 20),
+                                height: 50,
+                                child: ValueListenableBuilder(
+                                  valueListenable: _notifierAccount,
+                                  builder: (ctx, value, child) {
+                                    return ValueListenableBuilder(
+                                        valueListenable: _notifierTEAccount,
+                                        builder: (ctx, value, child) {
+                                          return DropdownButton<String>(
+                                              isExpanded: true,
+                                              hint: Text(
+                                                'Select an account',
+                                                style: th.textTheme.bodyMedium!
+                                                    .copyWith(
+                                                        color: const Color
+                                                                .fromARGB(255,
+                                                            130, 130, 130)),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              value: _notifierAccount.value ==
+                                                      ""
+                                                  ? null
+                                                  : _notifierAccount.value,
+                                              elevation: 16,
+                                              style: const TextStyle(
+                                                  color:
+                                                      Color
+                                                          .fromARGB(255, 136,
+                                                              78, 236)),
+                                              underline: Container(
+                                                height: 2,
+                                                color:
+                                                    (_notifierTEAccount.value ==
                                                                 true &&
                                                             _notifierAccount
                                                                     .value ==
                                                                 "")
                                                         ? Colors.redAccent
                                                         : Colors.grey,
-                                                  ),
-                                                  dropdownColor:
-                                                      settingsProv.isDark ==
-                                                              true
-                                                          ? const Color
-                                                                  .fromARGB(
-                                                              255, 23, 23, 23)
-                                                          : Colors.white,
-                                                  onChanged: (String? value) {
-                                                    _notifierAccount.value =
-                                                        value.toString();
-                                                    _notifierTEAccount.value =
-                                                        true;
-                                                    getData(
-                                                        _notifierAccount.value);
-                                                    _amountController.text =
-                                                        _notifierBalance.value
-                                                            .toString();
-                                                    _notifierAmount.value =
-                                                        _notifierBalance.value
-                                                            .toString();
-                                                  },
-                                                  items: data!.map<
-                                                          DropdownMenuItem<
-                                                              String>>(
-                                                      (Account value) {
-                                                    return DropdownMenuItem<
-                                                        String>(
-                                                      value: value.acc_name,
-                                                      child: Text(
-                                                        "${value.id} - ${value.acc_name}",
-                                                        style: th.textTheme
-                                                            .bodyMedium,
-                                                      ),
-                                                    );
-                                                  }).toList());
-                                            });
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 20,
-                                  ),
-                                  Expanded(
-                                    child: ValueListenableBuilder(
-                                      valueListenable:
-                                          _notifierSelectedTogglePayment,
-                                      builder: (ctx, value1, child) {
-                                        return ValueListenableBuilder(
-                                          valueListenable: _notifierTEPayment,
-                                          builder: (ctx, value2, child) {
-                                            return ValueListenableBuilder(
-                                              valueListenable:
-                                                  _notifierTogglePaymentType,
-                                              builder: (ctx, value3, child) {
-                                                return ToggleButtons(
-                                                  onPressed: (int index) {
-                                                    for (int i = 0;
-                                                        i <
-                                                            _notifierSelectedTogglePayment
-                                                                .value.length;
-                                                        i++) {
-                                                      _notifierSelectedTogglePayment
-                                                              .value[i] =
-                                                          i == index;
-                                                    }
-                                                    if (index == 0) {
-                                                      _notifierTogglePaymentType
-                                                              .value =
-                                                          PaymentTypeToggles
-                                                              .cash
-                                                              .toString();
-                                                    } else {
-                                                      _notifierTogglePaymentType
-                                                              .value =
-                                                          PaymentTypeToggles
-                                                              .cheque
-                                                              .toString();
-                                                    }
-                                                    _notifierTEPayment.value =
-                                                        false;
-                                                  },
-                                                  borderRadius:
-                                                      const BorderRadius.all(
-                                                          Radius.circular(8)),
-                                                  borderColor:
-                                                      _notifierTEPayment
-                                                                  .value ==
-                                                              true
-                                                          ? Colors.redAccent
-                                                          : Colors.grey,
-                                                  selectedBorderColor:
-                                                      th.colorScheme.secondary,
-                                                  selectedColor: Colors.white,
-                                                  fillColor:
-                                                      const Color.fromARGB(
-                                                          255, 23, 23, 23),
-                                                  color: const Color.fromARGB(
-                                                      255, 23, 23, 23),
-                                                  constraints:
-                                                      const BoxConstraints(
-                                                    minHeight: 40.0,
-                                                    minWidth: 80.0,
-                                                  ),
-                                                  isSelected:
-                                                      _notifierSelectedTogglePayment
-                                                          .value,
-                                                  children:
-                                                      toggleButtonOptionsPaymentType,
-                                                );
+                                              ),
+                                              dropdownColor:
+                                                  settingsProv.isDark ==
+                                                          true
+                                                      ? const Color.fromARGB(
+                                                          255, 23, 23, 23)
+                                                      : Colors.white,
+                                              onChanged: (String? value) {
+                                                _notifierAccount.value =
+                                                    value.toString();
+                                                _notifierTEAccount.value = true;
+                                                getData(_notifierAccount.value);
+                                                _amountController.text =
+                                                    _notifierBalance.value
+                                                        .toString();
+                                                _notifierAmount.value =
+                                                    _notifierBalance.value
+                                                        .toString();
                                               },
-                                            );
-                                          },
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ],
+                                              items: data!.map<
+                                                      DropdownMenuItem<String>>(
+                                                  (Account value) {
+                                                return DropdownMenuItem<String>(
+                                                  value: value.acc_name,
+                                                  child: Text(
+                                                    "${value.id} - ${value.acc_name}",
+                                                    style:
+                                                        th.textTheme.bodyMedium,
+                                                  ),
+                                                );
+                                              }).toList());
+                                        });
+                                  },
+                                ),
                               ),
                               const SizedBox(
                                 height: 30,
@@ -577,7 +493,78 @@ class _VoucherState extends State<Voucher> {
                                 ],
                               ),
                               const SizedBox(
-                                height: 40,
+                                height: 30,
+                              ),
+                              Center(
+                                child: ValueListenableBuilder(
+                                  valueListenable:
+                                      _notifierSelectedTogglePayment,
+                                  builder: (ctx, value1, child) {
+                                    return ValueListenableBuilder(
+                                      valueListenable: _notifierTEPayment,
+                                      builder: (ctx, value2, child) {
+                                        return ValueListenableBuilder(
+                                          valueListenable:
+                                              _notifierTogglePaymentType,
+                                          builder: (ctx, value3, child) {
+                                            return ToggleButtons(
+                                              onPressed: (int index) {
+                                                for (int i = 0;
+                                                    i <
+                                                        _notifierSelectedTogglePayment
+                                                            .value.length;
+                                                    i++) {
+                                                  _notifierSelectedTogglePayment
+                                                      .value[i] = i == index;
+                                                }
+                                                if (index == 0) {
+                                                  _notifierTogglePaymentType
+                                                          .value =
+                                                      PaymentTypeToggles.cash
+                                                          .toString();
+                                                } else {
+                                                  _notifierTogglePaymentType
+                                                          .value =
+                                                      PaymentTypeToggles.cheque
+                                                          .toString();
+                                                }
+                                                _notifierTEPayment.value =
+                                                    false;
+                                              },
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(8)),
+                                              borderColor:
+                                                  _notifierTEPayment.value ==
+                                                          true
+                                                      ? Colors.redAccent
+                                                      : Colors.grey,
+                                              selectedBorderColor:
+                                                  th.colorScheme.secondary,
+                                              selectedColor: Colors.white,
+                                              fillColor: const Color.fromARGB(
+                                                  255, 23, 23, 23),
+                                              color: const Color.fromARGB(
+                                                  255, 23, 23, 23),
+                                              constraints: const BoxConstraints(
+                                                minHeight: 40.0,
+                                                minWidth: 80.0,
+                                              ),
+                                              isSelected:
+                                                  _notifierSelectedTogglePayment
+                                                      .value,
+                                              children:
+                                                  toggleButtonOptionsPaymentType,
+                                            );
+                                          },
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 30,
                               ),
                               Row(
                                 children: [
@@ -651,7 +638,9 @@ class _VoucherState extends State<Voucher> {
                                           validator: (v) {
                                             if (value !=
                                                 PaymentTypeToggles.cheque
-                                                    .toString()) return null;
+                                                    .toString()) {
+                                              return null;
+                                            }
                                             if (v!.isEmpty == true) {
                                               return 'Enter cheque no';
                                             }
